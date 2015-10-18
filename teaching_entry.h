@@ -1,27 +1,21 @@
 //
 //  teaching_entry.h
-//
-//
+//  cs3307-Project
 //
 //
 
-#ifndef ____teaching_entry__
-#define ____teaching_entry__
+#ifndef __teaching_entry__
+#define __teaching_entry__
 
 #include <stdio.h>
 #include <string>
+#include "data_entry.h"
 using namespace std;
 
-class teaching_entry
+class teaching_entry: public data_entry
 {
     
 private:
-    int record;
-    string lm_user;
-    string lm_date;
-    int ID;
-    string member_name;
-    string primary_domain;
     
     //it looks like some of the start/end dates consist of just the month and day
     //some consist of the day/month/year, some consist of only a year
@@ -59,18 +53,6 @@ private:
 public:
     
     teaching_entry();
-    void set_record(int);
-    int get_record();
-    void set_user(string);
-    string get_user();
-    void set_date(string);
-    string get_date();
-    void set_ID(int);
-    int get_ID();
-    void set_member(string);
-    string get_member();
-    void set_domain(string);
-    string get_domain();
     void set_sday(int);
     int get_sday();
     void set_smonth(int);
@@ -129,4 +111,5 @@ public:
 };
 
 
-#endif /* defined(____teaching_entry__) */
+
+#endif /* defined(__test__teaching_entry__) */
