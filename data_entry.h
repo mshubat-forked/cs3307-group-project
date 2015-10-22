@@ -22,6 +22,8 @@ protected:
     string primary_domain;
 
 public:
+    data_entry * next;
+
     void set_record(int);
     int get_record();
     void set_user(string);
