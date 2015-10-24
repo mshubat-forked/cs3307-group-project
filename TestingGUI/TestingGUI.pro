@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = TestingGUI
 TEMPLATE = app
@@ -14,10 +14,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    summarywindow.cpp
+    summarywindow.cpp \
+    graphwindow.cpp \
+    qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
-    summarywindow.h
+    summarywindow.h \
+    graphwindow.h \
+    qcustomplot.h
 
 FORMS    += mainwindow.ui \
-    summarywindow.ui
+    summarywindow.ui \
+    graphwindow.ui

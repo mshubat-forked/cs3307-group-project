@@ -35,111 +35,15 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>661</width>
-        <height>301</height>
+        <width>657</width>
+        <height>327</height>
        </rect>
       </property>
       <column>
        <property name="text">
-        <string>Publication Summary</string>
+        <string notr="true">1</string>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string>Total</string>
-       </property>
-      </column>
-      <item>
-       <property name="text">
-        <string>Publications</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="textAlignment">
-        <set>AlignLeading|AlignVCenter</set>
-       </property>
-       <item>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Published Abstracts</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string>Some Guy</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text">
-         <string>Journal Articles</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string>Some Other Guy</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text">
-         <string>Books</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string>Some Old Guy</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text">
-         <string>Book Chapters</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string>You Get the Idea</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text">
-         <string>Letters to Editor</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </item>
-      </item>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -165,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>662</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -177,6 +81,7 @@
     <property name="title">
      <string>Graphs</string>
     </property>
+    <addaction name="actionTeaching_Graph"/>
    </widget>
    <widget class="QMenu" name="menuSet_Date_Range">
     <property name="title">
@@ -187,7 +92,14 @@
    <addaction name="menuGraphs"/>
    <addaction name="menuSet_Date_Range"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionTeaching_Graph">
+   <property name="text">
+    <string>Teaching Graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+G</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
