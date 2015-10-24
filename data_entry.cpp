@@ -53,3 +53,11 @@ string data_entry::get_domain()
 {
     return primary_domain;
 }
+void data_entry::set_include(bool i)
+{
+    include=i;
+}
+bool data_entry::get_include()
+{
+    return include;
+}

@@ -20,6 +20,7 @@ protected:
     int ID;
     string member_name;
     string primary_domain;
+    bool include;
 
 public:
     data_entry * next;
@@ -36,6 +37,8 @@ public:
     string get_member();
     void set_domain(string);
     string get_domain();
+    void set_include(bool);
+    bool get_include();
     
 
 };
