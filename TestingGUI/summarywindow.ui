@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Summary Window</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -186,6 +186,7 @@
      <string>Graphs</string>
     </property>
     <addaction name="actionTeaching_Graph"/>
+    <addaction name="actionPie_Graph"/>
    </widget>
    <widget class="QMenu" name="menuSet_Date_Range">
     <property name="title">
@@ -198,10 +199,18 @@
   </widget>
   <action name="actionTeaching_Graph">
    <property name="text">
-    <string>Teaching Graph</string>
+    <string>Bar Graph</string>
    </property>
    <property name="shortcut">
     <string>Meta+G</string>
+   </property>
+  </action>
+  <action name="actionPie_Graph">
+   <property name="text">
+    <string>Pie Graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+P</string>
    </property>
   </action>
  </widget>

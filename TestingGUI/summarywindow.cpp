@@ -1,6 +1,7 @@
 #include "summarywindow.h"
 #include "ui_summarywindow.h"
 #include <graphwindow.h>
+#include <graphwindowpie.h>
 #include <QTextStream>
 
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
@@ -97,4 +98,10 @@ void SummaryWindow::on_actionTeaching_Graph_triggered()
 {
     graph_window = new graphwindow(this);
     graph_window->show();
+}
+
+void SummaryWindow::on_actionPie_Graph_triggered()
+{
+   graph_pie_window = new graphwindowpie(this);
+   graph_pie_window->show();
 }

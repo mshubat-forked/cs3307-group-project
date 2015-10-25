@@ -18,8 +18,9 @@ graphwindow::graphwindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::graphwindow)
 {
-    ui->setupUi(this);
+    // + This has to be the first line when animating the ui
 
+    ui->setupUi(this);
     // + ERASE THIS
     // + Temporary information used to test building a graph
     // + Information passed like this would be handy to build the graph
@@ -44,10 +45,7 @@ graphwindow::graphwindow(QWidget *parent) :
         p_yi[i].other_total = temp_other_total[i];
     }
 
-    // + Apply the stacked bar graph to the window
-        graphwindow::make_stacked_bar_graph(p_yi, ARRAY_SIZE(temp_years));
-
-
+    make_stacked_bar_graph(p_yi,ARRAY_SIZE(temp_years) );
 
 }
 
@@ -216,5 +214,3 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     ui->graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
 }
-
-
