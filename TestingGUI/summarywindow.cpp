@@ -43,6 +43,22 @@ SummaryWindow::SummaryWindow(QWidget *parent) :
     // + Here is adding a child to the sub root just made above
     make_child(year_1, NULL, NULL, "Dr.Watson", "125", "120");
 
+    // + Adding some test values for the from date combo box
+    // + ideally these values would be based on the added data
+    ui->fromDateCombo->addItem("2010");
+    ui->fromDateCombo->addItem("2011");
+    ui->fromDateCombo->addItem("2012");
+    ui->fromDateCombo->addItem("2013");
+    ui->fromDateCombo->addItem("2014");
+
+    // + Adding some test values for the to date combo box
+    // + ideally these values would be based on the added data
+    ui->toDateCombo->addItem("2010");
+    ui->toDateCombo->addItem("2011");
+    ui->toDateCombo->addItem("2012");
+    ui->toDateCombo->addItem("2013");
+    ui->toDateCombo->addItem("2014");
+
 }
 
 
@@ -104,4 +120,18 @@ void SummaryWindow::on_actionPie_Graph_triggered()
 {
    graph_pie_window = new graphwindowpie(this);
    graph_pie_window->show();
+}
+
+void SummaryWindow::on_fromDateCombo_currentIndexChanged(const QString &arg1)
+{
+    //get the selected value using: ui->fromDateCombo->currentText();
+    //testing message:
+    //QMessageBox::information(this, "from", ui->fromDateCombo->currentText());
+}
+
+void SummaryWindow::on_toDateCombo_currentIndexChanged(const QString &arg1)
+{
+    //get the selected value using: ui->toDateCombo->currentText();
+    //testing message:
+    //QMessageBox::information(this, "to", ui->toDateCombo->currentText());
 }

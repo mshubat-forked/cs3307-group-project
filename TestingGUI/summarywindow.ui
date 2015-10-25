@@ -84,7 +84,7 @@
        <string>To:</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="fromDateCombo">
       <property name="geometry">
        <rect>
         <x>190</x>
@@ -93,33 +93,8 @@
         <height>26</height>
        </rect>
       </property>
-      <item>
-       <property name="text">
-        <string>2010-2011</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2011-2012</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2012-2013</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2013-2014</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2014-2015</string>
-       </property>
-      </item>
      </widget>
-     <widget class="QComboBox" name="comboBox_2">
+     <widget class="QComboBox" name="toDateCombo">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -128,26 +103,6 @@
         <height>26</height>
        </rect>
       </property>
-      <item>
-       <property name="text">
-        <string>2011-2012</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2012-2013</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2013-2014</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2014-2015</string>
-       </property>
-      </item>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
