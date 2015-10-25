@@ -31,7 +31,6 @@ private slots:
     void on_actionTeaching_Graph_triggered();
     void on_actionPie_Graph_triggered();
     void on_fromDateCombo_currentIndexChanged(const QString &arg1);
-
     void on_toDateCombo_currentIndexChanged(const QString &arg1);
 
 private:

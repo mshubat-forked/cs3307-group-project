@@ -43,22 +43,20 @@ SummaryWindow::SummaryWindow(QWidget *parent) :
     // + Here is adding a child to the sub root just made above
     make_child(year_1, NULL, NULL, "Dr.Watson", "125", "120");
 
-    // + Adding some test values for the from date combo box
+    // + Adding some test values for the to and from date combo box
     // + ideally these values would be based on the added data
-    ui->fromDateCombo->addItem("2010");
-    ui->fromDateCombo->addItem("2011");
-    ui->fromDateCombo->addItem("2012");
-    ui->fromDateCombo->addItem("2013");
-    ui->fromDateCombo->addItem("2014");
+    // + conversion from int to string as dates values are int in data structure
+    ui->fromDateCombo->addItem(QString::number(2010));
+    ui->fromDateCombo->addItem(QString::number(2011));
+    ui->fromDateCombo->addItem(QString::number(2012));
+    ui->fromDateCombo->addItem(QString::number(2013));
+    ui->fromDateCombo->addItem(QString::number(2014));
 
-    // + Adding some test values for the to date combo box
-    // + ideally these values would be based on the added data
-    ui->toDateCombo->addItem("2010");
-    ui->toDateCombo->addItem("2011");
-    ui->toDateCombo->addItem("2012");
-    ui->toDateCombo->addItem("2013");
-    ui->toDateCombo->addItem("2014");
-
+    ui->toDateCombo->addItem(QString::number(2010));
+    ui->toDateCombo->addItem(QString::number(2011));
+    ui->toDateCombo->addItem(QString::number(2012));
+    ui->toDateCombo->addItem(QString::number(2013));
+    ui->toDateCombo->addItem(QString::number(2014));
 }
 
 
@@ -124,14 +122,13 @@ void SummaryWindow::on_actionPie_Graph_triggered()
 
 void SummaryWindow::on_fromDateCombo_currentIndexChanged(const QString &arg1)
 {
-    //get the selected value using: ui->fromDateCombo->currentText();
-    //testing message:
-    //QMessageBox::information(this, "from", ui->fromDateCombo->currentText());
+    //get the selected value using: (ui->fromDateCombo->currentText()).toInt()
+    //note the conversion to int to fit with the data structure
 }
+
 
 void SummaryWindow::on_toDateCombo_currentIndexChanged(const QString &arg1)
 {
-    //get the selected value using: ui->toDateCombo->currentText();
-    //testing message:
-    //QMessageBox::information(this, "to", ui->toDateCombo->currentText());
+    //get the selected value using: (ui->toDateCombo->currentText()).toInt()
+    //note the conversion to int to fit with the data structure
 }
