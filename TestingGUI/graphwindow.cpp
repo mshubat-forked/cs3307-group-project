@@ -35,7 +35,7 @@ graphwindow::graphwindow(QWidget *parent) :
     //   the array to 3 (with help fro mthe ARRAY_SIZE marco
     YearInformationGraph *p_yi = new YearInformationGraph[ARRAY_SIZE(temp_years)];
 
-    for (int i = 0; i < ARRAY_SIZE(temp_years); i++)
+    for (int i = 0; i < (int)ARRAY_SIZE(temp_years); i++)
     {
         p_yi[i].year = temp_years[i];
         p_yi[i].pme_total = temp_pme_total[i];
@@ -44,20 +44,28 @@ graphwindow::graphwindow(QWidget *parent) :
         p_yi[i].other_total = temp_other_total[i];
     }
 
-    graphwindow::make_plot(p_yi, ARRAY_SIZE(temp_years));
+    // + Apply the stacked bar graph to the window
+        graphwindow::make_stacked_bar_graph(p_yi, ARRAY_SIZE(temp_years));
+
+
+
 }
 
+// + When graphwindow is closed delete the ui
 graphwindow::~graphwindow()
 {
     delete ui;
 }
 
-
-// + Draw the graph in the dialog window
-void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
+/* + Draws a stacked bar graph to the screen based on the information passed as parameters
+ *
+ * YearInformationGraph *p_yi: A pointer to an array of YearInformation structures
+ * int number_of_years: The total number of unique years associated with a faculty name
+*/
+void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_of_years)
 {
 
-    // create empty bar chart objects:
+    // + Create empty bar chart objects:
     QCPBars *undergrad = new QCPBars(ui->graph->xAxis, ui->graph->yAxis);
     QCPBars *postgrad = new QCPBars(ui->graph->xAxis, ui->graph->yAxis);
     QCPBars *continuing = new QCPBars(ui->graph->xAxis, ui->graph->yAxis);
@@ -68,14 +76,16 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     ui->graph->addPlottable(other);
 
 
-    // set names and colors:
+    // + Take the prepped bars and apply names and colours to them
     QPen pen;
     pen.setWidthF(1.2);
-    // sets the legend name
+
+    // Sets the names for the legend
     undergrad->setName("Undergraduate Medical Education");
     pen.setColor(QColor(255, 131, 0));
     undergrad->setPen(pen);
     undergrad->setBrush(QColor(255, 131, 0, 50));
+
     postgrad->setName("Post Medical Education");
     pen.setColor(QColor(1, 92, 191));
     postgrad->setPen(pen);
@@ -92,12 +102,14 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     other->setBrush(QColor(230, 92, 2, 50));
 
 
-    // stack bars ontop of each other:
+    // + Stack bars ontop of each other:
     postgrad->moveAbove(undergrad);
     continuing->moveAbove(postgrad);
     other->moveAbove(continuing);
 
-    // prepare x axis with country labels:
+    // + PREPARE THE X-AXIS
+
+    // + Apply category labels to the x-axis:
     QVector<double> ticks;
     QVector<QString> labels;
 
@@ -107,6 +119,7 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
         labels << p_yi[i-1].year;
     }
 
+    // + Other x-axis formatting
     ui->graph->xAxis->setAutoTicks(false);
     ui->graph->xAxis->setAutoTickLabels(false);
     ui->graph->xAxis->setTickVector(ticks);
@@ -119,12 +132,16 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     // + Sets the range of the ticks along the x-axis
     ui->graph->xAxis->setRange(0, number_of_years*2);
 
-    // prepare y axis:
 
-    // where we set the range of the y axis
+    // + PREPARE THE Y-AXIS
+
+
+    // + Where we set the range of the y axis
     int max_range, temp_range = 0;
 
-    // + Loop and determine the
+    // + Loop and determine the which year has the largest number
+    //   of category occurencs and set that as the max range of the
+    //   graph
     for(int i = 0; i < number_of_years; i++)
     {
         temp_range = p_yi[i].pme_total + p_yi[i].ume_total + p_yi[i].cme_total + p_yi[i].other_total;
@@ -137,6 +154,8 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     }
 
     ui->graph->yAxis->setRange(0, max_range+1);
+
+    // + Other y-axis formatting
     ui->graph->yAxis->setPadding(5); // a bit more space to the left border
     ui->graph->yAxis->setLabel("Intances of Programs");
     ui->graph->yAxis->grid()->setSubGridVisible(true);
@@ -151,8 +170,6 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     // Input data as a vector for a single instance of a grash
     // Set the data in relation the the ticks on the y-axis
     QVector<double> undergradData, postgradData, continuingData, otherData;
-
-
 
     // + Access the individual totals for each category depending on the year
     // + Ie. @ p_yi[j] j could be 0 meaning it will access the YearInformation struct
@@ -186,7 +203,7 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     continuing->setData(ticks, continuingData);
     other->setData(ticks,otherData);
 
-    // + Set up the legend
+    // + Set up the legend on the screen
     ui->graph->legend->setVisible(true);
     ui->graph->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignRight);
     ui->graph->legend->setBrush(QColor(255, 255, 255, 200));
@@ -199,4 +216,5 @@ void graphwindow::make_plot(YearInformationGraph *p_yi, int number_of_years)
     ui->graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
 }
+
 

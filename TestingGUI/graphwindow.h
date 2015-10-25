@@ -20,7 +20,7 @@ public:
     ~graphwindow();
 
 private slots:
-    void make_plot(YearInformationGraph *pointer, int number_of_years);
+    void make_stacked_bar_graph(YearInformationGraph *pointer, int number_of_years);
 
 private:
     Ui::graphwindow *ui;
