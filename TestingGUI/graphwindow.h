@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <qcustomplot.h>
+#include <summarywindow.h>
+
+struct YearInformationGraph;
 
 namespace Ui {
 class graphwindow;
@@ -17,7 +20,7 @@ public:
     ~graphwindow();
 
 private slots:
-    void make_plot();
+    void make_stacked_bar_graph(YearInformationGraph *pointer, int number_of_years);
 
 private:
     Ui::graphwindow *ui;

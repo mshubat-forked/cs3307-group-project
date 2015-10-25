@@ -17,11 +17,31 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>39</y>
      <width>640</width>
-     <height>480</height>
+     <height>441</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>104</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Bar Graph</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Pie Graph</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <customwidgets>
