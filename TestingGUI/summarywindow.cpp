@@ -1,6 +1,11 @@
 #include "summarywindow.h"
 #include "ui_summarywindow.h"
 #include <graphwindow.h>
+#include <QTextStream>
+
+#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
+
+using namespace std;
 
 SummaryWindow::SummaryWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,6 +43,7 @@ SummaryWindow::SummaryWindow(QWidget *parent) :
     make_child(year_1, NULL, NULL, "Dr.Watson", "125", "120");
 
 }
+
 
 // + Makes a top level root item for the tree widget
 QTreeWidgetItem * SummaryWindow::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
