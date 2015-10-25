@@ -17,23 +17,23 @@ class HashTable
 	    int length;
 	    
 	    // Returns an array location for a given item key.
-	    int hash(int data_entry);
+        int hash(string name);
 	    
 	public:
 	    
-	    // Constructs the empty Hash Table object, set to 100 by default
+        // Constructs the empty Hash Table object, set to 1000 by default
 	    HashTable(int tableLength = 1000);
 	    
 	    // Adds data to the Hash Table.
 	    void insertData(data_entry * newData );
 	    
-	    // Deletes data by ID from the Hash Table.
+        // Deletes data by name from the Hash Table.
 	    // Returns true if the operation is successful.
-	    bool removeData(int dataID);
+        bool removeData(string name);
 	    
-	    // Returns data from the Hash Table by ID.
+        // Returns data from the Hash Table by name.
 	    // If the data isn't found, a null pointer is returned.
-        data_entry * getDataByID(int dataID);
+        data_entry * getDataByName(string name);
 	    
 	    // Returns the number of locations in the Hash Table.
 	    int getLength();

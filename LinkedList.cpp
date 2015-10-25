@@ -30,16 +30,16 @@ void LinkedList::insertData(data_entry * newData)
     length++;
 }
 
-// Removes data from the list by ID.
+// Removes data from the list by name.
 // Returns true if the operation is successful.
-bool LinkedList::removeData(int dataID)
+bool LinkedList::removeData(string name)
 {
     if (!head -> next) return false;
     data_entry * p = head;
     data_entry * q = head;
     while (q)
     {
-        if (q->get_ID() == dataID)
+        if (q->get_member().compare(name))
         {
             p -> next = q -> next;
             delete q;
@@ -52,17 +52,17 @@ bool LinkedList::removeData(int dataID)
     return false;
 }
 
-// Searches for data by its ID.
+// Searches for data by its name.
 // Returns a reference to first match.
 // Returns a NULL pointer if no match is found.
-data_entry * LinkedList::getData(int dataID)
+data_entry * LinkedList::getData(string name)
 {
     data_entry * p = head;
     data_entry * q = head;
     while (q)
     {
         p = q;
-        if ((p != head) && (p->get_ID() == dataID))
+        if ((p != head) && (p->get_member().compare(name)))
             return p;
         q = p -> next;
     }
@@ -85,7 +85,7 @@ void LinkedList::printList()
         p = q;
         if (p != head)
         {
-            cout << p->get_ID();
+            cout << p->get_member();
             if (p -> next) cout << ", ";
             else cout << " ";
         }

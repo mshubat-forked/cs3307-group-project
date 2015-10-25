@@ -8,32 +8,39 @@ HashTable::HashTable( int tableLength )
 }
 
 // Returns an array location for a given data ID
-int HashTable::hash(int dataID)
+int HashTable::hash(string name)
 {
-    return (dataID % 1000);
+    int hashInt = 0;
+
+    for (int i = 0; i < name.length(); i++)
+    {
+        hashInt += name[i];
+    }
+
+    return (hashInt % length);
 }
 
 // Adds data to the Hash Table.
 void HashTable::insertData(data_entry * newData)
 {
-    int index = hash(newData -> get_ID());
+    int index = hash(newData -> get_member());
     array[index].insertData(newData);
 }
 
 // Deletes data by ID from the Hash Table.
 // Returns true if the operation is successful.
-bool HashTable::removeData(int dataID)
+bool HashTable::removeData(string name)
 {
-    int index = hash(dataID);
-    return array[index].removeData(dataID);
+    int index = hash(name);
+    return array[index].removeData(name);
 }
 
 // Returns data from the Hash Table by ID.
 // If the data isn't found, a null pointer is returned.
-data_entry * HashTable::getDataByID(int dataID)
+data_entry * HashTable::getDataByName(string name)
 {
-    int index = hash(dataID);
-    return array[index].getData(dataID);
+    int index = hash(name);
+    return array[index].getData(name);
 }
 
 // Returns the number of locations in the Hash Table.

@@ -25,12 +25,12 @@ public:
     
     // Removes data from the list by item key.
     // Returns true if the operation is successful.
-    bool removeData(int dataID);
+    bool removeData(string name);
     
     // Searches for data by its ID.
     // Returns a reference to first match.
     // Returns a NULL pointer if no match is found.
-    data_entry * getData(int dataID);
+    data_entry * getData(string name);
     
     // Displays list contents to the console window.
     void printList();
