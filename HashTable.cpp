@@ -10,11 +10,11 @@ HashTable::HashTable( int tableLength )
 // Returns an array location for a given data ID
 int HashTable::hash(string name)
 {
-    int hashInt = 0;
+    int hashInt = 7;
 
     for (int i = 0; i < name.length(); i++)
     {
-        hashInt += name[i];
+        hashInt = hashInt*31 + name[i];
     }
 
     return (hashInt % length);
