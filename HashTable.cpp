@@ -5,6 +5,12 @@ HashTable::HashTable( int tableLength )
 {
     array = new LinkedList[tableLength];
     length = tableLength;
+    
+    //initialize each array[index] to a linked list
+    for (int i=0; i<tableLength;i++){
+        array[i]=new LinkedList;
+    }
+    
 }
 
 // Returns an array location for a given data ID
