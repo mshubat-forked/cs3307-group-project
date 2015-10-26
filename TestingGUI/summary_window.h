@@ -5,6 +5,7 @@
 #include <QTreeWidgetItem>
 #include <graphwindow.h>
 #include <graphwindowpie.h>
+#include <graphwindowbar.h>
 #include "ui_summary_window.h"
 
 
@@ -41,6 +42,7 @@ private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
    QDialog *graph_pie_window;
+   QDialog *graph_bar_window;
    int fromDateIndex;
    int toDateIndex;
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Bar Graph</string>
+   <string>Pie Graph</string>
   </property>
   <widget class="QCustomPlot" name="graph" native="true">
    <property name="geometry">

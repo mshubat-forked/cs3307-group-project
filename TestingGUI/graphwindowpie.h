@@ -20,7 +20,7 @@ public:
     ~graphwindowpie();
 
 private slots:
-    void make_bar_graph(YearInformationGraph *pointer, int number_of_years);
+    void make_pie_graph(YearInformationGraph *pointer, int number_of_years);
 
 private:
     Ui::graphwindowpie *ui;

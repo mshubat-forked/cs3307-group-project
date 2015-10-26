@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>graphwindow</class>
- <widget class="QDialog" name="graphwindow">
+ <class>graphwindowbar</class>
+ <widget class="QDialog" name="graphwindowbar">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Stacked Graph</string>
+   <string>Bar Graph</string>
   </property>
   <widget class="QCustomPlot" name="graph" native="true">
    <property name="geometry">

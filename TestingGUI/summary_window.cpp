@@ -64,8 +64,9 @@ Summary_Window::Summary_Window(QWidget *parent) :
 
     // + Populate the graph combo box with the graph options
     // + This needs to match switch statement in activated function
-    ui->graphComboBox->addItem("Bar Graph"); //index 0
-    ui->graphComboBox->addItem("Pie Graph"); //index 1
+    ui->graphComboBox->addItem("Stack"); //index 0
+    ui->graphComboBox->addItem("Pie"); //index 1
+    ui->graphComboBox->addItem("Bar"); //index 2
 }
 
 // + Makes a top level root item for the tree widget
@@ -145,7 +146,7 @@ void Summary_Window::on_toDateCombo_activated(const QString &arg1)
 void Summary_Window::on_graphComboBox_activated(int index)
 {
     switch(index){
-    case 0: //bar graph
+    case 0: //stack bar graph
         graph_window = new graphwindow(this);
         graph_window->show();
         break;
@@ -153,6 +154,9 @@ void Summary_Window::on_graphComboBox_activated(int index)
         graph_pie_window = new graphwindowpie(this);
         graph_pie_window->show();
         break;
+    case 2: //pain bar graph
+        graph_bar_window = new graphwindowbar(this);
+        graph_bar_window->show();
     default:
         break;
     }
