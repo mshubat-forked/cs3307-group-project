@@ -16,8 +16,8 @@ SummaryWindow::SummaryWindow(QWidget *parent) :
 
     ui->treeWidget->setColumnCount(5);
     ui->treeWidget->headerItem()->setText(0,"Category:");
-    ui->treeWidget->headerItem()->setText(1,"Year:");
-    ui->treeWidget->headerItem()->setText(2,"Faculty:");
+    ui->treeWidget->headerItem()->setText(1,"Start Year:");
+    ui->treeWidget->headerItem()->setText(2,"Faculty Member:");
     ui->treeWidget->headerItem()->setText(3,"Hours:");
     ui->treeWidget->headerItem()->setText(4,"Students:");
 
@@ -38,7 +38,7 @@ SummaryWindow::SummaryWindow(QWidget *parent) :
     //   will be preferred here
 
     // + Here is an example how a subroot could be added to a main category root
-    QTreeWidgetItem *year_1 = make_child(pme, NULL, "2012-2013", NULL, "500", "250");
+    QTreeWidgetItem *year_1 = make_child(pme, NULL, "2012", NULL, "500", "250");
 
     // + Here is adding a child to the sub root just made above
     make_child(year_1, NULL, NULL, "Dr.Watson", "125", "120");
@@ -122,6 +122,11 @@ void SummaryWindow::on_actionPie_Graph_triggered()
 
 void SummaryWindow::on_fromDateCombo_currentIndexChanged(const QString &arg1)
 {
+    //checks to make sure from date is before to date
+    if((ui->toDateCombo->currentText()).toInt() < (ui->fromDateCombo->currentText()).toInt()){
+        QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
+    }
+
     //get the selected value using: (ui->fromDateCombo->currentText()).toInt()
     //note the conversion to int to fit with the data structure
 }
@@ -129,6 +134,11 @@ void SummaryWindow::on_fromDateCombo_currentIndexChanged(const QString &arg1)
 
 void SummaryWindow::on_toDateCombo_currentIndexChanged(const QString &arg1)
 {
+    //checks to make sure to date is before from date
+    if((ui->toDateCombo->currentText()).toInt() < (ui->fromDateCombo->currentText()).toInt()){
+        QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
+    }
+
     //get the selected value using: (ui->toDateCombo->currentText()).toInt()
     //note the conversion to int to fit with the data structure
 }

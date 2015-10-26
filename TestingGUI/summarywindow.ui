@@ -28,7 +28,7 @@
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Publications</string>
+      <string>Teaching</string>
      </attribute>
      <widget class="QTreeWidget" name="treeWidget">
       <property name="geometry">
@@ -50,7 +50,7 @@
        <rect>
         <x>10</x>
         <y>320</y>
-        <width>404</width>
+        <width>456</width>
         <height>26</height>
        </rect>
       </property>
@@ -58,7 +58,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Select Date Range</string>
+          <string>Select Starting Date Range</string>
          </property>
         </widget>
        </item>
@@ -97,7 +97,7 @@
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
-      <string>Teaching</string>
+      <string>Publications</string>
      </attribute>
     </widget>
    </widget>
