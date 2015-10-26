@@ -46,6 +46,7 @@ Summary_Window::Summary_Window(QWidget *parent) :
     // + Adding some test values for the to and from date combo box
     // + ideally these values would be based on the added data
     // + conversion from int to string as dates values are int in data structure
+
     ui->fromDateCombo->addItem(QString::number(2010));
     ui->fromDateCombo->addItem(QString::number(2011));
     ui->fromDateCombo->addItem(QString::number(2012));
@@ -57,6 +58,14 @@ Summary_Window::Summary_Window(QWidget *parent) :
     ui->toDateCombo->addItem(QString::number(2012));
     ui->toDateCombo->addItem(QString::number(2013));
     ui->toDateCombo->addItem(QString::number(2014));
+
+    fromDateIndex = ui->fromDateCombo->currentIndex();
+    toDateIndex = ui->toDateCombo->currentIndex();
+
+    // + Populate the graph combo box with the graph options
+    // + This needs to match switch statement in activated function
+    ui->graphComboBox->addItem("Bar Graph"); //index 0
+    ui->graphComboBox->addItem("Pie Graph"); //index 1
 }
 
 // + Makes a top level root item for the tree widget
@@ -100,42 +109,51 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString ca
     return new_tree_widget;
 }
 
-void Summary_Window::on_fromDateCombo_currentIndexChanged(const QString &arg1)
-{
-    //checks to make sure from date is before to date
-    if((ui->toDateCombo->currentText()).toInt() < (ui->fromDateCombo->currentText()).toInt()){
-        //QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
-    }
-
-    //get the selected value using: (ui->fromDateCombo->currentText()).toInt()
-    //note the conversion to int to fit with the data structure
-}
-
-
-void Summary_Window::on_toDateCombo_currentIndexChanged(const QString &arg1)
-{
-    //checks to make sure to date is before from date
-    if((ui->toDateCombo->currentText()).toInt() < (ui->fromDateCombo->currentText()).toInt()){
-        //QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
-    }
-
-    //get the selected value using: (ui->toDateCombo->currentText()).toInt()
-    //note the conversion to int to fit with the data structure
-}
-
 Summary_Window::~Summary_Window()
 {
     delete ui;
 }
 
-void Summary_Window::on_graphButton1_clicked()
+void Summary_Window::on_fromDateCombo_activated(const QString &arg1)
 {
-    graph_window = new graphwindow(this);
-    graph_window->show();
+    //checks to make sure from date is before to date
+    if((ui->toDateCombo->currentText()).toInt() < arg1.toInt()){
+        //gives warning and sets box back to previous index
+        QMessageBox::warning(this, "Warning", "From Date must fall before To Date");
+        ui->fromDateCombo->setCurrentIndex(fromDateIndex);
+    }
+    else{
+        fromDateIndex = ui->fromDateCombo->currentIndex();
+        //then get the selected year value using: arg1.toInt() to pass to filter function
+    }
 }
 
-void Summary_Window::on_graphButton2_clicked()
+void Summary_Window::on_toDateCombo_activated(const QString &arg1)
 {
-    graph_pie_window = new graphwindowpie(this);
-    graph_pie_window->show();
+    //checks to make sure to date is before from date
+    if(arg1.toInt() < (ui->fromDateCombo->currentText()).toInt()){
+        //gives warning and sets box back to previous index
+        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
+        ui->toDateCombo->setCurrentIndex(toDateIndex);
+    }
+    else{
+        toDateIndex = ui->toDateCombo->currentIndex();
+        //then get the selected year value using: arg1.toInt() to pass to filter function
+    }
+}
+
+void Summary_Window::on_graphComboBox_activated(int index)
+{
+    switch(index){
+    case 0: //bar graph
+        graph_window = new graphwindow(this);
+        graph_window->show();
+        break;
+    case 1: //pie graph
+        graph_pie_window = new graphwindowpie(this);
+        graph_pie_window->show();
+        break;
+    default:
+        break;
+    }
 }

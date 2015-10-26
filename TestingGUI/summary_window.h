@@ -23,7 +23,6 @@ public:
     ~Summary_Window();
 
 private slots:
-    // void on_pushButton_clicked();
 
     QTreeWidgetItem * make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                               QString num_hours, QString num_students);
@@ -32,19 +31,18 @@ private slots:
     QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);
 
-    //void on_actionTeaching_Graph_triggered();
-    //void on_actionPie_Graph_triggered();
-    void on_fromDateCombo_currentIndexChanged(const QString &arg1);
-    void on_toDateCombo_currentIndexChanged(const QString &arg1);
+    void on_fromDateCombo_activated(const QString &arg1);
 
-    void on_graphButton1_clicked();
+    void on_toDateCombo_activated(const QString &arg1);
 
-    void on_graphButton2_clicked();
+    void on_graphComboBox_activated(int index);
 
 private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
    QDialog *graph_pie_window;
+   int fromDateIndex;
+   int toDateIndex;
 
 };
 
