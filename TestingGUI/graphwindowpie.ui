@@ -11,9 +11,27 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Pie Graph Window</string>
+   <string>Bar Graph</string>
   </property>
+  <widget class="QCustomPlot" name="graph" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>640</width>
+     <height>480</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

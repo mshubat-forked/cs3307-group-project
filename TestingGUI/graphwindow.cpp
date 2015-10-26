@@ -47,6 +47,8 @@ graphwindow::graphwindow(QWidget *parent) :
 
     make_stacked_bar_graph(p_yi,ARRAY_SIZE(temp_years) );
 
+
+
 }
 
 // + When graphwindow is closed delete the ui

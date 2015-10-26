@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 TARGET = Test_Pull
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     graphwindow.cpp \
