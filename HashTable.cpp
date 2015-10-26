@@ -5,31 +5,23 @@ HashTable::HashTable( int tableLength )
 {
     array = new LinkedList[tableLength];
     length = tableLength;
-    
-    //initialize each array[index] to a linked list
-    for (int i=0; i<tableLength;i++){
-        array[i]=new LinkedList;
-    }
-    
 }
 
 // Returns an array location for a given data ID
 int HashTable::hash(string name)
 {
-    int hashInt = 7;
-
-    for (int i = 0; i < name.length(); i++)
+    int value = 0;
+    for ( int i = 0; i < name.length(); i++ )
     {
-        hashInt = hashInt*31 + name[i];
+        value += name[i];
     }
-
-    return (hashInt % length);
+    return (value * name.length() ) % length;
 }
 
 // Adds data to the Hash Table.
 void HashTable::insertData(data_entry * newData)
 {
-    int index = hash(newData -> get_member());
+    int index = hash(newData -> get_user());
     array[index].insertData(newData);
 }
 
@@ -71,4 +63,3 @@ HashTable::~HashTable()
 {
     delete [] array;
 }
-

@@ -4,7 +4,7 @@
 // Creates the head node and sets length to zero.
 LinkedList::LinkedList()
 {
-    head = new data_entry;
+    head = new data;
     head -> next = NULL;
     length = 0;
 }
@@ -14,19 +14,18 @@ void LinkedList::insertData(data_entry * newData)
 {
     if (!head -> next)
     {
-        head -> next = newData;
+        head -> next = new data{newData, NULL};
         length++;
         return;
     }
-    data_entry * p = head;
-    data_entry * q = head;
+    data * p = head;
+    data * q = head;
     while (q)
     {
         p = q;
         q = p -> next;
     }
-    p -> next = newData;
-    newData -> next = NULL;
+    p -> next = new data{newData, NULL};
     length++;
 }
 
@@ -35,11 +34,11 @@ void LinkedList::insertData(data_entry * newData)
 bool LinkedList::removeData(string name)
 {
     if (!head -> next) return false;
-    data_entry * p = head;
-    data_entry * q = head;
+    data * p = head;
+    data * q = head;
     while (q)
     {
-        if (q->get_member().compare(name))
+        if (q->entry->get_user().compare(name))
         {
             p -> next = q -> next;
             delete q;
@@ -57,13 +56,13 @@ bool LinkedList::removeData(string name)
 // Returns a NULL pointer if no match is found.
 data_entry * LinkedList::getData(string name)
 {
-    data_entry * p = head;
-    data_entry * q = head;
+    data * p = head;
+    data * q = head;
     while (q)
     {
         p = q;
-        if ((p != head) && (p->get_member().compare(name)))
-            return p;
+        if ((p != head) && (p->entry->get_user() == name))
+            return p->entry;
         q = p -> next;
     }
     return NULL;
@@ -77,15 +76,15 @@ void LinkedList::printList()
         cout << "\n{ }\n";
         return;
     }
-    data_entry * p = head;
-    data_entry * q = head;
+    data * p = head;
+    data * q = head;
     cout << "\n{ ";
     while (q)
     {
         p = q;
         if (p != head)
         {
-            cout << p->get_member();
+            cout << p->entry->get_user();
             if (p -> next) cout << ", ";
             else cout << " ";
         }
@@ -103,13 +102,12 @@ int LinkedList::getLength()
 // De-allocates list memory when the program terminates.
 LinkedList::~LinkedList()
 {
-    data_entry * p = head;
-    data_entry * q = head;
+    data * p = head;
+    data * q = head;
     while (q)
     {
         p = q;
         q = p -> next;
-        if (q) delete p;
+        delete p;
     }
 }
-

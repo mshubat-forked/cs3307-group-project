@@ -5,6 +5,21 @@
 
 #include "data_entry.h"
 
+data_entry::data_entry()
+{
+}
+
+data_entry::data_entry(int r, string u, string d, int id, string m, string dom, bool i)
+{
+    record = r;
+    lm_user = u;
+    lm_date = d;
+    ID = id;
+    member_name = m;
+    primary_domain = dom;
+    include = i;
+}
+
 void data_entry::set_record(int r)
 {
     record=r;
