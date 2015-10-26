@@ -16,17 +16,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     graphwindow.cpp \
     qcustomplot.cpp \
-    summarywindow.cpp \
+    summary_window.cpp \
     graphwindowpie.cpp
 
 HEADERS  += mainwindow.h \
     graphwindow.h \
     qcustomplot.h \
-    summarywindow.h \
+    summary_window.h \
     graphwindowpie.h
 
 FORMS += \
     graphwindow.ui \
     mainwindow.ui \
-    summarywindow.ui \
+    summary_window.ui \
     graphwindowpie.ui

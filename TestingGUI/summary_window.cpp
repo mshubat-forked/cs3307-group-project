@@ -1,5 +1,5 @@
-#include "summarywindow.h"
-#include "ui_summarywindow.h"
+#include "summary_window.h"
+#include "ui_summary_window.h"
 #include <graphwindow.h>
 #include <graphwindowpie.h>
 #include <QTextStream>
@@ -8,9 +8,9 @@
 
 using namespace std;
 
-SummaryWindow::SummaryWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::SummaryWindow)
+Summary_Window::Summary_Window(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Summary_Window)
 {
     ui->setupUi(this);
 
@@ -59,9 +59,8 @@ SummaryWindow::SummaryWindow(QWidget *parent) :
     ui->toDateCombo->addItem(QString::number(2014));
 }
 
-
 // + Makes a top level root item for the tree widget
-QTreeWidgetItem * SummaryWindow::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
+QTreeWidgetItem * Summary_Window::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                            QString num_hours, QString num_students)
 {
     // + Create a new tree widget to add to the treeWidget table on the main window
@@ -75,7 +74,7 @@ QTreeWidgetItem * SummaryWindow::make_root(QTreeWidgetItem *parent, QString cate
 }
 
 // + Makes sub items to the root items on the tree widget
-QTreeWidgetItem * SummaryWindow::make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
+QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                           QString num_hours, QString num_students)
 {
     // + Create a new tree widget to add to the treeWidget table on the main window
@@ -101,30 +100,11 @@ QTreeWidgetItem * SummaryWindow::make_child(QTreeWidgetItem *parent, QString cat
     return new_tree_widget;
 }
 
-SummaryWindow::~SummaryWindow()
-{
-    delete ui;
-}
-
-
-// + Show the graph in new dialog box
-void SummaryWindow::on_actionTeaching_Graph_triggered()
-{
-    graph_window = new graphwindow(this);
-    graph_window->show();
-}
-
-void SummaryWindow::on_actionPie_Graph_triggered()
-{
-   graph_pie_window = new graphwindowpie(this);
-   graph_pie_window->show();
-}
-
-void SummaryWindow::on_fromDateCombo_currentIndexChanged(const QString &arg1)
+void Summary_Window::on_fromDateCombo_currentIndexChanged(const QString &arg1)
 {
     //checks to make sure from date is before to date
     if((ui->toDateCombo->currentText()).toInt() < (ui->fromDateCombo->currentText()).toInt()){
-        QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
+        //QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
     }
 
     //get the selected value using: (ui->fromDateCombo->currentText()).toInt()
@@ -132,13 +112,30 @@ void SummaryWindow::on_fromDateCombo_currentIndexChanged(const QString &arg1)
 }
 
 
-void SummaryWindow::on_toDateCombo_currentIndexChanged(const QString &arg1)
+void Summary_Window::on_toDateCombo_currentIndexChanged(const QString &arg1)
 {
     //checks to make sure to date is before from date
     if((ui->toDateCombo->currentText()).toInt() < (ui->fromDateCombo->currentText()).toInt()){
-        QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
+        //QMessageBox::warning(this, "Warning", "To Date Precedes From Date!");
     }
 
     //get the selected value using: (ui->toDateCombo->currentText()).toInt()
     //note the conversion to int to fit with the data structure
+}
+
+Summary_Window::~Summary_Window()
+{
+    delete ui;
+}
+
+void Summary_Window::on_graphButton1_clicked()
+{
+    graph_window = new graphwindow(this);
+    graph_window->show();
+}
+
+void Summary_Window::on_graphButton2_clicked()
+{
+    graph_pie_window = new graphwindowpie(this);
+    graph_pie_window->show();
 }

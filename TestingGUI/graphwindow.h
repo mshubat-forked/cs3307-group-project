@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <qcustomplot.h>
-#include <summarywindow.h>
+#include <summary_window.h>
 
 struct YearInformationGraph;
 

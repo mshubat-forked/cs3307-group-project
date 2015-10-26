@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "summarywindow.h"
+#include "summary_window.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,8 +16,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    SummaryWindow s;
-    s.setWindowModality(Qt::ApplicationModal);
-    s.show();
-    
+    Summary_Window s(this);
+    s.setModal(true);
+    s.exec();
 }
