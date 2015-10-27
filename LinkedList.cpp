@@ -68,6 +68,28 @@ data_entry * LinkedList::getData(string name)
     return NULL;
 }
 
+//Returns a referece to first element of an array of all elements in list
+//Returns NULL if name does not match
+data_entry ** LinkedList::getAllData(string name)
+{
+    allData  = new data_entry*[length];
+    int i = 0;
+
+    data * p = head;
+    data * q = head;
+    while (q)
+    {
+        p = q;
+        if (p != head)
+        {
+            allData[i] = p->entry;
+            i++;
+        }
+        q = p -> next;
+    }
+    return allData;
+}
+
 // Displays list contents to the console window.
 void LinkedList::printList()
 {

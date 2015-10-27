@@ -47,6 +47,12 @@ data_entry * HashTable::getDataByName(string name)
     return array[index].getData(name);
 }
 
+data_entry ** HashTable::getAllDataByName(string name)
+{
+    int index = hash(name);
+    return array[index].getAllData(name);
+}
+
 // Returns the number of locations in the Hash Table.
 int HashTable::getLength()
 {

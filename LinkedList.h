@@ -21,6 +21,8 @@ private:
     // Length is the number of data nodes.
     int length;
 
+    data_entry ** allData;
+
 public:
     // Constructs the empty linked list object.
     // Creates the head node and sets length to zero.
@@ -33,10 +35,14 @@ public:
     // Returns true if the operation is successful.
     bool removeData(string name);
 
-    // Searches for data by its ID.
+    // Searches for data by its name.
     // Returns a reference to first match.
     // Returns a NULL pointer if no match is found.
     data_entry * getData(string name);
+
+    //Returns a referece to first element of an array of all elements in list
+    //Returns NULL if name does not match
+    data_entry ** getAllData(string name);
 
     // Displays list contents to the console window.
     void printList();

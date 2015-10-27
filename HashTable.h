@@ -35,6 +35,8 @@ class HashTable
         // If the data isn't found, a null pointer is returned.
         data_entry * getDataByName(string name);
 
+        data_entry ** getAllDataByName(string name);
+
         // Returns the number of locations in the Hash Table.
         int getLength();
 
