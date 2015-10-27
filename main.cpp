@@ -1,16 +1,16 @@
-//
-//  main.cpp
-//  cs3307-Project
-//
+#include "mainwindow.h"
+#include "summary_window.h"
+#include <QApplication>
 
-#include <iostream>
-#include "teaching_entry.h"
-#include "data_entry.h"
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
 
-int main(int argc, const char * argv[]) {
+    //SummaryWindow l;
+    //l.setWindowModality(Qt::ApplicationModal);
+    //l.show();
 
-    teaching_entry t;
-    t.set_record(1);
-    cout<<t.get_record();
-    
+    return a.exec();
 }

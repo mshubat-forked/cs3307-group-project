@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 TARGET = Test_Pull
 TEMPLATE = app
 
+CONFIG += c++11
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     graphwindow.cpp \
@@ -18,10 +20,9 @@ SOURCES += main.cpp\
     summary_window.cpp \
     graphwindowpie.cpp \
     graphwindowbar.cpp \
-    ../data_entry.cpp \
-    ../data_process.cpp \
-    ../grants_entry.cpp \
-    summarywindow.cpp
+    data_entry.cpp \
+    HashTable.cpp \
+    LinkedList.cpp
 
 HEADERS  += mainwindow.h \
     graphwindow.h \
@@ -29,9 +30,9 @@ HEADERS  += mainwindow.h \
     summary_window.h \
     graphwindowpie.h \
     graphwindowbar.h \
-    ../data_entry.h \
-    ../grants_entry.h \
-    summarywindow.h
+    data_entry.h \
+    HashTable.h \
+    LinkedList.h
 
 FORMS += \
     graphwindow.ui \
