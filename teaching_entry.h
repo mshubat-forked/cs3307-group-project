@@ -105,7 +105,7 @@ public:
     string get_other_details();
     int get_total_hours();
     void set_total_hours(int);
-    
+       
     
     
 };

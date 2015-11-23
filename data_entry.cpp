@@ -5,9 +5,6 @@
 
 #include "data_entry.h"
 
-data_entry::data_entry()
-{
-}
 
 data_entry::data_entry(int r, string u, string d, int id, string m, string dom, bool i)
 {
