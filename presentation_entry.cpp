@@ -2,9 +2,6 @@
 //  presentation_entry.cpp
 //  3307
 //
-//  Created by Madhavi Mohan on 2015-11-17.
-//  Copyright (c) 2015 Madhavi Mohan. All rights reserved.
-//
 
 #include "presentation_entry.h"
 

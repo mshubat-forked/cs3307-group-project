@@ -21,10 +21,10 @@ protected:
     string member_name;
     string primary_domain;
     bool include;
-
+    
 public:
     //data_entry * next = nullptr;
-
+    
     data_entry();
     void set_record(int);
     int get_record();
@@ -40,8 +40,8 @@ public:
     string get_domain();
     void set_include(bool);
     bool get_include();
-
-
+    
+    
 };
 
 

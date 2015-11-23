@@ -2,12 +2,9 @@
 //  presentation_entry.h
 //  3307
 //
-//  Created by Madhavi Mohan on 2015-11-17.
-//  Copyright (c) 2015 Madhavi Mohan. All rights reserved.
-//
 
-#ifndef ___307__presentation_entry__
-#define ___307__presentation_entry__
+#ifndef ___3307__presentation_entry__
+#define ___3307__presentation_entry__
 
 #include <stdio.h>
 #include <string>
@@ -109,4 +106,4 @@ public:
 };
 
 
-#endif /* defined(___307__presentation_entry__) */
+#endif /* defined(___3307__presentation_entry__) */
