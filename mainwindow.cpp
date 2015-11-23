@@ -7,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QPixmap pix("/Users/SamirahSiddiq/Desktop/Schulich and Western.jpg");
+
+          ui ->label_2->setPixmap(pix);
 }
 
 MainWindow::~MainWindow()
