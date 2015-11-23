@@ -26,7 +26,6 @@ public:
     //data_entry * next = nullptr;
 
     data_entry();
-    data_entry(int r, string u, string d, int id, string m, string dom, bool i);
     void set_record(int);
     int get_record();
     void set_user(string);
