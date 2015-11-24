@@ -2,6 +2,12 @@
 #include "summary_window.h"
 #include <QApplication>
 
+/*
+ * Function: main
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Runs the program by opening the 'mainwindow'
+ */
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

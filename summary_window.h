@@ -40,10 +40,6 @@ private slots:
 
     void on_graphComboBox_activated(int index);
 
-    TeachingField * make_list_information();
-
-    int make_program_totals(TeachingField *pointer,int array_size);
-
 private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
@@ -51,6 +47,9 @@ private:
    QDialog *graph_bar_window;
    int fromDateIndex;
    int toDateIndex;
+
+   // Defines a the values to the graph
+   QVector<double> graph_values;
 
 };
 

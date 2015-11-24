@@ -13,10 +13,23 @@ struct TeachingField
     int students;
 };
 
+QVector<double> values(4);
+
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
 using namespace std;
 
+/*
+ * Constructor: Summary_Window
+ * -----------------------------------------
+ * WHAT THE CONSTRUCTOR DOES:
+ * + Defines a Dialog window that shows the summarization of csv file
+ *   information and the functionality to view that information in different
+ *   ways (ie. date range filters and graphs)
+ *
+ * PARAMETER:
+ * - parent: a reference to the parent widget
+ */
 Summary_Window::Summary_Window(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Summary_Window)
@@ -30,16 +43,10 @@ Summary_Window::Summary_Window(QWidget *parent) :
     ui->treeWidget->headerItem()->setText(3,"Hours:");
     ui->treeWidget->headerItem()->setText(4,"Students:");
 
-    // + Create roots for the 4 main program heads: CME, UME, PME, and Other
-    // + Ideally this would be done with a loop
-
-    TeachingField *p_tf = make_list_information();
-
-
-    QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , QString::number(p_tf[0].hours), QString::number(p_tf[0].students));
-    QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, QString::number(p_tf[1].hours), QString::number(p_tf[1].students));
-    QTreeWidgetItem *cme = make_root(NULL, "CME", NULL, NULL, QString::number(p_tf[2].hours), QString::number(p_tf[2].students));
-    QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, QString::number(p_tf[3].hours), QString::number(p_tf[3].students));
+    QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , "23", "5");
+    QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, "18","10");
+    QTreeWidgetItem *cme = make_root(NULL, "CME", NULL, NULL, "15", "12");
+    QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, "34","3");
 
     // + Make each of the categories top level items in the tree widget
     ui->treeWidget->addTopLevelItem(pme);
@@ -51,10 +58,10 @@ Summary_Window::Summary_Window(QWidget *parent) :
     //   will be preferred here
 
     // + Here is an example how a subroot could be added to a main category root
-    QTreeWidgetItem *p_year_row = make_child(pme, NULL, QString::number(p_tf[1].date), NULL, QString::number(p_tf[1].hours), QString::number(p_tf[1].students));
+    QTreeWidgetItem *p_year_row = make_child(pme, NULL, "2011", NULL, "34", "45");
 
     // + Here is adding a child to the sub root just made above
-    make_child(p_year_row, NULL, NULL, p_tf[1].member_name, QString::number(p_tf[1].hours), QString::number(p_tf[1].students));
+    make_child(p_year_row, NULL, NULL, "Jack Johnson", "45", "100");
 
     // + Adding some test values for the to and from date combo box
     // + ideally these values would be based on the added data
@@ -80,9 +87,33 @@ Summary_Window::Summary_Window(QWidget *parent) :
     ui->graphComboBox->addItem("Stack"); //index 0
     ui->graphComboBox->addItem("Pie"); //index 1
     ui->graphComboBox->addItem("Bar"); //index 2
+
+    graph_values.append(18);
+    graph_values.append(45);
+    graph_values.append(34);
+    graph_values.append(40);
+
 }
 
-// + Makes a top level root item for the tree widget
+/*
+ * Function: make_root
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Makes a root QTreeWidgetItem that could be the parent to
+ *   child QTreeWidgetItems
+ *
+ * PARAMETER:
+ * - parent: A QTreeWidgetItem pointer that refers to a QTreeWidgetItem
+ *           that will be above the to be made child in the summary tree
+ * - category: A QString that can be one of four subject areas (PME, UME, CME, Other)
+ * - date: A QString that represents a year
+ * - faculty_name: A QString that represents the name of a member of a faculty
+ * - num_hours: A QString that represents the hours associated with a subject area for a year
+ * - num_students: A QString that represents the number of students in a subject for a year
+ *
+ * RETURNS:
+ * + A newly made root QTreeWidgetItem
+ */
 QTreeWidgetItem * Summary_Window::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                            QString num_hours, QString num_students)
 {
@@ -96,7 +127,25 @@ QTreeWidgetItem * Summary_Window::make_root(QTreeWidgetItem *parent, QString cat
     return new_tree_widget;
 }
 
-// + Makes sub items to the root items on the tree widget
+/*
+ * Function: make_child
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Makes a child QTreeWidgetItem that gets assoicated with a parent
+ *   QTreeWidgetItem
+ *
+ * PARAMETER:
+ * - parent: A QTreeWidgetItem pointer that refers to a QTreeWidgetItem
+ *           that will be above the to be made child in the summary tree
+ * - category: A QString that can be one of four subject areas (PME, UME, CME, Other)
+ * - date: A QString that represents a year
+ * - faculty_name: A QString that represents the name of a member of a faculty
+ * - num_hours: A QString that represents the hours associated with a subject area for a year
+ * - num_students: A QString that represents the number of students in a subject for a year
+ *
+ * RETURNS:
+ * + A newly made child QTreeWidgetItem
+ */
 QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                           QString num_hours, QString num_students)
 {
@@ -123,93 +172,105 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString ca
     return new_tree_widget;
 }
 
+
+/*
+ * Function: on_fromDateCombo_activated
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Defines a the first of two combo boxes that are used
+ *   to create a date range for the data on the summary window
+ *
+ * PARAMETER:
+ * - first_year: a string that represents a year
+ */
+void Summary_Window::on_fromDateCombo_activated(const QString &first_year)
+{
+    // Checks to make sure from date is before to date
+    if((ui->toDateCombo->currentText()).toInt() < first_year.toInt())
+    {
+        // Gives warning and sets box back to previous index
+        QMessageBox::warning(this, "Warning", "From Date must fall before To Date");
+
+        ui->fromDateCombo->setCurrentIndex(fromDateIndex);
+    }
+
+    else
+    {
+        fromDateIndex = ui->fromDateCombo->currentIndex();
+        //then get the selected year value using: first_year.toInt() to pass to filter function
+    }
+}
+
+/*
+ * Function: on_toDateCombo_activated
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Defines a the second of two combo boxes that are used
+ *   to create a date range for the data on the summary window
+ *
+ * PARAMETER:
+ * - second_year: a string that represents a year
+ */
+void Summary_Window::on_toDateCombo_activated(const QString &second_year)
+{
+    // Checks to make sure to date is before from date
+    if(second_year.toInt() < (ui->fromDateCombo->currentText()).toInt())
+    {
+        //gives warning and sets box back to previous index
+        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
+
+        ui->toDateCombo->setCurrentIndex(toDateIndex);
+    }
+
+    else
+    {
+        toDateIndex = ui->toDateCombo->currentIndex();
+        //then get the selected year value using: second_year.toInt() to pass to filter function
+    }
+}
+
+/*
+ * Function: on_graphComboBox_activated
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Defines the functionality of the combobox that controls
+ *   what graphs the user can view
+ *
+ * PARAMETER:
+ * - index: an integer value that represents the index
+ *          of the graph chosen
+ */
+void Summary_Window::on_graphComboBox_activated(int index)
+{
+
+    switch(index)
+    {
+        // Show a Stack bar graph
+        case 0:
+            graph_window = new graphwindow(this,graph_values);
+            graph_window->show();
+            break;
+
+        // Show a Pie graph
+        case 1:
+            graph_pie_window = new graphwindowpie(this,graph_values);
+            graph_pie_window->show();
+            break;
+
+        // Show a Plain bar graph
+        case 2:
+            graph_bar_window = new graphwindowbar(this,graph_values);
+            graph_bar_window->show();
+
+        default:
+            break;
+    }
+}
+
+/*
+ * Destory the window when it is closed
+ */
 Summary_Window::~Summary_Window()
 {
     delete ui;
-}
-
-void Summary_Window::on_fromDateCombo_activated(const QString &arg1)
-{
-    //checks to make sure from date is before to date
-    if((ui->toDateCombo->currentText()).toInt() < arg1.toInt()){
-        //gives warning and sets box back to previous index
-        QMessageBox::warning(this, "Warning", "From Date must fall before To Date");
-        ui->fromDateCombo->setCurrentIndex(fromDateIndex);
-    }
-    else{
-        fromDateIndex = ui->fromDateCombo->currentIndex();
-        //then get the selected year value using: arg1.toInt() to pass to filter function
-    }
-}
-
-void Summary_Window::on_toDateCombo_activated(const QString &arg1)
-{
-    //checks to make sure to date is before from date
-    if(arg1.toInt() < (ui->fromDateCombo->currentText()).toInt()){
-        //gives warning and sets box back to previous index
-        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
-        ui->toDateCombo->setCurrentIndex(toDateIndex);
-    }
-    else{
-        toDateIndex = ui->toDateCombo->currentIndex();
-        //then get the selected year value using: arg1.toInt() to pass to filter function
-    }
-}
-
-void Summary_Window::on_graphComboBox_activated(int index)
-{
-    switch(index){
-    case 0: //stack bar graph
-        graph_window = new graphwindow(this);
-        graph_window->show();
-        break;
-    case 1: //pie graph
-        graph_pie_window = new graphwindowpie(this);
-        graph_pie_window->show();
-        break;
-    case 2: //pain bar graph
-        graph_bar_window = new graphwindowbar(this);
-        graph_bar_window->show();
-    default:
-        break;
-    }
-}
-
-TeachingField * Summary_Window::make_list_information(){
-
-
-    QString temp_names[] = {"Malcomson, Paul","Dragon, Smaug","Smith, Drew","Strangelove, Dr.","Snuffleupagus, Mr","Baggins, "
-                            "Bilbo","Parker Peter","Schwarzenegger, Arnold","Harper, Stephen","Larson, Gary"}; //10
-
-    int temp_years[] = {2010,2010,2011,2011,2012,2012,2013,2013,2014,2014}; //10
-    QString temp_program[] = {"PME","UME","CME","Other", "PME", "PME", "UME", "CME","Other","UME"};//10
-    double temp_hours[] = {1.5,1,2.5,7,8,10,3,2,1.4,1,2,6,6,4.5,1.2,3,4,12}; //20
-    int temp_students[] = {3,14,20,7,8,1,13,23,56,8,9,10,11,12,38,12,3,2,7,8}; //20
-
-
-
-    // + Create an pointer to an array of YearInformationGraph items
-    // + Set the size of the array to the number of years in the range
-    // + Ie. A range of 2009, 2010, 2011 would set the size of
-    //   the array to 3 (with help fro mthe ARRAY_SIZE marco
-    TeachingField *p_tf = new TeachingField[ARRAY_SIZE(temp_names)];
-
-    for (int i = 0; i < (int)ARRAY_SIZE(temp_names); i++)
-    {
-        p_tf[i].member_name = temp_names[i];
-        p_tf[i].date = temp_years[i];
-        p_tf[i].program = temp_program[i];
-        p_tf[i].hours = temp_hours[i];
-        p_tf[i].students = temp_students[i];
-    }
-
- return p_tf;
-}
-
-// + This function will be eventually be used for calculating totals for hours and students
-int Summary_Window::make_program_totals(TeachingField *pointer, int array_size)
-{
-
-
-
 }
