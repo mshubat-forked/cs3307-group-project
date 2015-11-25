@@ -93,6 +93,10 @@ Summary_Window::Summary_Window(QWidget *parent) :
     graph_values.append(34);
     graph_values.append(40);
 
+    for(int n=0; n<4; n++){
+        ui->treeWidget->resizeColumnToContents(n);
+    }
+
 }
 
 /*
