@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>723</width>
-    <height>433</height>
+    <width>671</width>
+    <height>421</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Data Summary</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -24,6 +24,13 @@
        <string>Teaching</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="teaching_header">
+         <property name="text">
+          <string>Acuity Star Teaching Information</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QTreeWidget" name="treeWidget">
          <column>
@@ -91,16 +98,233 @@
       <attribute name="title">
        <string>Presentations</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="presentation_header">
+         <property name="text">
+          <string>Acuity Star Presentation Information</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTreeWidget" name="treeWidget_2">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Select Starting Date Range</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>From:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="fromDateCombo_2"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>To:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="toDateCombo_2"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="spacing">
+          <number>1</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>View Graph:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="graphComboBox_2">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+      <zorder>treeWidget_2</zorder>
+      <zorder>layoutWidget</zorder>
+      <zorder>layoutWidget_2</zorder>
+      <zorder>presentation_header</zorder>
+      <zorder>label_2</zorder>
+      <zorder>graphComboBox_2</zorder>
+      <zorder>label_2</zorder>
      </widget>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
        <string>Grants</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="grant_header">
+         <property name="text">
+          <string>Acuity Star Grant Information</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTreeWidget" name="treeWidget_3">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Select Starting Date Range</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>From:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="fromDateCombo_3"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>To:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="toDateCombo_3"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <property name="spacing">
+          <number>1</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>View Graph:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="graphComboBox_3">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab_8">
       <attribute name="title">
        <string>Publications</string>
       </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="publication_header">
+         <property name="text">
+          <string>Acuity Publication Information</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTreeWidget" name="treeWidget_4">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Select Starting Date Range</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>From:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="fromDateCombo_4"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>To:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="toDateCombo_4"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="spacing">
+          <number>1</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>View Graph:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="graphComboBox_4">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
