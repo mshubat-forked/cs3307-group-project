@@ -37,19 +37,17 @@ private slots:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
 
-    void on_fromDateCombo_teach_activated(const QString &arg1);
-
-    void on_toDateCombo_teach_activated(const QString &arg1);
-
     void on_graphComboBox_teach_activated(int index);
+
+    void on_dateFilterButton_clicked();
 
 private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
    QDialog *graph_pie_window;
    QDialog *graph_bar_window;
-   int fromDateIndex;
-   int toDateIndex;
+   int fromYear;
+   int toYear;
 
    // Defines a the values to the graph
    QVector<double> graph_values;

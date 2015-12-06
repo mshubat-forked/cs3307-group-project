@@ -69,24 +69,10 @@ Summary_Window::Summary_Window(QWidget *parent) :
     // + Here is adding a child to the sub root just made above
     make_child(p_year_row, NULL, NULL, "Jack Johnson", "45", "100");
 
-    // + Adding some test values for the to and from date combo box
-    // + ideally these values would be based on the added data
-    // + conversion from int to string as dates values are int in data structure
-
-    ui->fromDateCombo_teach->addItem(QString::number(2010));
-    ui->fromDateCombo_teach->addItem(QString::number(2011));
-    ui->fromDateCombo_teach->addItem(QString::number(2012));
-    ui->fromDateCombo_teach->addItem(QString::number(2013));
-    ui->fromDateCombo_teach->addItem(QString::number(2014));
-
-    ui->toDateCombo_teach->addItem(QString::number(2010));
-    ui->toDateCombo_teach->addItem(QString::number(2011));
-    ui->toDateCombo_teach->addItem(QString::number(2012));
-    ui->toDateCombo_teach->addItem(QString::number(2013));
-    ui->toDateCombo_teach->addItem(QString::number(2014));
-
-    fromDateIndex = ui->fromDateCombo_teach->currentIndex();
-    toDateIndex = ui->toDateCombo_teach->currentIndex();
+    // + Validator to ensure only year values can be entered into the date filter
+    QIntValidator *v = new QIntValidator(0, 9999);
+    ui->fromDate->setValidator( v );
+    ui->toDate->setValidator( v );
 
     // + Populate the graph combo box with the graph options
     // + This needs to match switch statement in activated function
@@ -192,62 +178,6 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString ca
 
 
 /*
- * Function: on_fromDateCombo_teach_activated
- * -----------------------------------------
- * WHAT THE FUNCTION DOES:
- * + Defines a the first of two combo boxes that are used
- *   to create a date range for the data on the summary window
- *
- * PARAMETER:
- * - first_year: a string that represents a year
- */
-void Summary_Window::on_fromDateCombo_teach_activated(const QString &first_year)
-{
-    // Checks to make sure from date is before to date
-    if((ui->toDateCombo_teach->currentText()).toInt() < first_year.toInt())
-    {
-        // Gives warning and sets box back to previous index
-        QMessageBox::warning(this, "Warning", "From Date must fall before To Date");
-
-        ui->fromDateCombo_teach->setCurrentIndex(fromDateIndex);
-    }
-
-    else
-    {
-        fromDateIndex = ui->fromDateCombo_teach->currentIndex();
-        //then get the selected year value using: first_year.toInt() to pass to filter function
-    }
-}
-
-/*
- * Function: on_toDateCombo_teach_activated
- * -----------------------------------------
- * WHAT THE FUNCTION DOES:
- * + Defines a the second of two combo boxes that are used
- *   to create a date range for the data on the summary window
- *
- * PARAMETER:
- * - second_year: a string that represents a year
- */
-void Summary_Window::on_toDateCombo_teach_activated(const QString &second_year)
-{
-    // Checks to make sure to date is before from date
-    if(second_year.toInt() < (ui->fromDateCombo_teach->currentText()).toInt())
-    {
-        //gives warning and sets box back to previous index
-        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
-
-        ui->toDateCombo_teach->setCurrentIndex(toDateIndex);
-    }
-
-    else
-    {
-        toDateIndex = ui->toDateCombo_teach->currentIndex();
-        //then get the selected year value using: second_year.toInt() to pass to filter function
-    }
-}
-
-/*
  * Function: on_graphComboBox_teach_activated
  * -----------------------------------------
  * WHAT THE FUNCTION DOES:
@@ -332,4 +262,22 @@ void Summary_Window::dropEvent(QDropEvent *e)
 Summary_Window::~Summary_Window()
 {
     delete ui;
+}
+
+void Summary_Window::on_dateFilterButton_clicked()
+{
+    //variable fromYear and to Year defined in header
+    //read in the dates
+    int tempFrom = (ui->fromDate->text()).toInt();
+    int tempTo = (ui->toDate->text()).toInt();
+    if(tempFrom > tempTo){
+        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
+        ui->fromDate->setText(QString::number(fromYear));
+        ui->toDate->setText(QString::number(toYear));
+    }
+    else{
+        fromYear=tempFrom;
+        toYear=tempTo;
+        //now need to filter
+    }
 }
