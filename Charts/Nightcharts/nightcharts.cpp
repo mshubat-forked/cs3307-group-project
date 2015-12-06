@@ -197,10 +197,12 @@ int Nightcharts::draw(QPainter *painter)
           pen.setColor(pieces[i].rgbColor);
           pen.setWidth(2);
           painter->setPen(pen);
-          painter->setBrush(pieces[i].rgbColor);
+          QColor temp_color = pieces[i].rgbColor;
+          temp_color.setAlpha(120);
+          painter->setBrush(temp_color);
           // + Draw the piece to the screen
-          painter->drawPie(cX,cY,cW,cH,starting_angle*16, angle*16);
 
+          painter->drawPie(cX,cY,cW,cH,starting_angle*16, angle*16);
           // + Start the next piece from where the current piece ends
           starting_angle = ending_angle;
       }
@@ -430,7 +432,9 @@ int Nightcharts::drawLegend(QPainter *painter)
 
         for (int i=pieces.size()-1;i>=0;i--)
         {
-            painter->setBrush(pieces[i].rgbColor);
+            QColor temp_color = pieces[i].rgbColor;
+            temp_color.setAlpha(120);
+            painter->setBrush(temp_color);
             float x = lX+dist;
             float y = lY+dist+i*(painter->fontMetrics().height()+2*dist);
             painter->drawRect(x,y,painter->fontMetrics().height(),painter->fontMetrics().height());
@@ -519,6 +523,12 @@ void pieceNC::setColor(Qt::GlobalColor color)
 void pieceNC::setColor(QColor color)
 {
     rgbColor = color;
+}
+
+void pieceNC::setColor(QColor color, int new_alpha)
+{
+    rgbColor = color;
+    rgbColor.setAlpha(new_alpha);
 }
 
 void pieceNC::setPerc(float Percentage)

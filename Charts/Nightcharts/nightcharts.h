@@ -34,6 +34,7 @@ public:
     void addName(QString name);
     void setColor(Qt::GlobalColor);
     void setColor(QColor color);
+    void setColor(QColor color, int new_alpha);
     void setPerc(float Percentage);
 
     QString pname;
