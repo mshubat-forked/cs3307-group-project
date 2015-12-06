@@ -37,11 +37,11 @@ private slots:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
 
-    void on_fromDateCombo_activated(const QString &arg1);
+    void on_fromDateCombo_teach_activated(const QString &arg1);
 
-    void on_toDateCombo_activated(const QString &arg1);
+    void on_toDateCombo_teach_activated(const QString &arg1);
 
-    void on_graphComboBox_activated(int index);
+    void on_graphComboBox_teach_activated(int index);
 
 private:
    Ui::Summary_Window *ui;

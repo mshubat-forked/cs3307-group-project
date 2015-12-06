@@ -40,14 +40,13 @@ Summary_Window::Summary_Window(QWidget *parent) :
 
     setAcceptDrops(true);
 
+    ui->treeWidget_teach->setColumnCount(5);
+    ui->treeWidget_teach->headerItem()->setText(0,"Category:");
+    ui->treeWidget_teach->headerItem()->setText(1,"Start Year:");
+    ui->treeWidget_teach->headerItem()->setText(2,"Faculty Member:");
+    ui->treeWidget_teach->headerItem()->setText(3,"Hours:");
+    ui->treeWidget_teach->headerItem()->setText(4,"Students:");
 
-
-    ui->teaching_tree->setColumnCount(5);
-    ui->teaching_tree->headerItem()->setText(0,"Category:");
-    ui->teaching_tree->headerItem()->setText(1,"Start Year:");
-    ui->teaching_tree->headerItem()->setText(2,"Faculty Member:");
-    ui->teaching_tree->headerItem()->setText(3,"Hours:");
-    ui->teaching_tree->headerItem()->setText(4,"Students:");
 
     QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , "23", "5");
     QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, "18","10");
@@ -55,10 +54,11 @@ Summary_Window::Summary_Window(QWidget *parent) :
     QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, "34","3");
 
     // + Make each of the categories top level items in the tree widget
-    ui->teaching_tree->addTopLevelItem(pme);
-    ui->teaching_tree->addTopLevelItem(ume);
-    ui->teaching_tree->addTopLevelItem(cme);
-    ui->teaching_tree->addTopLevelItem(other);
+    ui->treeWidget_teach->addTopLevelItem(pme);
+    ui->treeWidget_teach->addTopLevelItem(ume);
+    ui->treeWidget_teach->addTopLevelItem(cme);
+    ui->treeWidget_teach->addTopLevelItem(other);
+
 
     // + Make new nodes depending on the date range set by the user; again a loop
     //   will be preferred here
@@ -73,26 +73,26 @@ Summary_Window::Summary_Window(QWidget *parent) :
     // + ideally these values would be based on the added data
     // + conversion from int to string as dates values are int in data structure
 
-    ui->fromDateCombo->addItem(QString::number(2010));
-    ui->fromDateCombo->addItem(QString::number(2011));
-    ui->fromDateCombo->addItem(QString::number(2012));
-    ui->fromDateCombo->addItem(QString::number(2013));
-    ui->fromDateCombo->addItem(QString::number(2014));
+    ui->fromDateCombo_teach->addItem(QString::number(2010));
+    ui->fromDateCombo_teach->addItem(QString::number(2011));
+    ui->fromDateCombo_teach->addItem(QString::number(2012));
+    ui->fromDateCombo_teach->addItem(QString::number(2013));
+    ui->fromDateCombo_teach->addItem(QString::number(2014));
 
-    ui->toDateCombo->addItem(QString::number(2010));
-    ui->toDateCombo->addItem(QString::number(2011));
-    ui->toDateCombo->addItem(QString::number(2012));
-    ui->toDateCombo->addItem(QString::number(2013));
-    ui->toDateCombo->addItem(QString::number(2014));
+    ui->toDateCombo_teach->addItem(QString::number(2010));
+    ui->toDateCombo_teach->addItem(QString::number(2011));
+    ui->toDateCombo_teach->addItem(QString::number(2012));
+    ui->toDateCombo_teach->addItem(QString::number(2013));
+    ui->toDateCombo_teach->addItem(QString::number(2014));
 
-    fromDateIndex = ui->fromDateCombo->currentIndex();
-    toDateIndex = ui->toDateCombo->currentIndex();
+    fromDateIndex = ui->fromDateCombo_teach->currentIndex();
+    toDateIndex = ui->toDateCombo_teach->currentIndex();
 
     // + Populate the graph combo box with the graph options
     // + This needs to match switch statement in activated function
-    ui->graphComboBox->addItem("Stack"); //index 0
-    ui->graphComboBox->addItem("Pie"); //index 1
-    ui->graphComboBox->addItem("Bar"); //index 2
+    ui->graphComboBox_teach->addItem("Stack"); //index 0
+    ui->graphComboBox_teach->addItem("Pie"); //index 1
+    ui->graphComboBox_teach->addItem("Bar"); //index 2
 
     graph_values.append(18);
     graph_values.append(45);
@@ -105,7 +105,7 @@ Summary_Window::Summary_Window(QWidget *parent) :
     title_values.append("Other");
 
     for(int n=0; n<4; n++){
-        ui->teaching_tree->resizeColumnToContents(n);
+        ui->treeWidget_teach->resizeColumnToContents(n);
     }
 
     qDebug() << "Using file: " << csv_file_name;
@@ -134,8 +134,9 @@ Summary_Window::Summary_Window(QWidget *parent) :
 QTreeWidgetItem* Summary_Window::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                            QString num_hours, QString num_students)
 {
-    // + Create a new tree widget to add to the teaching_tree table on the main window
-    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->teaching_tree);
+
+    // + Create a new tree widget to add to the treeWidget table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->treeWidget_teach);
 
     new_tree_widget->setText(0, category);
     new_tree_widget->setText(3, num_hours);
@@ -191,7 +192,7 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString ca
 
 
 /*
- * Function: on_fromDateCombo_activated
+ * Function: on_fromDateCombo_teach_activated
  * -----------------------------------------
  * WHAT THE FUNCTION DOES:
  * + Defines a the first of two combo boxes that are used
@@ -200,26 +201,26 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString ca
  * PARAMETER:
  * - first_year: a string that represents a year
  */
-void Summary_Window::on_fromDateCombo_activated(const QString &first_year)
+void Summary_Window::on_fromDateCombo_teach_activated(const QString &first_year)
 {
     // Checks to make sure from date is before to date
-    if((ui->toDateCombo->currentText()).toInt() < first_year.toInt())
+    if((ui->toDateCombo_teach->currentText()).toInt() < first_year.toInt())
     {
         // Gives warning and sets box back to previous index
         QMessageBox::warning(this, "Warning", "From Date must fall before To Date");
 
-        ui->fromDateCombo->setCurrentIndex(fromDateIndex);
+        ui->fromDateCombo_teach->setCurrentIndex(fromDateIndex);
     }
 
     else
     {
-        fromDateIndex = ui->fromDateCombo->currentIndex();
+        fromDateIndex = ui->fromDateCombo_teach->currentIndex();
         //then get the selected year value using: first_year.toInt() to pass to filter function
     }
 }
 
 /*
- * Function: on_toDateCombo_activated
+ * Function: on_toDateCombo_teach_activated
  * -----------------------------------------
  * WHAT THE FUNCTION DOES:
  * + Defines a the second of two combo boxes that are used
@@ -228,26 +229,26 @@ void Summary_Window::on_fromDateCombo_activated(const QString &first_year)
  * PARAMETER:
  * - second_year: a string that represents a year
  */
-void Summary_Window::on_toDateCombo_activated(const QString &second_year)
+void Summary_Window::on_toDateCombo_teach_activated(const QString &second_year)
 {
     // Checks to make sure to date is before from date
-    if(second_year.toInt() < (ui->fromDateCombo->currentText()).toInt())
+    if(second_year.toInt() < (ui->fromDateCombo_teach->currentText()).toInt())
     {
         //gives warning and sets box back to previous index
         QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
 
-        ui->toDateCombo->setCurrentIndex(toDateIndex);
+        ui->toDateCombo_teach->setCurrentIndex(toDateIndex);
     }
 
     else
     {
-        toDateIndex = ui->toDateCombo->currentIndex();
+        toDateIndex = ui->toDateCombo_teach->currentIndex();
         //then get the selected year value using: second_year.toInt() to pass to filter function
     }
 }
 
 /*
- * Function: on_graphComboBox_activated
+ * Function: on_graphComboBox_teach_activated
  * -----------------------------------------
  * WHAT THE FUNCTION DOES:
  * + Defines the functionality of the combobox that controls
@@ -257,7 +258,7 @@ void Summary_Window::on_toDateCombo_activated(const QString &second_year)
  * - index: an integer value that represents the index
  *          of the graph chosen
  */
-void Summary_Window::on_graphComboBox_activated(int index)
+void Summary_Window::on_graphComboBox_teach_activated(int index)
 {
 
     switch(index)
