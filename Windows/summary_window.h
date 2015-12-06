@@ -34,11 +34,11 @@ private slots:
     QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);
 
-    void on_fromDateCombo_activated(const QString &arg1);
+    void on_fromDateCombo_teach_activated(const QString &arg1);
 
-    void on_toDateCombo_activated(const QString &arg1);
+    void on_toDateCombo_teach_activated(const QString &arg1);
 
-    void on_graphComboBox_activated(int index);
+    void on_graphComboBox_teach_activated(int index);
 
 private:
    Ui::Summary_Window *ui;
