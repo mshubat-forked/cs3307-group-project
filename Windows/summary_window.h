@@ -34,6 +34,9 @@ private slots:
     QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);
 
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dropEvent(QDropEvent *e);
+
     void on_fromDateCombo_activated(const QString &arg1);
 
     void on_toDateCombo_activated(const QString &arg1);

@@ -25,7 +25,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QTreeWidget" name="treeWidget">
+        <widget class="QTreeWidget" name="teaching_tree">
          <column>
           <property name="text">
            <string notr="true">1</string>
@@ -91,16 +91,61 @@
       <attribute name="title">
        <string>Presentations</string>
       </attribute>
+      <widget class="QTreeWidget" name="presentations_tree">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>11</y>
+         <width>673</width>
+         <height>298</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
        <string>Grants</string>
       </attribute>
+      <widget class="QTreeWidget" name="grants_tree">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>11</y>
+         <width>673</width>
+         <height>298</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_8">
       <attribute name="title">
        <string>Publications</string>
       </attribute>
+      <widget class="QTreeWidget" name="publications_tree">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>11</y>
+         <width>673</width>
+         <height>298</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
      </widget>
     </widget>
    </item>

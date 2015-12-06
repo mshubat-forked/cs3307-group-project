@@ -4,6 +4,8 @@
 #include <Windows/graphwindowpie.h>
 #include <QTextStream>
 
+static QString csv_file_name;
+
 struct TeachingField
 {
     QString member_name;
@@ -36,12 +38,16 @@ Summary_Window::Summary_Window(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->treeWidget->setColumnCount(5);
-    ui->treeWidget->headerItem()->setText(0,"Category:");
-    ui->treeWidget->headerItem()->setText(1,"Start Year:");
-    ui->treeWidget->headerItem()->setText(2,"Faculty Member:");
-    ui->treeWidget->headerItem()->setText(3,"Hours:");
-    ui->treeWidget->headerItem()->setText(4,"Students:");
+    setAcceptDrops(true);
+
+
+
+    ui->teaching_tree->setColumnCount(5);
+    ui->teaching_tree->headerItem()->setText(0,"Category:");
+    ui->teaching_tree->headerItem()->setText(1,"Start Year:");
+    ui->teaching_tree->headerItem()->setText(2,"Faculty Member:");
+    ui->teaching_tree->headerItem()->setText(3,"Hours:");
+    ui->teaching_tree->headerItem()->setText(4,"Students:");
 
     QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , "23", "5");
     QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, "18","10");
@@ -49,10 +55,10 @@ Summary_Window::Summary_Window(QWidget *parent) :
     QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, "34","3");
 
     // + Make each of the categories top level items in the tree widget
-    ui->treeWidget->addTopLevelItem(pme);
-    ui->treeWidget->addTopLevelItem(ume);
-    ui->treeWidget->addTopLevelItem(cme);
-    ui->treeWidget->addTopLevelItem(other);
+    ui->teaching_tree->addTopLevelItem(pme);
+    ui->teaching_tree->addTopLevelItem(ume);
+    ui->teaching_tree->addTopLevelItem(cme);
+    ui->teaching_tree->addTopLevelItem(other);
 
     // + Make new nodes depending on the date range set by the user; again a loop
     //   will be preferred here
@@ -99,8 +105,10 @@ Summary_Window::Summary_Window(QWidget *parent) :
     title_values.append("Other");
 
     for(int n=0; n<4; n++){
-        ui->treeWidget->resizeColumnToContents(n);
+        ui->teaching_tree->resizeColumnToContents(n);
     }
+
+    qDebug() << "Using file: " << csv_file_name;
 
 }
 
@@ -123,11 +131,11 @@ Summary_Window::Summary_Window(QWidget *parent) :
  * RETURNS:
  * + A newly made root QTreeWidgetItem
  */
-QTreeWidgetItem * Summary_Window::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
+QTreeWidgetItem* Summary_Window::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                            QString num_hours, QString num_students)
 {
-    // + Create a new tree widget to add to the treeWidget table on the main window
-    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->treeWidget);
+    // + Create a new tree widget to add to the teaching_tree table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->teaching_tree);
 
     new_tree_widget->setText(0, category);
     new_tree_widget->setText(3, num_hours);
@@ -158,7 +166,7 @@ QTreeWidgetItem * Summary_Window::make_root(QTreeWidgetItem *parent, QString cat
 QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
                                           QString num_hours, QString num_students)
 {
-    // + Create a new tree widget to add to the treeWidget table on the main window
+    // + Create a new tree widget to add to the teaching_tree table on the main window
     QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem();
 
     // + If the date is not NULL then the sub item just after the main root item
@@ -273,6 +281,47 @@ void Summary_Window::on_graphComboBox_activated(int index)
 
         default:
             break;
+    }
+}
+
+/*
+ * + Allow items to be dragged on the Summary_Window
+ */
+void Summary_Window::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls())
+    {
+        e->acceptProposedAction();
+    }
+
+}
+
+/*
+ * + Allow items to be dropped on the Summary_Window
+ */
+void Summary_Window::dropEvent(QDropEvent *e)
+{
+    foreach(const QUrl &url, e->mimeData()->urls())
+    {
+        const QString &file_name = url.toLocalFile();
+
+        std::string s_file_name = file_name.toUtf8().constData();
+        std::string accepted_file_type = ".csv";
+
+        std::size_t found = s_file_name.find(accepted_file_type);
+
+        // + Check if the dropped file by the user is a .csv file
+        // + Only accept .csv files for input
+        if(found != -1)
+        {
+            qDebug() << "Acceptable file: " << file_name;
+            csv_file_name = file_name;
+        }
+
+        else
+        {
+            qDebug() << "Unacceptable file: " << file_name;
+        }
     }
 }
 
