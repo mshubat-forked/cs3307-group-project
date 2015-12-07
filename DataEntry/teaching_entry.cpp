@@ -223,11 +223,11 @@ string teaching_entry::get_other_details()
 {
     return other_details;
 }
-int teaching_entry::get_total_hours()
+double teaching_entry::get_total_hours()
 {
     return total_hours;
 }
-void teaching_entry::set_total_hours(int th)
+void teaching_entry::set_total_hours(double th)
 {
     total_hours=th;
 }

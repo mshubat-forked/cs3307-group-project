@@ -48,7 +48,7 @@ private:
     bool stipend;
     string comments;
     string other_details;
-    int total_hours;
+    double total_hours;
     
 public:
     
@@ -103,8 +103,8 @@ public:
     void set_comments(string);
     void set_other_details(string);
     string get_other_details();
-    int get_total_hours();
-    void set_total_hours(int);
+    double get_total_hours();
+    void set_total_hours(double);
        
     
     

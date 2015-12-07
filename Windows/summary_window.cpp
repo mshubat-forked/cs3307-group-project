@@ -3,17 +3,12 @@
 #include <Windows/graphwindow.h>
 #include <Windows/graphwindowpie.h>
 #include <QTextStream>
+#include <QDebug>
+#include <iostream>
+#include <string>
+#include <Reading_Files/read_database.h>
 
 static QString csv_file_name;
-
-struct TeachingField
-{
-    QString member_name;
-    int date;
-    QString program;
-    double hours;
-    int students;
-};
 
 QVector<double> values(4);
 
@@ -40,34 +35,155 @@ Summary_Window::Summary_Window(QWidget *parent) :
 
     setAcceptDrops(true);
 
-    ui->treeWidget_teach->setColumnCount(5);
-    ui->treeWidget_teach->headerItem()->setText(0,"Category:");
-    ui->treeWidget_teach->headerItem()->setText(1,"Start Year:");
-    ui->treeWidget_teach->headerItem()->setText(2,"Faculty Member:");
-    ui->treeWidget_teach->headerItem()->setText(3,"Hours:");
-    ui->treeWidget_teach->headerItem()->setText(4,"Students:");
+    make_tree_header();
+
+    DB database;
+    readTeach(database);
+    QVector<teaching_entry> vector_teaching_entries = database.getTeachFull();
+
+    QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , "", "");
+    QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, "","");
+    QTreeWidgetItem *cme = make_root(NULL, "CME", NULL, NULL, "", "");
+    QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, "","");
+
+    QString current_date = "99999";
+    QString current_member = "-1";
+
+    QTreeWidgetItem *p_year_row;
+    QTreeWidgetItem *p_member_row;
+
+    int iteration = 0;
+
+    top_level_teaching(pme,ume,cme,other);
 
 
-    QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , "23", "5");
-    QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, "18","10");
-    QTreeWidgetItem *cme = make_root(NULL, "CME", NULL, NULL, "15", "12");
-    QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, "34","3");
 
-    // + Make each of the categories top level items in the tree widget
-    ui->treeWidget_teach->addTopLevelItem(pme);
-    ui->treeWidget_teach->addTopLevelItem(ume);
-    ui->treeWidget_teach->addTopLevelItem(cme);
-    ui->treeWidget_teach->addTopLevelItem(other);
+    while(!vector_teaching_entries.isEmpty())
+    {
+        teaching_entry current_teaching_entry = vector_teaching_entries.takeFirst();
+
+        QString teaching_date = QString::fromStdString(current_teaching_entry.get_date());
+        QString teaching_member = QString::fromStdString(current_teaching_entry.get_member());
+        QString teaching_hours = QString::number(current_teaching_entry.get_total_hours());
+        QString teaching_trainees = QString::number(current_teaching_entry.get_trainees());
+        QString teaching_program = QString::fromStdString(current_teaching_entry.get_program());
+
+        if(teaching_date == "" || teaching_date == "0")
+            continue;
+        if(teaching_member == "")
+            continue;
+        if(teaching_hours == "")
+            continue;
+        if(teaching_trainees == "")
+            continue;
+        if(teaching_program == "")
+            continue;
+
+        QTreeWidgetItem *program;
+        if(teaching_program == "Postgraduate Medical Education")
+        {
+           program = pme;
+           pme_total_hours += current_teaching_entry.get_total_hours();
+           pme_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+        else if(teaching_program == "Undergraduate Medical Education")
+        {
+           program = ume;
+           ume_total_hours += current_teaching_entry.get_total_hours();
+           ume_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+        else if(teaching_program == "Continuing Medical Education")
+        {
+           program = cme;
+           cme_total_hours += current_teaching_entry.get_total_hours();
+           cme_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+        else
+        {
+            program = other;
+        }
 
 
-    // + Make new nodes depending on the date range set by the user; again a loop
-    //   will be preferred here
 
-    // + Here is an example how a subroot could be added to a main category root
-    QTreeWidgetItem *p_year_row = make_child(pme, NULL, "2011", NULL, "34", "45");
+        if(current_date != teaching_date)
+        {
+            current_date = teaching_date;
 
-    // + Here is adding a child to the sub root just made above
-    make_child(p_year_row, NULL, NULL, "Jack Johnson", "45", "100");
+            if(iteration == 0)
+            {
+                p_year_row = make_child(program, NULL, current_date, NULL, "", "");
+                year_total_hours += current_teaching_entry.get_total_hours();
+                year_total_trainees += current_teaching_entry.get_trainees();
+            }
+
+            else{
+                p_year_row->setText(3,QString::number(year_total_hours,'f',0));
+                p_year_row->setText(4,QString::number(year_total_trainees,'f',0));
+
+                p_year_row = make_child(program, NULL, current_date, NULL, "", "");
+                year_total_hours = current_teaching_entry.get_total_hours();
+                year_total_trainees = current_teaching_entry.get_trainees();
+            }
+
+
+        }
+
+        else
+        {
+            year_total_hours += current_teaching_entry.get_total_hours();
+            year_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+
+        // + Here is adding a child to the sub root just made above
+        if(current_member != teaching_member)
+        {
+            current_member = teaching_member;
+            if(iteration == 0)
+            {
+                p_member_row = make_child(p_year_row, NULL, NULL, current_member, teaching_hours, teaching_trainees);
+                member_total_hours += current_teaching_entry.get_total_hours();
+                member_total_trainees += current_teaching_entry.get_trainees();
+
+            }
+
+            else
+            {
+
+                p_member_row->setText(3,QString::number(member_total_hours,'f',0));
+                p_member_row->setText(4,QString::number(member_total_trainees,'f',0));
+
+                p_member_row = make_child(p_year_row, NULL, NULL, current_member, teaching_hours, teaching_trainees);
+                member_total_hours = current_teaching_entry.get_total_hours();
+                member_total_trainees = current_teaching_entry.get_trainees();
+
+            }
+
+
+        }
+
+        else
+        {
+            member_total_hours += current_teaching_entry.get_total_hours();
+            member_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+        iteration++;
+
+    }
+
+    // + Set totals for program categories
+    pme->setText(3,QString::number(pme_total_hours,'f',0));
+    pme->setText(4,QString::number(pme_total_trainees,'f',0));
+
+    ume->setText(3,QString::number(ume_total_hours,'f',0));
+    ume->setText(4,QString::number(ume_total_trainees,'f',0));
+
+    cme->setText(3,QString::number(cme_total_hours,'f',0));
+    cme->setText(4,QString::number(cme_total_trainees,'f',0));
 
     // + Validator to ensure only year values can be entered into the date filter
     QIntValidator *v = new QIntValidator(0, 9999);
@@ -80,6 +196,7 @@ Summary_Window::Summary_Window(QWidget *parent) :
     ui->graphComboBox_teach->addItem("Pie"); //index 1
     ui->graphComboBox_teach->addItem("Bar"); //index 2
 
+
     graph_values.append(18);
     graph_values.append(45);
     graph_values.append(34);
@@ -89,13 +206,6 @@ Summary_Window::Summary_Window(QWidget *parent) :
     title_values.append("UME");
     title_values.append("CME");
     title_values.append("Other");
-
-    for(int n=0; n<4; n++){
-        ui->treeWidget_teach->resizeColumnToContents(n);
-    }
-
-    qDebug() << "Using file: " << csv_file_name;
-
 }
 
 /*
@@ -280,4 +390,46 @@ void Summary_Window::on_dateFilterButton_clicked()
         toYear=tempTo;
         //now need to filter
     }
+}
+
+/*
+ * Function: make_tree_header
+ * -------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Sets the titles for the tree widget header
+ */
+void Summary_Window::make_tree_header()
+{
+    // + Set the header for the teaching tree window
+    ui->treeWidget_teach->setColumnCount(5);
+    ui->treeWidget_teach->headerItem()->setText(0,"Category:");
+    ui->treeWidget_teach->headerItem()->setText(1,"Start Year:");
+    ui->treeWidget_teach->headerItem()->setText(2,"Faculty Member:");
+    ui->treeWidget_teach->headerItem()->setText(3,"Hours:");
+    ui->treeWidget_teach->headerItem()->setText(4,"Students:");
+
+    // + Spaces the headers evenly along the top of the tree widget
+    for(int n=0; n<4; n++)
+    {
+        ui->treeWidget_teach->resizeColumnToContents(n);
+    }
+}
+
+/*
+ * Function: top_level_teaching
+ * -------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Sets the top level items of the tree summary window for
+ *   teaching data
+ */
+void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *ume,
+                                         QTreeWidgetItem *cme, QTreeWidgetItem *other)
+{
+
+    // + Make each of the categories top level items in the tree widget
+    ui->treeWidget_teach->addTopLevelItem(pme);
+    ui->treeWidget_teach->addTopLevelItem(ume);
+    ui->treeWidget_teach->addTopLevelItem(cme);
+    ui->treeWidget_teach->addTopLevelItem(other);
+
 }

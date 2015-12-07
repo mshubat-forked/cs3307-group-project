@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <DataEntry/teaching_entry.h>
+#include <QVector>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +22,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
 
 };
 

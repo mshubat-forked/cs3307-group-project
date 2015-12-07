@@ -1,11 +1,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <QtSql>
+#include <QtSql/QtSql>
 #include <QDebug>
 #include <QFileInfo>
 #include <string.h>
-#include "teaching_entry.h"
+#include "DataEntry/teaching_entry.h"
 #include <QVector>
 #include <sstream>
 

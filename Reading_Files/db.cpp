@@ -98,7 +98,7 @@ QVector<teaching_entry> DB::getTeachFull(){
 
     QVector<teaching_entry> tVector;
     qry.prepare("SELECT * FROM Teaching\
-                ORDER BY Program, StartDate");
+                ORDER BY Program, StartDate, MemberName");
                 qry.exec();
             while(qry.next()){
         teaching_entry TE;
@@ -114,7 +114,7 @@ QVector<teaching_entry> DB::getTeachFull(){
           TE.set_date(convert.str());
           TE.set_member(qry.value(1).toString().toStdString());
           TE.set_program(qry.value(2).toString().toStdString());
-          TE.set_total_hours(qry.value(3).toInt());
+          TE.set_total_hours(qry.value(3).toDouble());
           TE.set_trainees(qry.value(4).toInt());
 
 
