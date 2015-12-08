@@ -1,12 +1,12 @@
 #include "summary_window.h"
-#include "ui_summary_window.h"
-#include <Windows/graphwindow.h>
-#include <Windows/graphwindowpie.h>
 #include <QTextStream>
 #include <QDebug>
+#include <QHash>
+#include <QVector>
 #include <iostream>
 #include <string>
 #include <Reading_Files/read_database.h>
+#include <QStringList>
 
 static QString csv_file_name;
 
@@ -35,155 +35,17 @@ Summary_Window::Summary_Window(QWidget *parent) :
 
     setAcceptDrops(true);
 
-    make_tree_header();
-
+    // + Make a connection to the database
     DB database;
     readTeach(database);
+
+    // + Get the teaching information from the database
     QVector<teaching_entry> vector_teaching_entries = database.getTeachFull();
+    data_for_graphs = database.getTeachFull();
 
-    QTreeWidgetItem *pme = make_root(NULL, "PME", NULL, NULL , "", "");
-    QTreeWidgetItem *ume = make_root(NULL, "UME", NULL, NULL, "","");
-    QTreeWidgetItem *cme = make_root(NULL, "CME", NULL, NULL, "", "");
-    QTreeWidgetItem *other = make_root(NULL, "Other", NULL, NULL, "","");
+    years = build_teaching_tree(vector_teaching_entries);
 
-    QString current_date = "99999";
-    QString current_member = "-1";
-
-    QTreeWidgetItem *p_year_row;
-    QTreeWidgetItem *p_member_row;
-
-    int iteration = 0;
-
-    top_level_teaching(pme,ume,cme,other);
-
-
-
-    while(!vector_teaching_entries.isEmpty())
-    {
-        teaching_entry current_teaching_entry = vector_teaching_entries.takeFirst();
-
-        QString teaching_date = QString::fromStdString(current_teaching_entry.get_date());
-        QString teaching_member = QString::fromStdString(current_teaching_entry.get_member());
-        QString teaching_hours = QString::number(current_teaching_entry.get_total_hours());
-        QString teaching_trainees = QString::number(current_teaching_entry.get_trainees());
-        QString teaching_program = QString::fromStdString(current_teaching_entry.get_program());
-
-        if(teaching_date == "" || teaching_date == "0")
-            continue;
-        if(teaching_member == "")
-            continue;
-        if(teaching_hours == "")
-            continue;
-        if(teaching_trainees == "")
-            continue;
-        if(teaching_program == "")
-            continue;
-
-        QTreeWidgetItem *program;
-        if(teaching_program == "Postgraduate Medical Education")
-        {
-           program = pme;
-           pme_total_hours += current_teaching_entry.get_total_hours();
-           pme_total_trainees += current_teaching_entry.get_trainees();
-        }
-
-        else if(teaching_program == "Undergraduate Medical Education")
-        {
-           program = ume;
-           ume_total_hours += current_teaching_entry.get_total_hours();
-           ume_total_trainees += current_teaching_entry.get_trainees();
-        }
-
-        else if(teaching_program == "Continuing Medical Education")
-        {
-           program = cme;
-           cme_total_hours += current_teaching_entry.get_total_hours();
-           cme_total_trainees += current_teaching_entry.get_trainees();
-        }
-
-        else
-        {
-            program = other;
-        }
-
-
-
-        if(current_date != teaching_date)
-        {
-            current_date = teaching_date;
-
-            if(iteration == 0)
-            {
-                p_year_row = make_child(program, NULL, current_date, NULL, "", "");
-                year_total_hours += current_teaching_entry.get_total_hours();
-                year_total_trainees += current_teaching_entry.get_trainees();
-            }
-
-            else{
-                p_year_row->setText(3,QString::number(year_total_hours,'f',0));
-                p_year_row->setText(4,QString::number(year_total_trainees,'f',0));
-
-                p_year_row = make_child(program, NULL, current_date, NULL, "", "");
-                year_total_hours = current_teaching_entry.get_total_hours();
-                year_total_trainees = current_teaching_entry.get_trainees();
-            }
-
-
-        }
-
-        else
-        {
-            year_total_hours += current_teaching_entry.get_total_hours();
-            year_total_trainees += current_teaching_entry.get_trainees();
-        }
-
-
-        // + Here is adding a child to the sub root just made above
-        if(current_member != teaching_member)
-        {
-            current_member = teaching_member;
-            if(iteration == 0)
-            {
-                p_member_row = make_child(p_year_row, NULL, NULL, current_member, teaching_hours, teaching_trainees);
-                member_total_hours += current_teaching_entry.get_total_hours();
-                member_total_trainees += current_teaching_entry.get_trainees();
-
-            }
-
-            else
-            {
-
-                p_member_row->setText(3,QString::number(member_total_hours,'f',0));
-                p_member_row->setText(4,QString::number(member_total_trainees,'f',0));
-
-                p_member_row = make_child(p_year_row, NULL, NULL, current_member, teaching_hours, teaching_trainees);
-                member_total_hours = current_teaching_entry.get_total_hours();
-                member_total_trainees = current_teaching_entry.get_trainees();
-
-            }
-
-
-        }
-
-        else
-        {
-            member_total_hours += current_teaching_entry.get_total_hours();
-            member_total_trainees += current_teaching_entry.get_trainees();
-        }
-
-        iteration++;
-
-    }
-
-    // + Set totals for program categories
-    pme->setText(3,QString::number(pme_total_hours,'f',0));
-    pme->setText(4,QString::number(pme_total_trainees,'f',0));
-
-    ume->setText(3,QString::number(ume_total_hours,'f',0));
-    ume->setText(4,QString::number(ume_total_trainees,'f',0));
-
-    cme->setText(3,QString::number(cme_total_hours,'f',0));
-    cme->setText(4,QString::number(cme_total_trainees,'f',0));
+    qDebug() << "Got a year: " << years.at(0);
 
     // + Validator to ensure only year values can be entered into the date filter
     QIntValidator *v = new QIntValidator(0, 9999);
@@ -192,9 +54,9 @@ Summary_Window::Summary_Window(QWidget *parent) :
 
     // + Populate the graph combo box with the graph options
     // + This needs to match switch statement in activated function
-    ui->graphComboBox_teach->addItem("Stack"); //index 0
-    ui->graphComboBox_teach->addItem("Pie"); //index 1
-    ui->graphComboBox_teach->addItem("Bar"); //index 2
+    //ui->graphComboBox_teach->addItem("Stack"); //index 0
+    //ui->graphComboBox_teach->addItem("Pie"); //index 1
+    //ui->graphComboBox_teach->addItem("Bar"); //index 2
 
 
     graph_values.append(18);
@@ -227,8 +89,7 @@ Summary_Window::Summary_Window(QWidget *parent) :
  * RETURNS:
  * + A newly made root QTreeWidgetItem
  */
-QTreeWidgetItem* Summary_Window::make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
-                           QString num_hours, QString num_students)
+QTreeWidgetItem* Summary_Window::make_root(QString category, QString num_hours, QString num_students)
 {
 
     // + Create a new tree widget to add to the treeWidget table on the main window
@@ -260,7 +121,7 @@ QTreeWidgetItem* Summary_Window::make_root(QTreeWidgetItem *parent, QString cate
  * RETURNS:
  * + A newly made child QTreeWidgetItem
  */
-QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
+QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString date, QString faculty_name,
                                           QString num_hours, QString num_students)
 {
     // + Create a new tree widget to add to the teaching_tree table on the main window
@@ -286,44 +147,6 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString ca
     return new_tree_widget;
 }
 
-
-/*
- * Function: on_graphComboBox_teach_activated
- * -----------------------------------------
- * WHAT THE FUNCTION DOES:
- * + Defines the functionality of the combobox that controls
- *   what graphs the user can view
- *
- * PARAMETER:
- * - index: an integer value that represents the index
- *          of the graph chosen
- */
-void Summary_Window::on_graphComboBox_teach_activated(int index)
-{
-
-    switch(index)
-    {
-        // Show a Stack bar graph
-        case 0:
-            graph_window = new graphwindow(this,graph_values, title_values);
-            graph_window->show();
-            break;
-
-        // Show a Pie graph
-        case 1:
-            graph_pie_window = new graphwindowpie(this,graph_values,title_values);
-            graph_pie_window->show();
-            break;
-
-        // Show a Plain bar graph
-        case 2:
-            graph_bar_window = new graphwindowbar(this,graph_values, title_values);
-            graph_bar_window->show();
-
-        default:
-            break;
-    }
-}
 
 /*
  * + Allow items to be dragged on the Summary_Window
@@ -432,4 +255,211 @@ void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *u
     ui->treeWidget_teach->addTopLevelItem(cme);
     ui->treeWidget_teach->addTopLevelItem(other);
 
+}
+
+/*
+ * Function: build_teaching_tree
+ * ----------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Fills out the summary tree with teaching entry information
+ */
+QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_teaching_entries)
+{
+
+    QStringList temp_years;
+
+    // + Define the headers for a teaching tree widget
+    make_tree_header();
+
+    // + Setup the root categories on the tree
+    QTreeWidgetItem *pme = make_root("PME", "", "");
+    QTreeWidgetItem *ume = make_root("UME", "","");
+    QTreeWidgetItem *cme = make_root("CME", "", "");
+    QTreeWidgetItem *other = make_root("Other", "","");
+
+    // + Used for keeping track of values through looping
+    QString current_date = "99999";
+    QString current_member = "-1";
+    int iteration = 0;
+
+    // + Pointers to the current row of the tree
+    QTreeWidgetItem *p_year_row;
+    QTreeWidgetItem *p_member_row;
+
+    // + Set the top level of items in the tree
+    top_level_teaching(pme,ume,cme,other);
+
+    // + Loop for the values in the passed database
+    while(!vector_teaching_entries.isEmpty())
+    {
+
+        // + Get a teaching entry items from the database
+        teaching_entry current_teaching_entry = vector_teaching_entries.takeFirst();
+
+        // + Extract information from the aformentioned teaching_entry
+        QString teaching_date = QString::fromStdString(current_teaching_entry.get_date());
+        QString teaching_member = QString::fromStdString(current_teaching_entry.get_member());
+        QString teaching_hours = QString::number(current_teaching_entry.get_total_hours());
+        QString teaching_trainees = QString::number(current_teaching_entry.get_trainees());
+        QString teaching_program = QString::fromStdString(current_teaching_entry.get_program());
+
+        // + If a blank value is found, skip the whole entry
+        if(teaching_date == "" || teaching_date == "0")
+            continue;
+        if(teaching_member == "")
+            continue;
+        if(teaching_hours == "")
+            continue;
+        if(teaching_trainees == "")
+            continue;
+        if(teaching_program == "")
+            continue;
+
+
+        // + Determing which root the current teaching entry should be put under
+        QTreeWidgetItem *program;
+        if(teaching_program == "Postgraduate Medical Education")
+        {
+           program = pme;
+           pme_total_hours += current_teaching_entry.get_total_hours();
+           pme_total_trainees += current_teaching_entry.get_trainees();
+           temp_years.append(teaching_date);
+        }
+
+        else if(teaching_program == "Undergraduate Medical Education")
+        {
+           program = ume;
+           ume_total_hours += current_teaching_entry.get_total_hours();
+           ume_total_trainees += current_teaching_entry.get_trainees();
+           temp_years.append(teaching_date);
+        }
+
+        else if(teaching_program == "Continuing Medical Education")
+        {
+           program = cme;
+           cme_total_hours += current_teaching_entry.get_total_hours();
+           cme_total_trainees += current_teaching_entry.get_trainees();
+           temp_years.append(teaching_date);
+        }
+
+        else
+        {
+            program = other;
+            temp_years.append(teaching_date);
+        }
+
+
+        // + When dates differ, a new data has been found, and change over to
+        //   that new date is inorder
+        if(current_date != teaching_date)
+        {
+            // + Update the current data to the new data
+            current_date = teaching_date;
+
+            // + Only do this for the first iternation of the loop
+            if(iteration == 0)
+            {
+                // + Create the first year row
+                p_year_row = make_child(program, current_date, NULL, "", "");
+
+                // + Keep a tally of the totals for the first year row
+                year_total_hours += current_teaching_entry.get_total_hours();
+                year_total_trainees += current_teaching_entry.get_trainees();
+            }
+
+            // + Otherwise the loop is passed the first year row and is putting together
+            //   other year rows
+            else
+            {
+                // + Apply the totals to current year row before the change over to
+                //   a new year row occurs
+                p_year_row->setText(3,QString::number(year_total_hours,'f',0));
+                p_year_row->setText(4,QString::number(year_total_trainees,'f',0));
+
+                // + Create the new year row
+                p_year_row = make_child(program, current_date, NULL, "", "");
+
+                // + Start the totals over at the current hour and student valleys
+                year_total_hours = current_teaching_entry.get_total_hours();
+                year_total_trainees = current_teaching_entry.get_trainees();
+            }
+
+
+        }
+        // + Keep a running total of the hour and student for a particular year
+        else
+        {
+            year_total_hours += current_teaching_entry.get_total_hours();
+            year_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+
+        // + Add a name row to the year row made above
+        // + The code here is similar to what the year row code does above
+        if(current_member != teaching_member)
+        {
+            current_member = teaching_member;
+
+            // + Add a new name to the faculty vector for other functions
+            faculty.append(current_member);
+
+            if(iteration == 0)
+            {
+                p_member_row = make_child(p_year_row, NULL, current_member, teaching_hours, teaching_trainees);
+                member_total_hours += current_teaching_entry.get_total_hours();
+                member_total_trainees += current_teaching_entry.get_trainees();
+
+            }
+
+            else
+            {
+
+                p_member_row->setText(3,QString::number(member_total_hours,'f',0));
+                p_member_row->setText(4,QString::number(member_total_trainees,'f',0));
+
+                p_member_row = make_child(p_year_row, NULL, current_member, teaching_hours, teaching_trainees);
+                member_total_hours = current_teaching_entry.get_total_hours();
+                member_total_trainees = current_teaching_entry.get_trainees();
+
+            }
+
+        }
+
+        else
+        {
+            member_total_hours += current_teaching_entry.get_total_hours();
+            member_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+        iteration++;
+
+    }
+
+    // + Set totals for program categories
+    pme->setText(3,QString::number(pme_total_hours,'f',0));
+    pme->setText(4,QString::number(pme_total_trainees,'f',0));
+
+    ume->setText(3,QString::number(ume_total_hours,'f',0));
+    ume->setText(4,QString::number(ume_total_trainees,'f',0));
+
+    cme->setText(3,QString::number(cme_total_hours,'f',0));
+    cme->setText(4,QString::number(cme_total_trainees,'f',0));
+
+
+    faculty = faculty.toSet().toList();
+
+    // + Get rid of an duplicate information from the years list
+    temp_years = temp_years.toSet().toList();
+
+    // + Sort the list in ascending order
+    qSort(temp_years);
+
+    return temp_years;
+}
+
+// + Open the graph setup dialog box
+void Summary_Window::on_button_graph_clicked()
+{
+    setup_graph = new GraphSetup(faculty, data_for_graphs, years, this);
+    setup_graph->show();
 }

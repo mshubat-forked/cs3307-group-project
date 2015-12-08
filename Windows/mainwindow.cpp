@@ -35,14 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
           }
 
 
-<<<<<<< HEAD
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
 
-
-=======
 /*
  * Function: Summary_Window
  * -----------------------------------------
@@ -50,7 +43,6 @@ MainWindow::~MainWindow()
  * + On the push of the button the program opens up the
  *   summary window
  */
->>>>>>> d05342ba26b2ac8da54b7d0516e3ebcf1292ca85
 void MainWindow::on_pushButton_clicked()
 {
     Summary_Window s(this);

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_5">
       <attribute name="title">
@@ -45,20 +45,6 @@
          <property name="spacing">
           <number>1</number>
          </property>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>View Graph:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="graphComboBox_teach">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
       </layout>
@@ -107,11 +93,7 @@
        </item>
       </layout>
       <zorder>treeWidget_pres</zorder>
-      <zorder>layoutWidget_2</zorder>
       <zorder>presentation_header</zorder>
-      <zorder>label_2</zorder>
-      <zorder>graphComboBox_pres</zorder>
-      <zorder>label_2</zorder>
      </widget>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
@@ -236,6 +218,13 @@
       <widget class="QPushButton" name="dateFilterButton">
        <property name="text">
         <string>Filter</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_graph">
+       <property name="text">
+        <string>Graph</string>
        </property>
       </widget>
      </item>

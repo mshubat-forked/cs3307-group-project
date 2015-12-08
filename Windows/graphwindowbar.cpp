@@ -26,11 +26,15 @@ struct YearInformationGraph
  * - values: the data to be shown on the graph
  *
  */
-graphwindowbar::graphwindowbar(QWidget *parent, QVector<double> values, QList<QString> titles) :
+graphwindowbar::graphwindowbar(QWidget *parent, QVector<teaching_entry> data_for_graphs, QStringList years, QString name) :
     QDialog(parent),
     ui(new Ui::graphwindowbar)
 {
     ui->setupUi(this);
+
+    ui->label_name->setText(name);
+
+    this->setStyleSheet("background-color: white;");
 
     QString temp_years[] = {"2010","2011","2012","2013","2014"};
     int temp_pme_total[] = {4,2,4,5,8};

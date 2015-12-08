@@ -3,9 +3,11 @@
 
 #include <QMainWindow>
 #include <QTreeWidgetItem>
-#include <Windows/graphwindow.h>
+#include <stdlib.h>
+#include <Windows/graphwindowstack.h>
 #include <Windows/graphwindowpie.h>
 #include <Windows/graphwindowbar.h>
+#include <Windows/graphsetup.h>
 #include <DataEntry/teaching_entry.h>
 #include "ui_summary_window.h"
 
@@ -26,17 +28,14 @@ public:
 
 private slots:
 
-    QTreeWidgetItem * make_root(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
-                                              QString num_hours, QString num_students);
+    QTreeWidgetItem * make_root(QString category, QString num_hours, QString num_students);
 
 
-    QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString category, QString date, QString faculty_name,
+    QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);
 
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
-
-    void on_graphComboBox_teach_activated(int index);
 
     void on_dateFilterButton_clicked();
 
@@ -45,11 +44,16 @@ private slots:
     void top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *ume,
                             QTreeWidgetItem *cme, QTreeWidgetItem *other);
 
+     QStringList build_teaching_tree(QVector<teaching_entry> vector_teaching_entries);
+     void on_button_graph_clicked();
+
 private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
    QDialog *graph_pie_window;
    QDialog *graph_bar_window;
+   QDialog *setup_graph;
+   QStringList years;
    int fromYear;
    int toYear;
 
@@ -77,11 +81,17 @@ private:
    // + Keeps track of the total trainees for a faculty member
    int member_total_trainees = 0;
 
-   // Defines a the values to the graph
+   // + Defines a the values to the graph
    QVector<double> graph_values;
 
-   // The titles to display on the graph
+   // + The titles to display on the graph
    QList<QString> title_values;
+
+   // + Collects data for graphs
+   QVector<teaching_entry> data_for_graphs;
+
+   // + Stores the faculty names
+   QStringList faculty;
 
 };
 

@@ -1,7 +1,7 @@
 /*
  * Source file: graphcolors.cpp
  * ---------------------------------
- * Defines a helper function generate_graph_colors()
+ * + Defines a helper function generate_graph_colors()
  */
 
 #include "graphcolors.h"

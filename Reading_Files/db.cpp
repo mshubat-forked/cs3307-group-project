@@ -60,8 +60,6 @@ void DB::addTeachingEntry(teaching_entry a){
     string Date,Name,Prog,Hours,NumStudents;
     QString qsql;
 
-
-
     //QString::fromStdString(a.get_date());
 
     Date=a.get_date();

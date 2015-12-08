@@ -1,62 +1,79 @@
-#include "graphwindow.h"
-#include "ui_graphwindow.h"
+#include "graphwindowstack.h"
+#include "ui_graphwindowstack.h"
 
-#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
-// + Defines a structure that store a years information for eventual
-//   display on the graph
-struct YearInformationGraph
-{
-    QString year;
-    int pme_total;
-    int ume_total;
-    int cme_total;
-    int other_total;
-};
-
-/*
- * Constructor: graphwindow
- * --------------------------------
- * WHAT THE CONSTRUCTOR DOES:
- *
- *
- * PARAMETER LIST:
- * - parent: a reference to the parent widget
- * - values: the data to be shown on the graph
- *
- */
-graphwindow::graphwindow(QWidget *parent, QVector<double> values, QList<QString> titles) :
+graphwindowstack::graphwindowstack(QWidget *parent ,QVector<teaching_entry> data_for_graphs, QStringList passed_years, QString name) :
     QDialog(parent),
-    ui(new Ui::graphwindow)
-{
-    // + This has to be the first line when animating the ui
-
-    ui->setupUi(this);
-    // + ERASE THIS
-    // + Temporary information used to test building a graph
-    // + Information passed like this would be handy to build the graph
-    QString temp_years[] = {"2009","2010","2011","2012"};
-    int temp_pme_total[] = {4,2,4,5};
-    int temp_ume_total[] = {1,7,2,6};
-    int temp_cme_total[] = {5,1,2,7};
-    int temp_other_total[] = {3,3,3,7};
-
-    // + Create an pointer to an array of YearInformationGraph items
-    // + Set the size of the array to the number of years in the range
-    // + Ie. A range of 2009, 2010, 2011 would set the size of
-    //   the array to 3 (with help fro mthe ARRAY_SIZE marco
-    YearInformationGraph *p_yi = new YearInformationGraph[ARRAY_SIZE(temp_years)];
-
-    for (int i = 0; i < (int)ARRAY_SIZE(temp_years); i++)
+    ui(new Ui::graphwindowstack)
     {
-        p_yi[i].year = temp_years[i];
-        p_yi[i].pme_total = temp_pme_total[i];
-        p_yi[i].ume_total = temp_ume_total[i];
-        p_yi[i].cme_total = temp_cme_total[i];
-        p_yi[i].other_total = temp_other_total[i];
-    }
+        ui->setupUi(this);
+        this->setStyleSheet("background-color:white;");
+        ui->label_name->setText(name);
 
-    make_stacked_bar_graph(p_yi,ARRAY_SIZE(temp_years));
+        years = passed_years;
+
+
+
+        QVector<int> values;
+        int pme_total = 0;
+        int ume_total = 0;
+        int cme_total = 0;
+        int other_total = 0;
+
+        // + Loop for the values in the passed database
+        while(!data_for_graphs.isEmpty())
+        {
+
+            // + Get a teaching entry items from the database
+            teaching_entry current_teaching_entry = data_for_graphs.takeFirst();
+
+            // + Extract information from the aformentioned teaching_entry
+            QString teaching_date = QString::fromStdString(current_teaching_entry.get_date());
+            QString teaching_member = QString::fromStdString(current_teaching_entry.get_member());
+            QString teaching_program = QString::fromStdString(current_teaching_entry.get_program());
+
+            if(teaching_member != name)
+            {
+                continue;
+            }
+
+            if(teaching_date == "0" || teaching_date == "")
+            {
+                continue;
+            }
+
+            // + If a blank value is found, skip the whole entry
+            if(teaching_program == "Postgraduate Medical Education")
+            {
+              pme_total++;
+            }
+
+            else if(teaching_program == "Undergraduate Medical Education")
+            {
+              ume_total++;
+            }
+
+            else if(teaching_program == "Continuing Medical Education")
+            {
+              cme_total++;
+            }
+
+            else
+            {
+              other_total++;
+            }
+
+        }
+
+        // + Put the totals into a QVectot that the pie will pull from
+        values.append(pme_total);
+        values.append(ume_total);
+        values.append(cme_total);
+        values.append(other_total);
+
+        // +
+        values_by_year.append(values);
+
 }
 
 /*
@@ -69,7 +86,7 @@ graphwindow::graphwindow(QWidget *parent, QVector<double> values, QList<QString>
  * RETURNS:
  *
  */
-void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_of_years)
+void graphwindowstack::make_stacked_bar_graph(QVector<QVector<int>> values, QStringList years)
 {
 
     // + Create empty bar chart objects:
@@ -82,21 +99,20 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     ui->graph->addPlottable(continuing);
     ui->graph->addPlottable(other);
 
-
     // + Take the prepped bars and apply names and colours to them
     QPen pen;
     pen.setWidthF(1.2);
+
+    postgrad->setName("Post Medical Education");
+    pen.setColor(QColor(1, 92, 191));
+    postgrad->setPen(pen);
+    postgrad->setBrush(QColor(1, 92, 191, 50));
 
     // Sets the names for the legend
     undergrad->setName("Undergraduate Medical Education");
     pen.setColor(QColor(255, 131, 0));
     undergrad->setPen(pen);
     undergrad->setBrush(QColor(255, 131, 0, 50));
-
-    postgrad->setName("Post Medical Education");
-    pen.setColor(QColor(1, 92, 191));
-    postgrad->setPen(pen);
-    postgrad->setBrush(QColor(1, 92, 191, 50));
 
     continuing->setName("Continuing Education");
     pen.setColor(QColor(150, 222, 0));
@@ -110,9 +126,9 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
 
 
     // + Stack bars ontop of each other:
+    continuing->moveAbove(other);
+    undergrad->moveAbove(continuing);
     postgrad->moveAbove(undergrad);
-    continuing->moveAbove(postgrad);
-    other->moveAbove(continuing);
 
     // + PREPARE THE X-AXIS
 
@@ -121,9 +137,9 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     QVector<QString> labels;
 
     // + The size of the array passed should be years (total number of years available)
-    for(int i = 1; i <= number_of_years; i++){
+    for(int i = 1; i < years.length(); i++){
         ticks << i;
-        labels << p_yi[i-1].year;
+        labels << years.at(i);
     }
 
     // + Other x-axis formatting
@@ -137,7 +153,7 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     ui->graph->xAxis->grid()->setVisible(true);
 
     // + Sets the range of the ticks along the x-axis
-    ui->graph->xAxis->setRange(0, number_of_years*2);
+    ui->graph->xAxis->setRange(0, years.length()*2);
 
 
     // + PREPARE THE Y-AXIS
@@ -149,10 +165,13 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     // + Loop and determine the which year has the largest number
     //   of category occurencs and set that as the max range of the
     //   graph
-    for(int i = 0; i < number_of_years; i++)
+    for(int i = 0; i < years.length(); i++)
     {
-        temp_range = p_yi[i].pme_total + p_yi[i].ume_total + p_yi[i].cme_total + p_yi[i].other_total;
 
+        for(int j = 0; j < values.at(i).length(); j++)
+        {
+           temp_range += values.at(i).at(j);
+        }
         // + Set the greatest number of occuernces of a category
         //   to be the max range for the graph
         if(temp_range > max_range)
@@ -173,34 +192,17 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     gridPen.setStyle(Qt::DotLine);
     ui->graph->yAxis->grid()->setSubGridPen(gridPen);
 
-    // Add data:
-    // Input data as a vector for a single instance of a grash
-    // Set the data in relation the the ticks on the y-axis
     QVector<double> undergradData, postgradData, continuingData, otherData;
 
-    // + Access the individual totals for each category depending on the year
-    // + Ie. @ p_yi[j] j could be 0 meaning it will access the YearInformation struct
-    //   at index 0
-    // + The the specifc totals stored in this struct will be accessed and be given to
-    //   the vector that specifies the matching category
-    // + For example: Lets say when j is 0, the struct pointed to by p_yi[0] could be
-    /*   struct YearInformation{
-             QString year; // = 2009
-             int pme_total; // = 5
-             int ume_total; // = 3
-             int cme_total; // = 2
-             int other_total; // = 3
-        };
-    */
-    // + p_yi[0] is referecing information for the year 2009, and the p_yi[0].ume_total
-    //   would access the value 5
-    // + The value of 5 is what is set to the vector undergradData
-    for(int j = 0; j < number_of_years; j++)
+    for(int n = 0; n < years.length(); n++)
     {
-        undergradData << p_yi[j].ume_total;
-        postgradData << p_yi[j].pme_total;
-        continuingData << p_yi[j].cme_total;
-        otherData << p_yi[j].other_total;
+        for(int m = 0; m < values.at(n).length(); m++)
+        {
+            undergradData << values.at(n).at(m);
+            postgradData << values.at(n).at(m);
+            continuingData << values.at(n).at(m);
+            otherData << values.at(n).at(m);
+        }
     }
 
 
@@ -224,10 +226,7 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
 
 }
 
-/*
- * Destory the window when it is closed
- */
-graphwindow::~graphwindow()
+graphwindowstack::~graphwindowstack()
 {
     delete ui;
 }

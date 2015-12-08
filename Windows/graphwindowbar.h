@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <Charts/qcustomplot.h>
 #include <Windows/summary_window.h>
+#include <Reading_Files/teaching_entry.h>
 
 struct YearInformationGraph;
 
@@ -16,7 +17,7 @@ class graphwindowbar : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindowbar(QWidget *parent = 0, QVector<double> values = {}, QList<QString> titles = {});
+    explicit graphwindowbar(QWidget *parent = 0,QVector<teaching_entry> data_for_graphs = {}, QStringList years = {}, QString name = "");
     ~graphwindowbar();
 
 private slots:
