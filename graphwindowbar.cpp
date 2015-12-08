@@ -14,7 +14,19 @@ struct YearInformationGraph
     int other_total;
 };
 
-graphwindowbar::graphwindowbar(QWidget *parent) :
+
+/*
+ * Constructor: graphwindowbar
+ * --------------------------------
+ * WHAT THE CONSTRUCTOR DOES:
+ *
+ *
+ * PARAMETER LIST:
+ * - parent: a reference to the parent widget
+ * - values: the data to be shown on the graph
+ *
+ */
+graphwindowbar::graphwindowbar(QWidget *parent, QVector<double> values) :
     QDialog(parent),
     ui(new Ui::graphwindowbar)
 {
@@ -45,11 +57,16 @@ graphwindowbar::graphwindowbar(QWidget *parent) :
 
 }
 
-graphwindowbar::~graphwindowbar()
-{
-    delete ui;
-}
-
+/*
+ * Function: generate_graph_colors
+ * ------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * +
+ *
+ * PARAMETER LIST:
+ * -
+ *
+ */
 void graphwindowbar::make_bar_graph(YearInformationGraph *p_yi, int number_of_years)
 {
     QCPBars *barsPME = new QCPBars(ui->graph->xAxis, ui->graph->yAxis);
@@ -198,4 +215,12 @@ void graphwindowbar::make_bar_graph(YearInformationGraph *p_yi, int number_of_ye
     ui->graph->legend->setFont(legendFont);
     ui->graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
+}
+
+/*
+ * Destory the window when it is closed
+ */
+graphwindowbar::~graphwindowbar()
+{
+    delete ui;
 }

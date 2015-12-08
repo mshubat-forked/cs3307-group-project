@@ -14,7 +14,18 @@ struct YearInformationGraph
     int other_total;
 };
 
-graphwindow::graphwindow(QWidget *parent) :
+/*
+ * Constructor: graphwindow
+ * --------------------------------
+ * WHAT THE CONSTRUCTOR DOES:
+ *
+ *
+ * PARAMETER LIST:
+ * - parent: a reference to the parent widget
+ * - values: the data to be shown on the graph
+ *
+ */
+graphwindow::graphwindow(QWidget *parent, QVector<double> values) :
     QDialog(parent),
     ui(new Ui::graphwindow)
 {
@@ -45,23 +56,19 @@ graphwindow::graphwindow(QWidget *parent) :
         p_yi[i].other_total = temp_other_total[i];
     }
 
-    make_stacked_bar_graph(p_yi,ARRAY_SIZE(temp_years) );
-
-
-
+    make_stacked_bar_graph(p_yi,ARRAY_SIZE(temp_years));
 }
 
-// + When graphwindow is closed delete the ui
-graphwindow::~graphwindow()
-{
-    delete ui;
-}
-
-/* + Draws a stacked bar graph to the screen based on the information passed as parameters
+/*
+ * Function: generate_graph_colors
+ * ------------------------------------
+ * WHAT THE FUNCTION DOES:
  *
- * YearInformationGraph *p_yi: A pointer to an array of YearInformation structures
- * int number_of_years: The total number of unique years associated with a faculty name
-*/
+ * PARAMETER LIST:
+ *
+ * RETURNS:
+ *
+ */
 void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_of_years)
 {
 
@@ -215,4 +222,12 @@ void graphwindow::make_stacked_bar_graph(YearInformationGraph *p_yi, int number_
     ui->graph->legend->setFont(legendFont);
     ui->graph->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
+}
+
+/*
+ * Destory the window when it is closed
+ */
+graphwindow::~graphwindow()
+{
+    delete ui;
 }

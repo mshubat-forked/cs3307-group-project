@@ -16,7 +16,7 @@ class graphwindowbar : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindowbar(QWidget *parent = 0);
+    explicit graphwindowbar(QWidget *parent = 0, QVector<double> values = {});
     ~graphwindowbar();
 
 private slots:

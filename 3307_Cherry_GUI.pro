@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     graphwindowbar.cpp \
     data_entry.cpp \
     HashTable.cpp \
-    LinkedList.cpp
+    LinkedList.cpp \
+    graphcolors.cpp \
+    piechartwidget.cpp
 
 HEADERS  += mainwindow.h \
     graphwindow.h \
@@ -32,7 +34,9 @@ HEADERS  += mainwindow.h \
     graphwindowbar.h \
     data_entry.h \
     HashTable.h \
-    LinkedList.h
+    LinkedList.h \
+    piechartwidget.h \
+    graphcolors.h
 
 FORMS += \
     graphwindow.ui \

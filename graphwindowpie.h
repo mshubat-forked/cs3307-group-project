@@ -3,9 +3,6 @@
 
 #include <QDialog>
 #include <qcustomplot.h>
-#include <summarywindow.h>
-
-struct YearInformationGraph;
 
 namespace Ui {
 class graphwindowpie;
@@ -16,11 +13,8 @@ class graphwindowpie : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindowpie(QWidget *parent = 0);
+    explicit graphwindowpie(QWidget *parent = 0, QVector<double> values = {});
     ~graphwindowpie();
-
-private slots:
-    void make_pie_graph(YearInformationGraph *pointer, int number_of_years);
 
 private:
     Ui::graphwindowpie *ui;

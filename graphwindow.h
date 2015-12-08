@@ -16,7 +16,7 @@ class graphwindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindow(QWidget *parent = 0);
+    explicit graphwindow(QWidget *parent = 0, QVector<double> values = {});
     ~graphwindow();
 
 private slots:
