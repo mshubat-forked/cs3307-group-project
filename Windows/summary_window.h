@@ -22,7 +22,8 @@ class Summary_Window : public QDialog
     Q_OBJECT
 
 public:
-    explicit Summary_Window(QWidget *parent);
+    //explicit Summary_Window(QWidget *parent);
+    explicit Summary_Window(QWidget *parent, bool new_db);
     void getVector(QVector<teaching_entry> &tVect);
     ~Summary_Window();
 
