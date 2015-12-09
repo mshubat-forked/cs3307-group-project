@@ -25,12 +25,12 @@ public:
     ~graphwindowstack();
 
 private slots:
-    void make_stacked_bar_graph(QVector<QVector<int>> values, QStringList years);
+    void make_stacked_bar_graph(QVector<int> values, QStringList years);
 
 private:
     Ui::graphwindowstack *ui;
     QStringList years;
-    QVector<QVector<int>> values_by_year;
+    QVector<int> values;
 };
 
 #endif // GRAPHWINDOWSTACK_H

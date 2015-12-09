@@ -12,9 +12,6 @@ graphwindowstack::graphwindowstack(QWidget *parent ,QVector<teaching_entry> data
 
         years = passed_years;
 
-
-
-        QVector<int> values;
         int pme_total = 0;
         int ume_total = 0;
         int cme_total = 0;
@@ -71,8 +68,7 @@ graphwindowstack::graphwindowstack(QWidget *parent ,QVector<teaching_entry> data
         values.append(cme_total);
         values.append(other_total);
 
-        // +
-        values_by_year.append(values);
+        make_stacked_bar_graph(values, years);
 
 }
 
@@ -86,7 +82,7 @@ graphwindowstack::graphwindowstack(QWidget *parent ,QVector<teaching_entry> data
  * RETURNS:
  *
  */
-void graphwindowstack::make_stacked_bar_graph(QVector<QVector<int>> values, QStringList years)
+void graphwindowstack::make_stacked_bar_graph(QVector<int> values, QStringList years)
 {
 
     // + Create empty bar chart objects:
@@ -137,7 +133,7 @@ void graphwindowstack::make_stacked_bar_graph(QVector<QVector<int>> values, QStr
     QVector<QString> labels;
 
     // + The size of the array passed should be years (total number of years available)
-    for(int i = 1; i < years.length(); i++){
+    for(int i = 0; i < 1; i++){
         ticks << i;
         labels << years.at(i);
     }
@@ -153,7 +149,7 @@ void graphwindowstack::make_stacked_bar_graph(QVector<QVector<int>> values, QStr
     ui->graph->xAxis->grid()->setVisible(true);
 
     // + Sets the range of the ticks along the x-axis
-    ui->graph->xAxis->setRange(0, years.length()*2);
+    ui->graph->xAxis->setRange(0, values.length()*2);
 
 
     // + PREPARE THE Y-AXIS
@@ -165,13 +161,11 @@ void graphwindowstack::make_stacked_bar_graph(QVector<QVector<int>> values, QStr
     // + Loop and determine the which year has the largest number
     //   of category occurencs and set that as the max range of the
     //   graph
-    for(int i = 0; i < years.length(); i++)
+    for(int i = 0; i < values.length(); i++)
     {
 
-        for(int j = 0; j < values.at(i).length(); j++)
-        {
-           temp_range += values.at(i).at(j);
-        }
+        temp_range += values.at(i);
+
         // + Set the greatest number of occuernces of a category
         //   to be the max range for the graph
         if(temp_range > max_range)
@@ -194,15 +188,12 @@ void graphwindowstack::make_stacked_bar_graph(QVector<QVector<int>> values, QStr
 
     QVector<double> undergradData, postgradData, continuingData, otherData;
 
-    for(int n = 0; n < years.length(); n++)
+    for(int n = 0; n < values.length(); n++)
     {
-        for(int m = 0; m < values.at(n).length(); m++)
-        {
-            undergradData << values.at(n).at(m);
-            postgradData << values.at(n).at(m);
-            continuingData << values.at(n).at(m);
-            otherData << values.at(n).at(m);
-        }
+            undergradData << values.at(n);
+            postgradData << values.at(n);
+            continuingData << values.at(n);
+            otherData << values.at(n);
     }
 
 

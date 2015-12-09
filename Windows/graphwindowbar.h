@@ -13,7 +13,6 @@
 #include <Windows/summary_window.h>
 #include <Reading_Files/teaching_entry.h>
 
-struct YearInformationGraph;
 
 namespace Ui {
 class graphwindowbar;
@@ -28,10 +27,11 @@ public:
     ~graphwindowbar();
 
 private slots:
-    void make_bar_graph(YearInformationGraph *pointer, int number_of_years);
+    void make_bar_graph(QVector<double> values);
 
 private:
     Ui::graphwindowbar *ui;
+      QVector<double> values;
 };
 
 #endif // GRAPHWINDOWBAR_H
