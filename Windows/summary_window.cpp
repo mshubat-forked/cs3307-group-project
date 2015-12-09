@@ -26,8 +26,11 @@ using namespace std;
  *
  * PARAMETER:
  * - parent: a reference to the parent widget
+ * - new_db: boolean indication of if a new db file is needed
+ *   true: delete and make a new database file
+ *   false: keep the old database file
  */
-Summary_Window::Summary_Window(QWidget *parent) :
+Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
     QDialog(parent),
     ui(new Ui::Summary_Window)
 {
@@ -199,16 +202,21 @@ Summary_Window::~Summary_Window()
 
 void Summary_Window::on_dateFilterButton_clicked()
 {
-    //variable fromYear and to Year defined in header
-    //read in the dates
+    //variables fromYear and to Year defined in header
+    //reads in the dates to temp holders
     int tempFrom = (ui->fromDate->text()).toInt();
     int tempTo = (ui->toDate->text()).toInt();
+
+    //compares to ensure from date is before to date
     if(tempFrom > tempTo){
+
+        //prints warning message and resets textbox values to previous values
         QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
         ui->fromDate->setText(QString::number(fromYear));
         ui->toDate->setText(QString::number(toYear));
     }
     else{
+        //assigns the entered values to the the fromYear and toYear variables to be used for filtering
         fromYear=tempFrom;
         toYear=tempTo;
         //now need to filter

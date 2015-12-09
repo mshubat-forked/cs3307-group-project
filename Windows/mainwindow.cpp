@@ -43,9 +43,18 @@ MainWindow::MainWindow(QWidget *parent) :
  * + On the push of the button the program opens up the
  *   summary window
  */
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_new_file_button_clicked()
 {
-    Summary_Window s(this);
+    bool new_file = true;
+    Summary_Window s(this, new_file);
+    s.setModal(true);
+    s.exec();
+}
+
+void MainWindow::on_last_session_button_clicked()
+{
+    bool new_file = false;
+    Summary_Window s(this, new_file);
     s.setModal(true);
     s.exec();
 }
@@ -57,3 +66,5 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
