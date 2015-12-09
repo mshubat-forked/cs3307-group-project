@@ -18,9 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QPixmap pix("/Users/SamirahSiddiq/Desktop/Schulich and Western");
+    QPixmap pix("Images/Schulich and Western.jpg");
 
-          ui ->label_2->setPixmap(pix);
+    ui->label_2->setPixmap(pix);
+    ui->label_2->show();
+
 
       //  QSplashScreen *splash = new QSplashScreen;
         // splash ->setPixmap(QPixmap("/Users/SamirahSiddiq/Desktop/schulich_pic.jpg"));
