@@ -1,3 +1,6 @@
+
+
+
 #include "read_database.h"
 
 void readTeach(DB database){

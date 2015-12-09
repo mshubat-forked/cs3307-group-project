@@ -1,7 +1,9 @@
-//
-//  data_entry.cpp
-//  cs3307-Project
-//
+/*
+ * Source File: data_entry.cpp
+ * --------------------------------
+ * + Defines a source file that handles a users input for display
+ *   a chosen graph
+ */
 
 #include "data_entry.h"
 

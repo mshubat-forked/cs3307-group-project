@@ -7,6 +7,7 @@
 #include <string>
 #include <Reading_Files/read_database.h>
 #include <QStringList>
+#include <fstream>
 
 static QString csv_file_name;
 
@@ -35,8 +36,13 @@ Summary_Window::Summary_Window(QWidget *parent) :
 
     setAcceptDrops(true);
 
+
+
+
+
     // + Make a connection to the database
     DB database;
+
     readTeach(database);
 
     // + Get the teaching information from the database

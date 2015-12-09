@@ -19,8 +19,6 @@ DB::DB()//constructor for the database - creates 4 data type tables
     if(!db.open())
         std::cout << "Failed to open the Database\n";
     else
-
-
         std::cout<< "Succeeded in opening Database\n";
 
 
