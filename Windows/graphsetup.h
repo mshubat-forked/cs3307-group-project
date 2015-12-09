@@ -1,3 +1,10 @@
+/*
+ * Header File: graphsetup.h
+ * --------------------------------
+ * + Defines the declarations of functions and variables for
+ *   graphsetup.cpp
+ */
+
 #ifndef GRAPHSETUP_H
 #define GRAPHSETUP_H
 

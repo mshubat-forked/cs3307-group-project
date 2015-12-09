@@ -1,3 +1,9 @@
+/*
+ * Header File: graphcolor.h
+ * --------------------------------
+ * + Defines the declaration for the function
+ *   generate_graph_colors for graphcolor.cpp
+ */
 #ifndef GRAPHCOLORS_H
 #define GRAPHCOLORS_H
 

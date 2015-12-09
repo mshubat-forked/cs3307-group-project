@@ -1,9 +1,9 @@
-//
-//  teaching_entry.h
-//  cs3307-Project
-//
-//
-
+/*
+ * Header File: teaching_entry.h
+ * --------------------------------
+ * + Defines the declarations for getter and setter functions
+ *   for data_entry.cpp
+ */
 #ifndef __teaching_entry__
 #define __teaching_entry__
 
@@ -16,12 +16,7 @@ class teaching_entry: public data_entry
 {
     
 private:
-    
-    //it looks like some of the start/end dates consist of just the month and day
-    //some consist of the day/month/year, some consist of only a year
-    //since its so inconsistent I figured I'd create a separate variable for each part of the date
-    //and if we didn't have the data for something it would just be initialized to 0 (which i do in the cpp file)
-    
+
     int start_day;
     int start_month;
     int start_year;

@@ -1,12 +1,12 @@
-//
-//  publication_entry.h
-//  3307
-//
+/*
+ * Header File: publication_entry.h
+ * --------------------------------
+ * + Defines the declarations for getter and setter functions
+ *   for publication_entry.cpp
+ */
 
 #ifndef ___3307__publication_entry__
 #define ___3307__publication_entry__
-
-
 
 #include <stdio.h>
 #include <string>

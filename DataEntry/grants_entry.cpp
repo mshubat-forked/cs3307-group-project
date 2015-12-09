@@ -1,13 +1,16 @@
-//
-//  grants_entry.cpp
-//
-
+/*
+ * Header File: grants_entry.cpp
+ * --------------------------------
+ * + Defines the declarations for functions
+ *   for mainwindow.cpp
+ */
 
 #include "grants_entry.h"
 #include "data_Entry.h"
 #include <string>
 using namespace std;
 
+// + Constructor for setting up a new grant object
 grants_entry::grants_entry()
 {
     start_day=0;
@@ -18,38 +21,55 @@ grants_entry::grants_entry()
     end_year=0;
 }
 
+// + Sets a integer parameter sd to the start day
 void grants_entry::set_sday(int sd)
 {
     start_day=sd;
 }
+
+// + Get the start date
 int grants_entry::get_sday()
 {
     return start_day;
 }
+
+// + Sets a integer parameter sm to the start month
 void grants_entry::set_smonth(int sm)
 {
     start_month=sm;
 }
+
+// + Gets the start month
 int grants_entry::get_smonth()
 {
     return start_month;
 }
+
+// + Sets a integer paramter sy to start year
 void grants_entry::set_syear(int sy)
 {
     sy=start_year;
 }
+
+// + Gets the start year
 int grants_entry::get_syear()
 {
     return start_year;
 }
+
+// + Sets a integer ed to end day
 void grants_entry::set_eday(int ed)
 {
     end_day=ed;
 }
+
+// + Gets the end day
 int grants_entry::get_eday()
 {
     return end_day;
 }
+
+// + Sets an integer
 void grants_entry::set_month(int em)
 {
     end_month=em;

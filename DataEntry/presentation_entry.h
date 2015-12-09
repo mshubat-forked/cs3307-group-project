@@ -1,8 +1,9 @@
-//
-//  presentation_entry.h
-//  3307
-//
-
+/*
+ * Header File: presentation_entry.h
+ * --------------------------------
+ * + Defines the declarations for getter and setter functions
+ *   for presentation_entry.cpp
+ */
 #ifndef ___3307__presentation_entry__
 #define ___3307__presentation_entry__
 

@@ -1,3 +1,10 @@
+/*
+ * Header File: graphwindowstack.h
+ * --------------------------------
+ * + Defines the declarations for functions and variables
+ *   for graphwindowstack.cpp
+ */
+
 #ifndef GRAPHWINDOWSTACK_H
 #define GRAPHWINDOWSTACK_H
 

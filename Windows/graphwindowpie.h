@@ -1,3 +1,10 @@
+/*
+ * Header File: graphwindowpie.h
+ * --------------------------------
+ * + Defines the declarations for functions and variables
+ *   for graphwindowpie.cpp
+ */
+
 #ifndef GRAPHWINDOWPIE_H
 #define GRAPHWINDOWPIE_H
 

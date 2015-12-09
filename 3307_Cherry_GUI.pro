@@ -26,7 +26,6 @@ SOURCES += main.cpp\
     Windows/graphwindowbar.cpp \
     Windows/graphwindowpie.cpp \
     Windows/mainwindow.cpp \
-    Windows/piechartwidget.cpp \
     Windows/summary_window.cpp \
     Reading_Files/datastruct.cpp \
     Reading_Files/db.cpp \
@@ -49,7 +48,6 @@ HEADERS  += Windows/mainwindow.h \
     Windows/graphwindowbar.h \
     Windows/graphwindowpie.h \
     Windows/mainwindow.h \
-    Windows/piechartwidget.h \
     Windows/summary_window.h \
     Reading_Files/db.h \
     Reading_Files/main.h \
@@ -67,9 +65,18 @@ FORMS += \
     Windows/graphsetup.ui \
     Windows/graphwindowstack.ui
 
+OTHER_FILES += \
+    Images/Schulich and Western.jpg
+
 INCLUDEPATH += C:/Users/kungf/Documents/boost_1_59_0/
 LIBS += "-LC:/Users/kungf/Documents/boost_1_59_0/libs/"
 
 win32:RC_ICONS += Images/star_icon.ico
 
 unix|win32: LIBS += -lcomdlg32
+
+DISTFILES += \
+    Images/Schulich and Western.jpg
+
+RESOURCES += \
+    resources.qrc

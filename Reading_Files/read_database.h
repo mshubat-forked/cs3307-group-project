@@ -2,7 +2,7 @@
  * Header file: read_database.h
  * ---------------------------------
  * + Contains function declarations for reading data from
- *   a database
+ *   a database for the file read_database.cpp
  */
 
 #ifndef READ_DATABASE_H

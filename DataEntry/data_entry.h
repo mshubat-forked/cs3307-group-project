@@ -1,8 +1,9 @@
-//
-//  data_entry.h
-//  cs3307-Project
-//
-//
+/*
+ * Header File: data_entry.h
+ * --------------------------------
+ * + Defines the declarations for getter and setter functions
+ *   for data_entry.cpp
+ */
 
 #ifndef __data_entry__
 #define __data_entry__
@@ -23,8 +24,7 @@ protected:
     bool include;
     
 public:
-    //data_entry * next = nullptr;
-    
+
     data_entry();
     void set_record(int);
     int get_record();

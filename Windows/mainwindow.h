@@ -1,3 +1,10 @@
+/*
+ * Header File: graphwindowbar.h
+ * --------------------------------
+ * + Defines the declarations for functions
+ *   for mainwindow.cpp
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

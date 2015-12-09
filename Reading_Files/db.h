@@ -1,3 +1,11 @@
+/*
+ * Header File: db.h
+ * --------------------------------
+ * + Defines the declarations for inputting and outputting
+ *   into and from the database respectively for the class
+ *   db.cpp
+ */
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>

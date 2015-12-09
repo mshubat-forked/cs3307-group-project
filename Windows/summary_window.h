@@ -1,3 +1,10 @@
+/*
+ * Header File: summary_window.h
+ * --------------------------------
+ * + Defines the declarations for functions
+ *   for summary_window.cpp
+ */
+
 #ifndef SUMMARY_WINDOW_H
 #define SUMMARY_WINDOW_H
 
@@ -22,7 +29,6 @@ class Summary_Window : public QDialog
     Q_OBJECT
 
 public:
-    //explicit Summary_Window(QWidget *parent);
     explicit Summary_Window(QWidget *parent, bool new_db);
     void getVector(QVector<teaching_entry> &tVect);
     ~Summary_Window();
@@ -30,7 +36,6 @@ public:
 private slots:
 
     QTreeWidgetItem * make_root(QString category, QString num_hours, QString num_students);
-
 
     QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);

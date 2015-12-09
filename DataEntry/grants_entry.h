@@ -1,6 +1,9 @@
-//
-//  grants_entry.h
-//
+/*
+ * Header File: grants_entry.h
+ * --------------------------------
+ * + Defines the declarations for getter and setter functions
+ *   for grants_entry.cpp
+ */
 
 #ifndef __grants_entry__
 #define __grants_entry__
