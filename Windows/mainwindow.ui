@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>291</height>
+    <width>570</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,14 +30,23 @@
     </item>
     <item>
      <widget class="QLabel" name="label_2">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
       <property name="midLineWidth">
        <number>1</number>
       </property>
       <property name="text">
        <string/>
       </property>
+      <property name="pixmap">
+       <pixmap>../Images/Schulich and Western.jpg</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>false</bool>
+      </property>
       <property name="alignment">
-       <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
       <property name="indent">
        <number>0</number>
@@ -71,7 +80,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>492</width>
+     <width>570</width>
      <height>22</height>
     </rect>
    </property>

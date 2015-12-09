@@ -17,33 +17,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    QPixmap pix("Images/Schulich and Western.jpg");
-
-    ui->label_2->setPixmap(pix);
-    ui->label_2->show();
-
-
-      //  QSplashScreen *splash = new QSplashScreen;
-        // splash ->setPixmap(QPixmap("/Users/SamirahSiddiq/Desktop/schulich_pic.jpg"));
-         // splash->show();
-
-          //QBrush brush = new QBrush();
-            //QPixmap pixmap("/Users/SamirahSiddiq/Desktop/schulich_pic.jpg");
-            //brush->setTexture(pixmap);
-          //ui ->label_3-> setAutoFillBackground(brush);
-
-
-          }
-
-
+}
 
 /*
- * Function: Summary_Window
+ * Function: on_new_file_button_clicked
  * -----------------------------------------
  * WHAT THE FUNCTION DOES:
  * + On the push of the button the program opens up the
  *   summary window
+ * + Indicates new db file needed
  */
 void MainWindow::on_new_file_button_clicked()
 {
@@ -53,6 +35,14 @@ void MainWindow::on_new_file_button_clicked()
     s.exec();
 }
 
+/*
+ * Function: on_last_session_button_clicked
+ * -----------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + On the push of the button the program opens up the
+ *   summary window
+ * + Indicates to use previous file needed
+ */
 void MainWindow::on_last_session_button_clicked()
 {
     bool new_file = false;
