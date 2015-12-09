@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QPixmap pix("../Images/logo.jpg");
+
+        ui->label_2->setPixmap(pix);
+        ui->label_2->show();
 }
 
 /*
