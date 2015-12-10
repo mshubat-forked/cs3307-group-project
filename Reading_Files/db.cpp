@@ -1,3 +1,10 @@
+/*
+ * Source file: db.cpp
+ * ---------------------------------
+ * + Defines a class to handles the connection and queries to the SQLite database
+ *   storing csv information
+ */
+
 #include "db.h"
 
 /**
@@ -9,6 +16,13 @@
 static QSqlDatabase db;
 
 
+/*
+ * Constructor: DB
+ * ---------------------------------------
+ * WHAT THE CONSTRUCTOR DOES:
+ * + Creates DB object which creates tables to store
+ *   information from read csv files
+ */
 DB::DB()//constructor for the database - creates 4 data type tables
 {
     db = QSqlDatabase:: addDatabase("QSQLITE","db_connection");//static to remain for every created DB object
@@ -52,6 +66,14 @@ DB::DB()//constructor for the database - creates 4 data type tables
 }
 
 //------------------------ INPUT INTO DATABASE ------------------------//
+
+/*
+ * Function: addTeachEntry
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Adds read in teaching_entry items from the teaching csv file
+ *   into the database
+ */
 void DB::addTeachingEntry(teaching_entry a){
 
     string sql;
@@ -85,6 +107,16 @@ void DB::addTeachingEntry(teaching_entry a){
 
 //------------------------ OUTPUT FROM DATABASE ------------------------//
 
+/*
+ * Function: addTeachFull
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Gets data from the database to the program so it can be
+ *   displayed to the GUI
+ *
+ * RETURNS
+ * + A QVector that stores paired down teaching_entry items that are relevant to the GUI
+ */
 QVector<teaching_entry> DB::getTeachFull(){
 
     ostringstream convert;

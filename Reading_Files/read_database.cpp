@@ -1,8 +1,19 @@
-
+/*
+ * Source file: read_database.cpp
+ * ---------------------------------
+ * + A class that defines functions for reading csv files
+ *   and storing that read data into a SQLite database
+ */
 
 
 #include "read_database.h"
 
+/*
+ * Function: readTeach
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Reads and parses a 'teaching' csv file to pass to a database
+ */
 void readTeach(DB database){
 
     char buffer[MAX_PATH] = "";
@@ -172,6 +183,19 @@ void readTeach(DB database){
     }
 
 }
+
+/*
+ * Function: dateTrim
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Trims a date from a the teaching csv down to a year value
+ *
+ * PARAMETERS:
+ * - str: a data value in the form of a string
+ *
+ * RETURNS:
+ * + Only the year value of the date passed
+ */
 string dateTrim(string str){
     size_t found = str.find("/");
     if (found == 4 || found == -1) {

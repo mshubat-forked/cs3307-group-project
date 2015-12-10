@@ -1,3 +1,10 @@
+/*
+ * Source file: summary_window.cpp
+ * ---------------------------------
+ * + Defines a Dialog window class that handles the main
+ *   interaction pane for the user
+ */
+
 #include "summary_window.h"
 #include <QTextStream>
 #include <QDebug>
@@ -9,11 +16,8 @@
 #include <QStringList>
 #include <fstream>
 
+// + Could be used for storing a drag-and-dropped file name
 static QString csv_file_name;
-
-QVector<double> values(4);
-
-#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
 using namespace std;
 
@@ -25,7 +29,7 @@ using namespace std;
  *   information and the functionality to view that information in different
  *   ways (ie. date range filters and graphs)
  *
- * PARAMETER:
+ * PARAMETERS:
  * - parent: a reference to the parent widget
  * - new_db: boolean indication of if a new db file is needed
  *   true: delete and make a new database file
@@ -177,14 +181,14 @@ void Summary_Window::dropEvent(QDropEvent *e)
     }
 }
 
-/*
- * Destory the window when it is closed
- */
-Summary_Window::~Summary_Window()
-{
-    delete ui;
-}
 
+/*
+ * Function: on_dateFilterButton_clicked()
+ * -------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Makes a new data query to the database with a year
+ *   range to display on the summary window
+ */
 void Summary_Window::on_dateFilterButton_clicked()
 {
     //variables fromYear and to Year defined in header
@@ -237,6 +241,12 @@ void Summary_Window::make_tree_header()
  * WHAT THE FUNCTION DOES:
  * + Sets the top level items of the tree summary window for
  *   teaching data
+ *
+ * PARAMETERS:
+ * - pme: a pointer to a root treeWidget to put pme data under
+ * - ume: a pointer to a root treeWidget to put ume data under
+ * - cme: a pointer to a root treeWidget to put cme data under
+ * - other: a pointer to a root treeWidget to put other data under
  */
 void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *ume,
                                          QTreeWidgetItem *cme, QTreeWidgetItem *other)
@@ -255,6 +265,12 @@ void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *u
  * ----------------------------------
  * WHAT THE FUNCTION DOES:
  * + Fills out the summary tree with teaching entry information
+ *
+ * PARAMETERS:
+ * - vector_teaching_entries: teaching entry information to parse through and display
+ *
+ * RETURNS:
+ * + A QStringList of years found when reading through the data
  */
 QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_teaching_entries)
 {
@@ -450,14 +466,35 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
     return temp_years;
 }
 
-// + Open the graph setup dialog box
+/*
+ * Function: on_button_graph_clicked
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Open a dialog window that lets the user choose what type of graph they
+ *   would like to view and for what name
+ */
 void Summary_Window::on_button_graph_clicked()
 {
     setup_graph = new GraphSetup(faculty, data_for_graphs, years, current_tab_index, this);
     setup_graph->show();
 }
 
+/*
+ * Function: on_tabWidget_tabBarClicked
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Stores the current tab index value into current_tab_index
+ *   which can be accessed anywhere from in the class
+ */
 void Summary_Window::on_tabWidget_tabBarClicked(int index)
 {
     current_tab_index = index;
+}
+
+/*
+ * Destory the window when it is closed
+ */
+Summary_Window::~Summary_Window()
+{
+    delete ui;
 }

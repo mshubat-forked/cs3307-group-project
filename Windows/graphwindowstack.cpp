@@ -135,18 +135,22 @@ void graphwindowstack::make_teaching_stacked_graph(QVector<teaching_entry> data_
 }
 
 /*
- * Function: generate_graph_colors
+ * Function: draw_teaching_stacked_graph
  * ------------------------------------
  * WHAT THE FUNCTION DOES:
+ * + Animates a stacked bar graph to the screen
  *
  * PARAMETER LIST:
- *
- * RETURNS:
+ * - values: the total program information to display on the graph
+ * - years: a list of years for the range of the graph
+ * - colors: a vector of colors to paint the bars
  *
  */
 void graphwindowstack::draw_teaching_stacked_graph(QVector<int> values, QStringList years, QVector<QColor> colors)
 {
 
+    // + Make QString for the first and last years dates to communicate the
+    //   range of data on the x-axis to the user
     QString first_year = years.first();
     QString last_year = years.last();
 
@@ -191,7 +195,7 @@ void graphwindowstack::draw_teaching_stacked_graph(QVector<int> values, QStringL
     undergrad->moveAbove(continuing);
     postgrad->moveAbove(undergrad);
 
-    // + PREPARE THE X-AXIS
+    //---PREPARE THE X-AXIS----//
 
     // + Apply category labels to the x-axis:
     QVector<double> ticks;
@@ -220,7 +224,7 @@ void graphwindowstack::draw_teaching_stacked_graph(QVector<int> values, QStringL
     ui->graph->xAxis->setRange(0, values.length()*2);
 
 
-    // + PREPARE THE Y-AXIS
+    //----PREPARE THE Y-AXIS----//
 
     // + Where we set the range of the y axis
     int max_range = 0;
@@ -248,10 +252,10 @@ void graphwindowstack::draw_teaching_stacked_graph(QVector<int> values, QStringL
 
     QVector<double> undergradData, postgradData, continuingData, otherData;
 
-            undergradData << values.at(1);
-            postgradData << values.at(0);
-            continuingData << values.at(2);
-            otherData << values.at(3);
+    undergradData << values.at(1);
+    postgradData << values.at(0);
+    continuingData << values.at(2);
+    otherData << values.at(3);
 
     // + Set the input data in relation to the ticks on the graph
     undergrad->setData(ticks, undergradData);
@@ -273,6 +277,9 @@ void graphwindowstack::draw_teaching_stacked_graph(QVector<int> values, QStringL
 
 }
 
+/*
+ * Destory the window
+ */
 graphwindowstack::~graphwindowstack()
 {
     delete ui;

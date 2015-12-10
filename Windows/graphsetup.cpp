@@ -12,7 +12,7 @@
 #include <iostream>
 
 /*
- * Constructor: on_button_cancel_clicked
+ * Constructor: GraphSetup
  * ---------------------------------------
  * WHAT THE CONSTRUCTOR DOES:
  * + Creates the GraphSetup dialog window so the user can enter meta information

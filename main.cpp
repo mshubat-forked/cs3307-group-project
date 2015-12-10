@@ -1,7 +1,10 @@
-#include "Windows/mainwindow.h"
-#include "Windows/summary_window.h"
+/*
+ * Source file: main.cpp
+ * ---------------------------------
+ * + Initiates the running of the program
+ */
 
-#include "Reading_Files/read_database.h"
+#include "Windows/mainwindow.h"
 
 using namespace boost;
 using namespace std;
@@ -11,7 +14,7 @@ using namespace std;
  * Function: main
  * -----------------------------------------
  * WHAT THE FUNCTION DOES:
- * + Runs the program by opening the 'mainwindow'
+ * + Runs the program by opening the 'mainwindow' QMainWindow class
  */
 int main(int argc, char *argv[])
 {
