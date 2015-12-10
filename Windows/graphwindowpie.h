@@ -21,9 +21,12 @@ class graphwindowpie : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindowpie(QWidget *parent = 0, QVector<teaching_entry> data_for_graphs = {}, QString passed_name = "");
+    explicit graphwindowpie(QWidget *parent = 0, QVector<teaching_entry> data_for_graphs = {}, QString passed_name = "", int tab_index = 0);
+     ~graphwindowpie();
 
-    ~graphwindowpie();
+private slots:
+    void make_teaching_pie_graph(QVector<teaching_entry> data_for_graphs, QString name);
+
 
 private:
     Ui::graphwindowpie *ui;
@@ -31,9 +34,6 @@ private:
     QStringList titles;
     QStringList years;
     QString name;
-
-
-    void setup_look();
 
 };
 

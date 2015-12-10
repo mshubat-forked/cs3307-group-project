@@ -10,6 +10,7 @@
 
 #include <QDialog>
 #include <Charts/qcustomplot.h>
+#include <Windows/graphcolors.h>
 #include <Reading_Files/teaching_entry.h>
 
 namespace Ui {
@@ -21,11 +22,12 @@ class graphwindowstack : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindowstack(QWidget *parent = 0,QVector<teaching_entry> data_for_graphs = {}, QStringList passed_years = {}, QString name = "");
+    explicit graphwindowstack(QWidget *parent = 0,QVector<teaching_entry> data_for_graphs = {}, QStringList passed_years = {}, QString name = "", int tab_index = 0);
     ~graphwindowstack();
 
 private slots:
-    void make_stacked_bar_graph(QVector<int> values, QStringList years);
+    void make_teaching_stacked_graph(QVector<teaching_entry> data_for_graphs, QString name);
+    void draw_teaching_stacked_graph(QVector<int> values, QStringList years, QVector<QColor> colors);
 
 private:
     Ui::graphwindowstack *ui;

@@ -40,9 +40,6 @@ Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
     setAcceptDrops(true);
 
 
-
-
-
     // + Make a connection to the database
     DB database;
 
@@ -54,29 +51,11 @@ Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
 
     years = build_teaching_tree(vector_teaching_entries);
 
-    qDebug() << "Got a year: " << years.at(0);
-
     // + Validator to ensure only year values can be entered into the date filter
     QIntValidator *v = new QIntValidator(0, 9999);
     ui->fromDate->setValidator( v );
     ui->toDate->setValidator( v );
 
-    // + Populate the graph combo box with the graph options
-    // + This needs to match switch statement in activated function
-    //ui->graphComboBox_teach->addItem("Stack"); //index 0
-    //ui->graphComboBox_teach->addItem("Pie"); //index 1
-    //ui->graphComboBox_teach->addItem("Bar"); //index 2
-
-
-    graph_values.append(18);
-    graph_values.append(45);
-    graph_values.append(34);
-    graph_values.append(40);
-
-    title_values.append("PME");
-    title_values.append("UME");
-    title_values.append("CME");
-    title_values.append("Other");
 }
 
 /*
@@ -474,6 +453,11 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
 // + Open the graph setup dialog box
 void Summary_Window::on_button_graph_clicked()
 {
-    setup_graph = new GraphSetup(faculty, data_for_graphs, years, this);
+    setup_graph = new GraphSetup(faculty, data_for_graphs, years, current_tab_index, this);
     setup_graph->show();
+}
+
+void Summary_Window::on_tabWidget_tabBarClicked(int index)
+{
+    current_tab_index = index;
 }

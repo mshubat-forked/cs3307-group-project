@@ -1,3 +1,10 @@
+/*
+ * Source file: graphwindowpie.cpp
+ * ---------------------------------
+ * + Defines a class that generates pie graphs for
+ *   passed data
+ */
+
 #include "graphwindowpie.h"
 #include "ui_graphwindowpie.h"
 #include "graphcolors.h"
@@ -14,17 +21,51 @@
  *
  * PARAMETER LIST:
  * - parent: a reference to the parent widget
- * - values: the data to be shown on the graph
- *
+ * - data_for_graphs: data from a database that information for the graph will be extracted from
+ * - name: the faculty memeber the data on the graph is associated with
+ * - tab_index: the current tab selected by the user
  */
-graphwindowpie::graphwindowpie(QWidget *parent, QVector<teaching_entry> data_for_graphs, QString name) :
+graphwindowpie::graphwindowpie(QWidget *parent, QVector<teaching_entry> data_for_graphs, QString passed_name, int tab_index) :
     QDialog(parent),
     ui(new Ui::graphwindowpie)
 {
+    name = passed_name;
+
     ui->setupUi(this);
 
-    setup_look();
+    this->setStyleSheet("background-color:white;");
+    ui->label_subject->setText("Teaching Summary for ");
 
+    // + Change to what graph generation code to use based on what the current tab is
+    // + Makes a graph for the teaching data
+    if(tab_index == 0)
+    {
+        make_teaching_pie_graph(data_for_graphs, name);
+    }
+
+    // + Makes a graph for the Presentations
+    else if (tab_index == 1)
+    {
+
+    }
+
+    // + Makes a graph for the Grants
+    else if (tab_index == 2)
+    {
+
+    }
+
+    // + Makes a graph for the Publications
+    else if (tab_index == 3)
+    {
+
+    }
+
+
+}
+
+void graphwindowpie::make_teaching_pie_graph(QVector<teaching_entry> data_for_graphs, QString name)
+{
     int pme_total = 0;
     int ume_total = 0;
     int cme_total = 0;
@@ -88,19 +129,6 @@ graphwindowpie::graphwindowpie(QWidget *parent, QVector<teaching_entry> data_for
     // + Titles for the above data
     titles << "PME" << "UME" << "CME" << "Other";
 
-    // + Get rid of an duplicate information from the years list
-    years = years.toSet().toList();
-
-    // + Find the max and min year in the 'years' QStringList
-    QString min = *std::min_element(years.begin(), years.end());
-    QString max = *std::max_element(years.begin(), years.end());
-
-    // + Set the above information to labels on the screen
-    ui->label_year_start->setText(min);
-    ui->label_year_finish->setText(max);
-    ui->label_name->setText(name);
-
-
     // + Create the colours for the graph
     QVector<QColor> pie_pie_colors = generate_graph_colors(values.size());
 
@@ -112,13 +140,18 @@ graphwindowpie::graphwindowpie(QWidget *parent, QVector<teaching_entry> data_for
     {
         ui->piechart->addItem(titles[i], pie_pie_colors[i], values[i]);
     }
-}
 
+    // + Get rid of an duplicate information from the years list
+    years = years.toSet().toList();
 
-void graphwindowpie::setup_look()
-{
-    this->setStyleSheet("background-color:white;");
-    ui->label_subject->setText("Teaching Summary for ");
+    // + Find the max and min year in the 'years' QStringList
+    QString min = *std::min_element(years.begin(), years.end());
+    QString max = *std::max_element(years.begin(), years.end());
+
+    // + Set the above information to labels on the screen
+    ui->label_year_start->setText(min);
+    ui->label_year_finish->setText(max);
+    ui->label_name->setText(name);
 }
 
 /*

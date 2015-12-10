@@ -23,7 +23,7 @@
  * - data_for_graphs: data from the database to display on the graphwindow
  * - parent: a reference to the window that called GraphSetup
  */
-GraphSetup::GraphSetup(QStringList faculty, QVector<teaching_entry> data_for_graphs, QStringList passed_years, QWidget *parent) :
+GraphSetup::GraphSetup(QStringList faculty, QVector<teaching_entry> data_for_graphs, QStringList passed_years, int tab_index, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::GraphSetup)
 {
@@ -39,6 +39,8 @@ GraphSetup::GraphSetup(QStringList faculty, QVector<teaching_entry> data_for_gra
 
     data = data_for_graphs;
     years = passed_years;
+    current_tab_index = tab_index;
+    qDebug() << "Current index: " << QString::number(current_tab_index);
 }
 
 /*
@@ -54,21 +56,21 @@ void GraphSetup::on_button_ok_clicked()
     // + Go to a Stack Graph
     if(ui->comboBox_type->currentText() == "Stack Graph")
     {
-        graph_stack_window = new graphwindowstack(this, data, years, ui->comboBox_name->currentText());
+        graph_stack_window = new graphwindowstack(this, data, years, ui->comboBox_name->currentText(),current_tab_index);
         graph_stack_window->show();
     }
 
     // + Go to a Bar Graph
     else if(ui->comboBox_type->currentText() == "Bar Graph")
     {
-        graph_bar_window = new graphwindowbar(this, data, years, ui->comboBox_name->currentText());
+        graph_bar_window = new graphwindowbar(this, data, years, ui->comboBox_name->currentText(),current_tab_index);
         graph_bar_window->show();
     }
 
     // + Go to a Pie Graph
     else if(ui->comboBox_type->currentText() == "Pie Graph")
     {
-        graph_pie_window = new graphwindowpie(this, data, ui->comboBox_name->currentText());
+        graph_pie_window = new graphwindowpie(this, data, ui->comboBox_name->currentText(),current_tab_index);
         graph_pie_window->show();
     }
 

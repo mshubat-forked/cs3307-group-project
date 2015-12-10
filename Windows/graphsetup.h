@@ -23,7 +23,7 @@ class GraphSetup : public QDialog
     Q_OBJECT
 
 public:
-    explicit GraphSetup(QStringList faculty, QVector<teaching_entry> data_for_graphs, QStringList passed_years, QWidget *parent = 0);
+    explicit GraphSetup(QStringList faculty, QVector<teaching_entry> data_for_graphs, QStringList passed_years, int tab_index, QWidget *parent = 0);
     ~GraphSetup();
 
 private slots:
@@ -39,6 +39,7 @@ private:
     QDialog *graph_bar_window;
     QVector<teaching_entry> data;
     QStringList years;
+    int current_tab_index;
 };
 
 #endif // GRAPHSETUP_H

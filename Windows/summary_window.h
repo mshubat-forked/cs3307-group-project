@@ -53,6 +53,8 @@ private slots:
      QStringList build_teaching_tree(QVector<teaching_entry> vector_teaching_entries);
      void on_button_graph_clicked();
 
+     void on_tabWidget_tabBarClicked(int index);
+
 private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
@@ -98,6 +100,9 @@ private:
 
    // + Stores the faculty names
    QStringList faculty;
+
+   // + The current tab index
+   int current_tab_index = 0;
 
 };
 

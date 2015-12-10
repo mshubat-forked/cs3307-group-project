@@ -197,9 +197,7 @@ int Nightcharts::draw(QPainter *painter)
           pen.setColor(pieces[i].rgbColor);
           pen.setWidth(2);
           painter->setPen(pen);
-          QColor temp_color = pieces[i].rgbColor;
-          temp_color.setAlpha(120);
-          painter->setBrush(temp_color);
+          painter->setBrush(pieces[i].rgbColor);
           // + Draw the piece to the screen
 
           painter->drawPie(cX,cY,cW,cH,starting_angle*16, angle*16);

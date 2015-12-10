@@ -10,7 +10,7 @@
 
 #include <QDialog>
 #include <Charts/qcustomplot.h>
-#include <Windows/summary_window.h>
+#include <Windows/graphcolors.h>
 #include <Reading_Files/teaching_entry.h>
 
 
@@ -23,15 +23,17 @@ class graphwindowbar : public QDialog
     Q_OBJECT
 
 public:
-    explicit graphwindowbar(QWidget *parent = 0,QVector<teaching_entry> data_for_graphs = {}, QStringList years = {}, QString name = "");
+    explicit graphwindowbar(QWidget *parent = 0,QVector<teaching_entry> data_for_graphs = {}, QStringList years_for_graphs = {}, QString name = "", int tab_index = 0);
     ~graphwindowbar();
 
 private slots:
-    void make_bar_graph(QVector<double> values);
+    void make_teaching_bar_graph(QVector<teaching_entry> data_for_graphs, QString name);
+    void draw_teaching_bar_graph(QVector<double> values, QStringList years, QVector<QColor> colors);
 
 private:
     Ui::graphwindowbar *ui;
       QVector<double> values;
+      QStringList years;
 };
 
 #endif // GRAPHWINDOWBAR_H
