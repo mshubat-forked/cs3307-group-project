@@ -29,6 +29,8 @@ private slots:
     void make_teaching_stacked_graph(QVector<teaching_entry> data_for_graphs, QString name);
     void draw_teaching_stacked_graph(QVector<int> values, QStringList years, QVector<QColor> colors);
 
+    void on_button_print_clicked();
+
 private:
     Ui::graphwindowstack *ui;
     QStringList years;

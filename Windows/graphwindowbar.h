@@ -30,6 +30,8 @@ private slots:
     void make_teaching_bar_graph(QVector<teaching_entry> data_for_graphs, QString name);
     void draw_teaching_bar_graph(QVector<double> values, QStringList years, QVector<QColor> colors);
 
+    void on_button_print_clicked();
+
 private:
     Ui::graphwindowbar *ui;
       QVector<double> values;

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/Run_Images">
         <file>Images/logo.png</file>
+        <file>Images/printer.png</file>
     </qresource>
 </RCC>

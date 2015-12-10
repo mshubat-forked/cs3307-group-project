@@ -286,9 +286,48 @@ void graphwindowbar::draw_teaching_bar_graph(QVector<double> values, QStringList
 }
 
 /*
+ * Function: on_button_print_clicked
+ * ------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Prints the current graph
+ */
+void graphwindowbar::on_button_print_clicked()
+{
+    QPainter painter;
+    QPrinter printer;
+
+    // + Dialog window for print options
+    QPrintDialog *print_window = new QPrintDialog(&printer);
+
+    // + Open the print window
+    if (print_window->exec() != QDialog::Accepted)
+        return;
+
+    // + Start the painter
+    painter.begin(&printer);
+
+    // + Set the scale for capturing the widget
+    double xscale = printer.pageRect().width()/double(ui->graph->width());
+    double yscale = printer.pageRect().height()/double(ui->graph->height());
+    double scale = qMin(xscale, yscale);
+    painter.translate(printer.paperRect().x() + printer.pageRect().width()/2,
+                      printer.paperRect().y() + printer.pageRect().height()/2);
+    painter.scale(scale, scale);
+    painter.translate(-width()/2, -height()/2);
+
+    // + The widget to the apply the painter to
+    ui->graph->render(&painter);
+
+    // + Stop the painter
+    painter.end();
+}
+
+/*
  * Destory the window when it is closed
  */
 graphwindowbar::~graphwindowbar()
 {
     delete ui;
 }
+
+

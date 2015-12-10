@@ -2,7 +2,7 @@
  * Source File: grants_entry.cpp
  * --------------------------------
  * + Defines the declarations for functions
- *   for mainwindow.cpp
+ *   for the class
  */
 
 #include "grants_entry.h"

@@ -3,8 +3,10 @@
  * ---------------------------------
  * + Initiates the running of the program
  */
-
 #include "Windows/mainwindow.h"
+#include "Reading_Files/read_database.h"
+#include "Windows/mainwindow.h"
+#include <QApplication>
 
 using namespace boost;
 using namespace std;

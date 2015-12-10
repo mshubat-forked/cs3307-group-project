@@ -28,6 +28,8 @@ private slots:
     void make_teaching_pie_graph(QVector<teaching_entry> data_for_graphs, QString name);
 
 
+    void on_button_print_clicked();
+
 private:
     Ui::graphwindowpie *ui;
     QVector<double> values;

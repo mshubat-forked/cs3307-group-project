@@ -32,6 +32,7 @@ graphwindowpie::graphwindowpie(QWidget *parent, QVector<teaching_entry> data_for
     name = passed_name;
 
     ui->setupUi(this);
+    ui->button_print->toolTip();
 
     this->setStyleSheet("background-color:white;");
     ui->label_subject->setText("Teaching Summary for ");
@@ -63,7 +64,16 @@ graphwindowpie::graphwindowpie(QWidget *parent, QVector<teaching_entry> data_for
 
 
 }
-
+/*
+ * Function: make_teaching_pie_graph
+ * ------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Animates a stacked bar graph to the screen
+ *
+ * PARAMETER LIST:
+ * - data_for_graphs: The data to display on the graph
+ * - name: the faculty member associated with the graph data
+ */
 void graphwindowpie::make_teaching_pie_graph(QVector<teaching_entry> data_for_graphs, QString name)
 {
     int pme_total = 0;
@@ -155,10 +165,49 @@ void graphwindowpie::make_teaching_pie_graph(QVector<teaching_entry> data_for_gr
 }
 
 /*
+ * Function: on_button_print_clicked
+ * ------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Prints the current graph
+ */
+void graphwindowpie::on_button_print_clicked()
+{
+    QPainter painter;
+    QPrinter printer;
+
+    // + Dialog window for print options
+    QPrintDialog *print_window = new QPrintDialog(&printer);
+
+    // + Open the print window
+    if (print_window->exec() != QDialog::Accepted)
+        return;
+
+    // + Start the painter
+    painter.begin(&printer);
+
+    // + Set the scale for capturing the widget
+    double xscale = printer.pageRect().width()/double(ui->piechart->width());
+    double yscale = printer.pageRect().height()/double(ui->piechart->height());
+    double scale = qMin(xscale, yscale);
+    painter.translate(printer.paperRect().x() + printer.pageRect().width()/2,
+                      printer.paperRect().y() + printer.pageRect().height()/2);
+    painter.scale(scale, scale);
+    painter.translate(-width()/2, -height()/2);
+
+    // + The widget to the apply the painter to
+    ui->piechart->render(&painter);
+
+    // + Stop the painter
+    painter.end();
+}
+
+/*
  * Destory the window when it is closed
  */
 graphwindowpie::~graphwindowpie()
 {
     delete ui;
 }
+
+
 
