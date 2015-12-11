@@ -32,7 +32,11 @@ class DB
 public:
     DB();
 
-       //------------------------ OTHER FUNCTIONS ------------------------//
+       void dropTables();
+
+       void makeTables();
+
+        //------------------------ OTHER FUNCTIONS ------------------------//
 
        static bool dbexists ();//static - can be called w/o an object
 

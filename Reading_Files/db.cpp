@@ -70,6 +70,55 @@ DB::DB()//constructor for the database - creates 4 data type tables
     //db.close();
 }
 
+void DB::dropTables(){
+
+    QString sql;
+
+    // Drop Teaching Table
+
+    sql="DROP TABLE teaching;";
+    db.exec(sql);
+
+    // Drop Grants and Clinical Funding Table
+
+    sql="DROP TABLE grantsClinicalFunding;";
+    db.exec(sql);
+
+    // Drop Publications Table
+
+    sql="DROP TABLE publications;";
+    db.exec(sql);
+
+    // Drop Presentations Table
+
+    sql="DROP TABLE presentations;";
+    db.exec(sql);
+}
+
+void DB::makeTables(){
+
+    QString sql;
+
+    //-------------- Create Teaching Table --------------//
+
+    sql="CREATE TABLE teaching(StartDate int,MemberName varchar(40),Program varchar(40), TotalHours DOUBLE(4,2),NumStudents int);";
+    db.exec(sql);
+
+    //-------------- Create Grants and Clinical Funding Table --------------//
+
+    sql="CREATE TABLE grantsClinicalFunding (StartDate int,MemberName varchar(40),FundingType varchar (16),PeerReviewed varchar(5),IndustryGrant varchar(5), Status varchar(12),Role varchar(30),TotalAmount money, Title varchar(40));";
+    db.exec(sql);
+
+    //-------------- Create Publications Table --------------//
+
+    sql="CREATE TABLE publications(MemberName varchar(40), PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
+    db.exec(sql);
+
+    //-------------- Create Presentations Table --------------//
+
+    sql="CREATE TABLE presentations(Date int, MemberName varchar(40),Type varchar(30), Role varchar(20));";
+    db.exec(sql);
+}
 
 //------------------------ OTHER FUNCTIONS ------------------------//
 /**
