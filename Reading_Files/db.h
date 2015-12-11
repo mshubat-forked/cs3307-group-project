@@ -42,15 +42,23 @@ public:
 
        void addGrantEntry(grants_entry a);
 
-       void addPublicationEntry();
+       void addPublicationEntry(publication_entry a);
 
-       void addPresentationEntry();
+       void addPresentationEntry(presentation_entry a);
 
        //------------------------ OUTPUT FROM DATABASE ------------------------//
 
        QVector<teaching_entry> getTeachFull();
 
+       QVector<teaching_entry> getTeachByDate(int date1, int date2);
+
        QVector<grants_entry> getGrantFull();
+
+       QVector<grants_entry> getGrantByDate(int date1, int date2);
+
+       QVector<presentation_entry> getPresFull();
+
+       QVector<presentation_entry> getPresByDate(int date1, int date2);
 
 };
 

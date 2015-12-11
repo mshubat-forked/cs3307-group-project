@@ -152,10 +152,70 @@ void DB::addGrantEntry(grants_entry a){
     //convert sql statement to Qstring
     qsql = QString::fromStdString(sql);//convert to qstring
 
-    db.exec(qsql);//execute Add teaching entry sql Statement
+    db.exec(qsql);//execute Add grant entry sql Statement
 
 
 }
+
+/**
+ * @brief DB::addPublicationEntry
+ * @param a
+ */
+
+void DB::addPublicationEntry(publication_entry a){
+
+    string sql;
+    string MemberName,PrimaryDomain,PublicationStatus,Type,StatusDate,Role,MediumName,Title; //and authors array?
+    QString qsql;
+
+    MemberName=a.get_member();
+    PrimaryDomain= //a.get_what??? ... depends on what field Dan populates
+    PublicationStatus=a.get_publication_status();
+    Type=a.get_type();
+    StatusDate=a.get_status_year(); //or get_date()?
+    Role=a.get_role();
+    MediumName= //a.get_what??? ... depends on what field Dan populates
+    //I dont know how to handle the authors array ... do we really need it?
+    Title=a.get_title();
+
+    //note: does not inlcude the authors array
+    sql = std::string("INSERT INTO publications (MemberName, PrimaryDomain, PublicationStatus, Type, StatusDate, Role, MediumName, Title) VALUES(")+"'"+MemberName+"','"+PrimaryDomain+"','"+PublicationStatus+"',"+Type+","+StatusDate+",'"+Role+"','"+MediumName+"',"+Type+","+Title+");";
+
+    //convert sql statement to Qstring
+    qsql = QString::fromStdString(sql);//convert to qstring
+
+    db.exec(qsql);//execute Add publication entry sql Statement
+
+}
+
+
+/**
+ * @brief DB::addPresentationEntry
+ * @param a
+ */
+void DB::addPresentationEntry(presentation_entry a){
+
+    string sql;//used to hold sql string
+    string Date,MemberName,Type,Role;
+    QString qsql;//used to hold sql QString
+
+
+    Date=a.get_date();
+    MemberName=a.get_member();
+    Type=a.get_type();
+    Role=a.get_role();
+
+    sql = std::string("INSERT INTO presentations (Date, MemberName, Type, Role) VALUES(")+"'"+Date+"','"+MemberName+"','"+Type+"');";
+
+    //convert sql statement to Qstring
+    qsql = QString::fromStdString(sql);//convert to qstring
+
+    db.exec(qsql);//execute Add presentation entry sql Statement
+
+
+}
+
+
 
 //------------------------ OUTPUT FROM DATABASE ------------------------//
 /**
@@ -174,6 +234,50 @@ QVector<teaching_entry> DB::getTeachFull(){
     qry.exec();
 
 
+
+    while(qry.next()){
+
+        teaching_entry TE;//create teaching_entry to append to vector
+
+        convert.str("");
+
+        convert <<qry.value(0).toInt();
+
+        date=convert.str();
+
+
+        TE.set_date(convert.str());
+        TE.set_member(qry.value(1).toString().toStdString());
+        TE.set_program(qry.value(2).toString().toStdString());
+        TE.set_total_hours(qry.value(3).toInt());
+        TE.set_trainees(qry.value(4).toInt());
+
+
+        tVector.append(TE);
+    }//end of while
+
+    return tVector;
+}
+
+/**
+ * @brief DB::getTeachByDate
+ * @return Vector of all teaching entries in a date range
+ */
+QVector<teaching_entry> DB::getTeachByDate(int date1, int date2){
+
+    //string lowerDate, upperDate;
+    //lowerDate=std::to_string(date1);
+    //upperDate=std::to_string(date1);
+
+    ostringstream convert;
+    QSqlQuery qry(db);
+    string date;
+
+    QVector<teaching_entry> tVector;
+    qry.prepare("SELECT * FROM Teaching WHERE StartDate>= :lowerDate AND StartDate <= :upperDate ORDER BY Program, StartDate");
+    qry.bindValue(":lowerDate", date1);
+    qry.bindValue(":upperDate", date2);
+    qry.exec();
 
     while(qry.next()){
 
@@ -234,6 +338,126 @@ QVector<grants_entry> DB::getGrantFull(){
         tVector.append(GE);
     }//end of while
 
+
+    return tVector;
+}
+
+/**
+ * @brief DB::getGrantByDate()
+ * @return vector of all grant entries in a date range
+ */
+QVector<grants_entry> DB::getGrantByDate(int date1, int date2){
+
+    ostringstream convert;
+    QSqlQuery qry(db);
+    string date;
+
+    QVector<grants_entry> tVector;
+    qry.prepare("SELECT * FROM grantsClinicalFunding WHERE StartDate>= :lowerDate AND StartDate<= :upperDate ORDER BY FundingType, PeerReviewed, MemberName");
+    qry.bindValue(":lowerDate", date1);
+    qry.bindValue(":upperDate", date2);
+    qry.exec();
+
+
+
+    while(qry.next())//loops through rows in table
+    {
+        grants_entry GE;//create grants_entry to append to vector
+
+        GE.set_date(qry.value(0).toString().toStdString());
+        GE.set_member(qry.value(1).toString().toStdString());
+        GE.set_ftype(qry.value(2).toString().toStdString());
+        GE.set_preview(qry.value(3).toInt());
+        GE.set_ind_grant(qry.value(4).toInt());
+        GE.set_status(qry.value(5).toString().toStdString());
+        GE.set_role(qry.value(6).toString().toStdString());
+        GE.set_total_amount(qry.value(7).toInt());
+        GE.set_title(qry.value(8).toString().toStdString());
+
+
+        tVector.append(GE);
+    }//end of while
+
+
+    return tVector;
+}
+
+
+/**
+ * @brief DB::getPresFull
+ * @return Vector of all presentation entries
+ */
+QVector<presentation_entry> DB::getPresFull(){
+
+    ostringstream convert;
+    QSqlQuery qry(db);
+    string date;
+
+    QVector<presentation_entry> tVector;
+    qry.prepare("SELECT * FROM presentations ORDER BY Date, MemberName"); //what should this be ordered by?
+
+    qry.exec();
+
+    //order of returned data: date, membername, type, role
+
+    while(qry.next()){
+
+        presentation_entry PE;//create presentation_entry to append to vector
+
+        convert.str("");
+
+        convert <<qry.value(0).toInt();
+
+        date=convert.str();
+
+
+        PE.set_date(convert.str());
+        PE.set_member(qry.value(1).toString().toStdString());
+        PE.set_type(qry.value(2).toString().toStdString());
+        PE.set_role(qry.value(3).toString().toStdString());
+
+        tVector.append(PE);
+    }//end of while
+
+    return tVector;
+}
+
+/**
+ * @brief DB::getPresByDate
+ * @return Vector of all presentation entries in a date range
+ */
+QVector<presentation_entry> DB::getPresByDate(int date1, int date2){
+
+    ostringstream convert;
+    QSqlQuery qry(db);
+    string date;
+
+    QVector<presentation_entry> tVector;
+    qry.prepare("SELECT * FROM presentations WHERE StartDate>= :lowerDate AND StartDate<= :upperDate ORDER BY Date, MemberName"); //what should this be ordered by?
+    qry.bindValue(":lowerDate", date1);
+    qry.bindValue(":upperDate", date2);
+    qry.exec();
+
+    //order of returned data: date, membername, type, role
+
+    while(qry.next()){
+
+        presentation_entry PE;//create presentation_entry to append to vector
+
+        convert.str("");
+
+        convert <<qry.value(0).toInt();
+
+        date=convert.str();
+
+
+        PE.set_date(convert.str());
+        PE.set_member(qry.value(1).toString().toStdString());
+        PE.set_type(qry.value(2).toString().toStdString());
+        PE.set_role(qry.value(3).toString().toStdString());
+
+        tVector.append(PE);
+    }//end of while
 
     return tVector;
 }
