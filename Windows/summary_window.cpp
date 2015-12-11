@@ -209,6 +209,18 @@ void Summary_Window::on_dateFilterButton_clicked()
         fromYear=tempFrom;
         toYear=tempTo;
         //now need to filter
+
+        ui->treeWidget_teach->clear();
+
+        DB database;
+
+        readTeach(database);
+
+        // + Get the teaching information from the database
+        QVector<teaching_entry> vector_teaching_entries = database.getTeachByDate(2014,2015);
+
+        build_teaching_tree(vector_teaching_entries);
+
     }
 }
 

@@ -168,13 +168,13 @@ void DB::addPublicationEntry(publication_entry a){
     string MemberName,PrimaryDomain,PublicationStatus,Type,StatusDate,Role,MediumName,Title; //and authors array?
     QString qsql;
 
-    MemberName=a.get_member();
+    MemberName=a.get_authors();
     PrimaryDomain= //a.get_what??? ... depends on what field Dan populates
     PublicationStatus=a.get_publication_status();
     Type=a.get_type();
     StatusDate=a.get_status_year(); //or get_date()?
     Role=a.get_role();
-    MediumName= //a.get_what??? ... depends on what field Dan populates
+    MediumName=a.get_type(); //a.get_what??? ... depends on what field Dan populates
     //I dont know how to handle the authors array ... do we really need it?
     Title=a.get_title();
 
