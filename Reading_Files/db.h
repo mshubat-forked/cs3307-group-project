@@ -56,6 +56,10 @@ public:
 
        QVector<grants_entry> getGrantByDate(int date1, int date2);
 
+       QVector<publication_entry> getPubFull();
+
+       QVector<publication_entry> getPubByDate(int date1, int date2);
+
        QVector<presentation_entry> getPresFull();
 
        QVector<presentation_entry> getPresByDate(int date1, int date2);

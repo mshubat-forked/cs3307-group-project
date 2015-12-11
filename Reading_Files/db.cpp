@@ -57,7 +57,7 @@ DB::DB()//constructor for the database - creates 4 data type tables
 
     //-------------- Create Publications Table --------------//
 
-    sql="CREATE TABLE publications(MemberName varchar(40),PrimaryDomain varchar(30),PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), [Author(s)] varchar(200),Title varchar(200));";
+    sql="CREATE TABLE publications(MemberName varchar(40),PrimaryDomain varchar(30),PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
     db.exec(sql);
 
     //-------------- Create Presentations Table --------------//
@@ -165,20 +165,18 @@ void DB::addGrantEntry(grants_entry a){
 void DB::addPublicationEntry(publication_entry a){
 
     string sql;
-    string MemberName,PrimaryDomain,PublicationStatus,Type,StatusDate,Role,MediumName,Title; //and authors array?
+    string MemberName,PrimaryDomain,PublicationStatus,Type,StatusDate,Role,MediumName,Title;
     QString qsql;
 
     MemberName=a.get_member();
-    PrimaryDomain= //a.get_what??? ... depends on what field Dan populates
+    PrimaryDomain //=a.get_what??? ... depends on what field Dan populates
     PublicationStatus=a.get_publication_status();
     Type=a.get_type();
     StatusDate=a.get_status_year(); //or get_date()?
     Role=a.get_role();
-    MediumName= //a.get_what??? ... depends on what field Dan populates
-    //I dont know how to handle the authors array ... do we really need it?
+    MediumName= a.get_journal();
     Title=a.get_title();
 
-    //note: does not inlcude the authors array
     sql = std::string("INSERT INTO publications (MemberName, PrimaryDomain, PublicationStatus, Type, StatusDate, Role, MediumName, Title) VALUES(")+"'"+MemberName+"','"+PrimaryDomain+"','"+PublicationStatus+"',"+Type+","+StatusDate+",'"+Role+"','"+MediumName+"',"+Type+","+Title+");";
 
     //convert sql statement to Qstring
@@ -382,6 +380,92 @@ QVector<grants_entry> DB::getGrantByDate(int date1, int date2){
     return tVector;
 }
 
+/**
+ * @brief DB::getPubFull
+ * @return Vector of all publication entries
+ */
+QVector<publication_entry> DB::getPubFull(){
+
+    ostringstream convert;
+    QSqlQuery qry(db);
+    string date;
+
+    QVector<publication_entry> tVector;
+    qry.prepare("SELECT * FROM publications ORDER BY Type, MemberName");
+
+    qry.exec();
+
+    //order of returned data: MemberName, PrimaryDomain, PublicationStatus, Type, StatusDate, Role, MediumName, Title
+
+    while(qry.next()){
+
+        publication_entry PE;//create publication_entry to append to vector
+
+        convert.str("");
+
+        convert <<qry.value(4).toInt();
+
+        date=convert.str();
+
+
+        PE.set_date(convert.str()); //proper date feild?
+        PE.set_member(qry.value(0).toString().toStdString());
+        //PE.set_?(qry.value(1).toString().toStdString()); which feild is primary domain
+        PE.set_publication_status(qry.value(2).toString().toStdString());
+        PE.set_type(qry.value(3).toString().toStdString());
+        PE.set_role(qry.value(5).toString().toStdString());
+        PE.set_journal(qry.value(6).toString().toStdString());
+        PE.set_title(qry.value(7).toString().toStdString());
+
+        tVector.append(PE);
+    }//end of while
+
+    return tVector;
+}
+
+/**
+ * @brief DB::getPubByDate
+ * @return Vector of all publication entries in a date range
+ */
+QVector<publication_entry> DB::getPubByDate(int date1, int date2){
+
+    ostringstream convert;
+    QSqlQuery qry(db);
+    string date;
+
+    QVector<publication_entry> tVector;
+    qry.prepare("SELECT * FROM publications WHERE StartDate>= :lowerDate AND StartDate<= :upperDate ORDER BY Type, MemberName");
+    qry.bindValue(":lowerDate", date1);
+    qry.bindValue(":upperDate", date2);
+    qry.exec();
+
+    //order of returned data: MemberName, PrimaryDomain, PublicationStatus, Type, StatusDate, Role, MediumName, Title
+
+    while(qry.next()){
+
+        publication_entry PE;//create publication_entry to append to vector
+
+        convert.str("");
+
+        convert <<qry.value(4).toInt();
+
+        date=convert.str();
+
+
+        PE.set_date(convert.str()); //proper date feild?
+        PE.set_member(qry.value(0).toString().toStdString());
+        //PE.set_?(qry.value(1).toString().toStdString()); which feild is primary domain
+        PE.set_publication_status(qry.value(2).toString().toStdString());
+        PE.set_type(qry.value(3).toString().toStdString());
+        PE.set_role(qry.value(5).toString().toStdString());
+        PE.set_journal(qry.value(6).toString().toStdString());
+        PE.set_title(qry.value(7).toString().toStdString());
+
+        tVector.append(PE);
+    }//end of while
+
+    return tVector;
+}
 
 /**
  * @brief DB::getPresFull
@@ -394,7 +478,7 @@ QVector<presentation_entry> DB::getPresFull(){
     string date;
 
     QVector<presentation_entry> tVector;
-    qry.prepare("SELECT * FROM presentations ORDER BY Date, MemberName"); //what should this be ordered by?
+    qry.prepare("SELECT * FROM presentations ORDER BY Type, MemberName");
 
     qry.exec();
 
@@ -433,7 +517,7 @@ QVector<presentation_entry> DB::getPresByDate(int date1, int date2){
     string date;
 
     QVector<presentation_entry> tVector;
-    qry.prepare("SELECT * FROM presentations WHERE StartDate>= :lowerDate AND StartDate<= :upperDate ORDER BY Date, MemberName"); //what should this be ordered by?
+    qry.prepare("SELECT * FROM presentations WHERE StartDate>= :lowerDate AND StartDate<= :upperDate ORDER BY Type, MemberName");
     qry.bindValue(":lowerDate", date1);
     qry.bindValue(":upperDate", date2);
     qry.exec();
