@@ -9,13 +9,19 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <QtSql/QtSql>
+#include <QtSql>
 #include <QDebug>
 #include <QFileInfo>
 #include <string.h>
-#include "DataEntry/teaching_entry.h"
+#include "teaching_entry.h"
+#include "grants_entry.h"
+#include "DataEntry/publication_entry.h"
+#include "DataEntry/presentation_entry.h"
 #include <QVector>
 #include <sstream>
+#include <fstream>
+#include <direct.h>
+#include <algorithm>
 
 class DB
 {
@@ -26,20 +32,25 @@ class DB
 public:
     DB();
 
-    //------------------------ INPUT INTO DATABASE ------------------------//
+       //------------------------ OTHER FUNCTIONS ------------------------//
 
-    void addGrantEntry();
+       static bool dbexists ();//static - can be called w/o an object
 
-    void addPublicationEntry();
+       //------------------------ INPUT INTO DATABASE ------------------------//
 
-    void addPresentationEntry();
+       void addTeachingEntry(teaching_entry a);
 
-    void addTeachingEntry(teaching_entry a);
+       void addGrantEntry(grants_entry a);
 
+       void addPublicationEntry();
 
-    //------------------------ OUTPUT FROM DATABASE ------------------------//
+       void addPresentationEntry();
 
-    QVector<teaching_entry> getTeachFull();
+       //------------------------ OUTPUT FROM DATABASE ------------------------//
+
+       QVector<teaching_entry> getTeachFull();
+
+       QVector<grants_entry> getGrantFull();
 
 };
 
