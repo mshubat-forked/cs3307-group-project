@@ -15,6 +15,7 @@
 #include <Reading_Files/read_database.h>
 #include <QStringList>
 #include <fstream>
+#include <QProgressDialog>
 
 // + Could be used for storing a drag-and-dropped file name
 static QString csv_file_name;
@@ -41,24 +42,33 @@ Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
 {
     ui->setupUi(this);
 
-    setAcceptDrops(true);
-
-
-    // + Make a connection to the database
-    DB database;
-
-    readTeach(database);
-
-    // + Get the teaching information from the database
-    QVector<teaching_entry> vector_teaching_entries = database.getTeachFull();
-    data_for_graphs = database.getTeachFull();
-
-    years = build_teaching_tree(vector_teaching_entries);
+    // + Allows drag and drop functionality, unhide comment if want to use in future
+    // setAcceptDrops(true);
 
     // + Validator to ensure only year values can be entered into the date filter
     QIntValidator *v = new QIntValidator(0, 9999);
     ui->fromDate->setValidator( v );
     ui->toDate->setValidator( v );
+
+    // + Make a connection to the database
+
+    if(new_db == false){
+        DB database;
+            // + Get the teaching information from the database
+            vector_teaching_entries = database.getTeachFull();
+
+            // + Set the data aside for the graphs aswell
+            data_for_graphs = database.getTeachFull();
+
+            // + Build the summary window
+            years = build_teaching_tree(vector_teaching_entries);
+    }
+
+    // + If a new session was chosen clear the table and start fresh
+    else
+    {
+        ui->treeWidget_teach->clear();
+    }
 
 }
 
@@ -182,47 +192,7 @@ void Summary_Window::dropEvent(QDropEvent *e)
 }
 
 
-/*
- * Function: on_dateFilterButton_clicked()
- * -------------------------------
- * WHAT THE FUNCTION DOES:
- * + Makes a new data query to the database with a year
- *   range to display on the summary window
- */
-void Summary_Window::on_dateFilterButton_clicked()
-{
-    //variables fromYear and to Year defined in header
-    //reads in the dates to temp holders
-    int tempFrom = (ui->fromDate->text()).toInt();
-    int tempTo = (ui->toDate->text()).toInt();
 
-    //compares to ensure from date is before to date
-    if(tempFrom > tempTo){
-
-        //prints warning message and resets textbox values to previous values
-        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
-        ui->fromDate->setText(QString::number(fromYear));
-        ui->toDate->setText(QString::number(toYear));
-    }
-    else{
-        //assigns the entered values to the the fromYear and toYear variables to be used for filtering
-        fromYear=tempFrom;
-        toYear=tempTo;
-        //now need to filter
-
-        ui->treeWidget_teach->clear();
-
-        DB database;
-
-        readTeach(database);
-
-        // + Get the teaching information from the database
-        QVector<teaching_entry> vector_teaching_entries = database.getTeachByDate(2014,2015);
-
-        build_teaching_tree(vector_teaching_entries);
-
-    }
-}
 
 /*
  * Function: make_tree_header
@@ -272,6 +242,125 @@ void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *u
 
 }
 
+
+
+/*
+ * Function: on_button_graph_clicked
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Open a dialog window that lets the user choose what type of graph they
+ *   would like to view and for what name
+ */
+void Summary_Window::on_button_graph_clicked()
+{
+    setup_graph = new GraphSetup(faculty, data_for_graphs, years, current_tab_index, this);
+    setup_graph->show();
+}
+
+/*
+ * Function: on_tabWidget_tabBarClicked
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Stores the current tab index value into current_tab_index
+ *   which can be accessed anywhere from in the class
+ */
+void Summary_Window::on_tabWidget_tabBarClicked(int index)
+{
+    current_tab_index = index;
+}
+
+/*
+ * Function: on_button_load_file_clicked
+ * ---------------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Loads a CSV into the currently selected tab
+ */
+void Summary_Window::on_button_load_file_clicked()
+{
+    // + Make a connection to the database
+    DB database;
+
+    // + Load a Teaching table
+    if(current_tab_index == 0)
+    {
+
+        readTeach(this, database);
+        // + Get the teaching information from the database
+        vector_teaching_entries = database.getTeachFull();
+
+        // + Set the data aside for the graphs aswell
+        data_for_graphs = database.getTeachFull();
+
+        // + Build the summary window
+        years = build_teaching_tree(vector_teaching_entries);
+
+    }
+
+    // + Load a Presentations table
+    else if(current_tab_index == 1)
+    {
+
+    }
+
+
+    // + Load a Grants table
+    else if(current_tab_index == 2)
+    {
+
+    }
+
+
+    // + Load a Publications
+    else if(current_tab_index == 3)
+    {
+
+    }
+
+}
+
+/*
+ * Function: on_dateFilterButton_clicked()
+ * -------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Makes a new data query to the database with a year
+ *   range to display on the summary window
+ */
+void Summary_Window::on_dateFilterButton_clicked()
+{
+    //variables fromYear and to Year defined in header
+    //reads in the dates to temp holders
+    int tempFrom = (ui->fromDate->text()).toInt();
+    int tempTo = (ui->toDate->text()).toInt();
+
+    //compares to ensure from date is before to date
+    if(tempFrom > tempTo){
+
+        //prints warning message and resets textbox values to previous values
+        QMessageBox::warning(this, "Warning", "To Date must fall after From Date");
+        ui->fromDate->setText(QString::number(fromYear));
+        ui->toDate->setText(QString::number(toYear));
+    }
+
+    else
+    {
+        //assigns the entered values to the the fromYear and toYear variables to be used for filtering
+        fromYear=tempFrom;
+        toYear=tempTo;
+        //now need to filter
+
+        DB database;
+
+        // + Get the teaching information from the database
+        QVector<teaching_entry> vector_teaching_entries = database.getTeachByDate(tempFrom,tempTo);
+
+        // + Set the data aside for the graphs aswell
+        data_for_graphs = database.getTeachByDate(tempFrom,tempTo);
+
+        years = build_teaching_tree(vector_teaching_entries);
+
+    }
+}
+
 /*
  * Function: build_teaching_tree
  * ----------------------------------
@@ -286,6 +375,21 @@ void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *u
  */
 QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_teaching_entries)
 {
+
+    ui->treeWidget_teach->clear();
+
+    // + Keeps track of total hours for each main heading
+    pme_total_hours = 0.0;
+    ume_total_hours = 0.0;
+    cme_total_hours = 0.0;
+    other_total_hours = 0.0;
+
+    // + Keeps track of total traineers for each main heading
+    pme_total_trainees = 0;
+    ume_total_trainees = 0;
+    cme_total_trainees = 0;
+    other_total_trainees = 0;
+
 
     QStringList temp_years;
 
@@ -479,34 +583,13 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
 }
 
 /*
- * Function: on_button_graph_clicked
- * ---------------------------------------
- * WHAT THE FUNCTION DOES:
- * + Open a dialog window that lets the user choose what type of graph they
- *   would like to view and for what name
- */
-void Summary_Window::on_button_graph_clicked()
-{
-    setup_graph = new GraphSetup(faculty, data_for_graphs, years, current_tab_index, this);
-    setup_graph->show();
-}
-
-/*
- * Function: on_tabWidget_tabBarClicked
- * ---------------------------------------
- * WHAT THE FUNCTION DOES:
- * + Stores the current tab index value into current_tab_index
- *   which can be accessed anywhere from in the class
- */
-void Summary_Window::on_tabWidget_tabBarClicked(int index)
-{
-    current_tab_index = index;
-}
-
-/*
  * Destory the window when it is closed
  */
 Summary_Window::~Summary_Window()
 {
     delete ui;
 }
+
+
+
+

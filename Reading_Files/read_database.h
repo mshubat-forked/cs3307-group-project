@@ -30,6 +30,6 @@ using namespace std;
 string dateTrim(string t);
 
 // + Reads a teaching database into the program
-void readTeach(DB db);
+void readTeach(QWidget *parent, DB db);
 
 #endif // READ_DATABAS_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>570</width>
-    <height>475</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,6 +30,12 @@
     </item>
     <item>
      <widget class="QLabel" name="label_2">
+      <property name="minimumSize">
+       <size>
+        <width>548</width>
+        <height>16</height>
+       </size>
+      </property>
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
@@ -59,28 +65,18 @@
        </size>
       </property>
       <property name="text">
-       <string>Upload New File</string>
+       <string>Start New Session</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="last_session_button">
       <property name="text">
-       <string>Open Last Session</string>
+       <string>Open Past Session</string>
       </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>570</width>
-     <height>26</height>
-    </rect>
-   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

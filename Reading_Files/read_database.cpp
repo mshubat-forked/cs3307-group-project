@@ -7,6 +7,10 @@
 
 
 #include "read_database.h"
+#include <QtCore>
+#include <QtGui>
+#include <QProgressDialog>
+#include <QProgressBar>
 
 /*
  * Function: readTeach
@@ -14,7 +18,27 @@
  * WHAT THE FUNCTION DOES:
  * + Reads and parses a 'teaching' csv file to pass to a database
  */
-void readTeach(DB database){
+void readTeach(QWidget *parent ,DB database){
+
+
+    // + This whole chuck of code is for a loading window to let
+    //   the user know the program is loading files
+    int pw_x = parent->pos().x();
+    int pw_y = parent->pos().y();
+
+    int pw_width = parent->size().width();
+    int pw_height = parent->size().height();
+
+    QProgressDialog progress(parent);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setLabelText("Loading data...");
+    progress.setCancelButton(0);
+    progress.setRange(0,0);
+    progress.setMinimumDuration(0);
+
+    progress.setGeometry((pw_x+(pw_width/2))-175, (pw_y+(pw_height/2))-40, 350, 150);
+    progress.show();
+
 
     char buffer[MAX_PATH] = "";
     OPENFILENAMEA ofn = {0};  // note:  OPENFILENAMEA, not OPENFILENAME
@@ -33,6 +57,8 @@ void readTeach(DB database){
     ofn.nMaxFile = MAX_PATH;  // size of our 'buffer' buffer
 
 
+
+
     // Now that we've prepped the struct, actually open the dialog:
     //  the below function call actually opens the "File Open" dialog box, and returns
     //  once the user exits out of it
@@ -45,6 +71,8 @@ void readTeach(DB database){
         // code reaches here if the user hit 'OK'.  The full path of the file
         //  they selected is now stored in 'buffer'
     }
+
+
 
     //columns not consistent between documents, these variables account for that
     //they hold the location of the column that has the mandatory variable of the corresponding name
@@ -61,16 +89,24 @@ void readTeach(DB database){
                 "",  // kept delimiters
                 boost::keep_empty_tokens); // empty token policy
 
+
+
     ifstream indata;
     string line;
     indata.open(buffer);
+
+
+
     int counter = 0;
     if (indata.is_open())
     {
+
+
+
         while ( getline(indata,line) )
         {
-            counter++;
 
+            counter++;
 
             //split(tokenList, line, is_any_of(","), token_compress_on);
             /*
@@ -79,6 +115,8 @@ void readTeach(DB database){
            * and save these column locations in their designated variables
            */
             if(counter == 1){
+
+
 
                 int locCounter = 0;//used to keep track of column location
                 BOOST_FOREACH(string t, tokenizer(line, sep)){
@@ -117,6 +155,8 @@ void readTeach(DB database){
                 }
             }
             else{
+
+
                 int locCounter2 = 0;
                 teaching_entry temp = teaching_entry();
                 BOOST_FOREACH(string t, tokenizer(line, sep))
@@ -178,9 +218,16 @@ void readTeach(DB database){
                 database.addTeachingEntry(temp);
             }
 
+
+
         }
+
         indata.close();
+
+
     }
+
+    progress.cancel();
 
 }
 

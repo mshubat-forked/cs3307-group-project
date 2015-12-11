@@ -1,3 +1,10 @@
+/*
+ * Source file: mainwindow.cpp
+ * ---------------------------------
+ * + Defines a QMainWindow that greets the user upon
+ *   loading the program
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "summary_window.h"

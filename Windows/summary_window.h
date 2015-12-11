@@ -55,6 +55,8 @@ private slots:
 
      void on_tabWidget_tabBarClicked(int index);
 
+     void on_button_load_file_clicked();
+
 private:
    Ui::Summary_Window *ui;
    QDialog *graph_window;
@@ -103,6 +105,11 @@ private:
 
    // + The current tab index
    int current_tab_index = 0;
+
+   QVector<teaching_entry> vector_teaching_entries;
+   QVector<teaching_entry> vector_grantfunding_entries;
+   QVector<teaching_entry> vector_presentations_entries;
+   QVector<teaching_entry> vector_publications_entries;
 
 };
 

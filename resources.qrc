@@ -2,5 +2,9 @@
     <qresource prefix="/Run_Images">
         <file>Images/logo.png</file>
         <file>Images/printer.png</file>
+        <file>Images/filter_icon.png</file>
+        <file>Images/floppy_icon.png</file>
+        <file>Images/graph_icon.png</file>
+        <file>Images/pie_graph_icon.png</file>
     </qresource>
 </RCC>

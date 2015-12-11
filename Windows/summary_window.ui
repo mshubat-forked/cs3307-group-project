@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
-    <height>434</height>
+    <width>650</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
         <widget class="QTreeWidget" name="treeWidget_teach">
          <column>
           <property name="text">
-           <string notr="true">1</string>
+           <string notr="true">&lt;No data currently in table&gt;</string>
           </property>
          </column>
         </widget>
@@ -65,31 +65,10 @@
         <widget class="QTreeWidget" name="treeWidget_pres">
          <column>
           <property name="text">
-           <string notr="true">1</string>
+           <string notr="true">&lt;No data currently in table&gt;</string>
           </property>
          </column>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>View Graph:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="graphComboBox_pres">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
       <zorder>treeWidget_pres</zorder>
@@ -111,31 +90,10 @@
         <widget class="QTreeWidget" name="treeWidget_grant">
          <column>
           <property name="text">
-           <string notr="true">1</string>
+           <string notr="true">&lt;No data currently in table&gt;</string>
           </property>
          </column>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>View Graph:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="graphComboBox_grant">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -155,31 +113,10 @@
         <widget class="QTreeWidget" name="treeWidget_pub">
          <column>
           <property name="text">
-           <string notr="true">1</string>
+           <string notr="true">&lt;No data currently in table&gt;</string>
           </property>
          </column>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>View Graph:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="graphComboBox_pub">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -219,6 +156,21 @@
        <property name="text">
         <string>Filter</string>
        </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/Run_Images/Images/filter_icon.png</normaloff>:/Run_Images/Images/filter_icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_load_file">
+       <property name="text">
+        <string>Load File</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/Run_Images/Images/floppy_icon.png</normaloff>:/Run_Images/Images/floppy_icon.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -226,12 +178,18 @@
        <property name="text">
         <string>Graph</string>
        </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/Run_Images/Images/pie_graph_icon.png</normaloff>:/Run_Images/Images/pie_graph_icon.png</iconset>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
