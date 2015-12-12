@@ -16,6 +16,9 @@
 #include <Windows/graphwindowbar.h>
 #include <Windows/graphsetup.h>
 #include <DataEntry/teaching_entry.h>
+#include <DataEntry/presentation_entry.h>
+#include <DataEntry/grants_entry.h>
+#include <DataEntry/publication_entry.h>
 #include "ui_summary_window.h"
 
 #include <QDialog>
@@ -40,9 +43,6 @@ private slots:
     QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);
 
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent *e);
-
     void on_dateFilterButton_clicked();
 
     void make_tree_header();
@@ -51,11 +51,20 @@ private slots:
                             QTreeWidgetItem *cme, QTreeWidgetItem *other);
 
      QStringList build_teaching_tree(QVector<teaching_entry> vector_teaching_entries);
+
+     QStringList build_presentations_tree(QVector<presentation_entry> vector_teaching_entries);
+
+     QStringList build_grants_tree(QVector<grants_entry> vector_teaching_entries);
+
+     QStringList build_publications_tree(QVector<publication_entry> vector_teaching_entries);
+
      void on_button_graph_clicked();
 
      void on_tabWidget_tabBarClicked(int index);
 
      void on_button_load_file_clicked();
+
+     bool dbexists();
 
 private:
    Ui::Summary_Window *ui;
@@ -97,19 +106,25 @@ private:
    // + The titles to display on the graph
    QList<QString> title_values;
 
-   // + Collects data for graphs
-   QVector<teaching_entry> data_for_graphs;
-
    // + Stores the faculty names
    QStringList faculty;
 
    // + The current tab index
    int current_tab_index = 0;
 
+   // + Gets information for all enteries
    QVector<teaching_entry> vector_teaching_entries;
-   QVector<teaching_entry> vector_grantfunding_entries;
-   QVector<teaching_entry> vector_presentations_entries;
-   QVector<teaching_entry> vector_publications_entries;
+   QVector<grants_entry> vector_grantfunding_entries;
+   QVector<presentation_entry> vector_presentations_entries;
+   QVector<publication_entry> vector_publications_entries;
+
+   // + Collects data for graphs
+   QVector<teaching_entry> data_for_teaching_graphs;
+   QVector<grants_entry> data_for_grantfunding_graphs;
+   QVector<presentation_entry> data_for_presentations_graphs;
+   QVector<publication_entry> data_for_publications_graphs;
+
+
 
 };
 

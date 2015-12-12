@@ -32,10 +32,51 @@
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_start_year_teaching">
+           <property name="text">
+            <string>    </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_to_teaching">
+           <property name="text">
+            <string>  </string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_end_year_teaching">
+           <property name="text">
+            <string>    </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QTreeWidget" name="treeWidget_teach">
          <column>
           <property name="text">
-           <string notr="true">&lt;No data currently in table&gt;</string>
+           <string notr="true">&lt;Use the 'Load Data' button below to add a teaching CSV to the summary&gt;</string>
           </property>
          </column>
         </widget>
@@ -62,10 +103,51 @@
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_start_year_presentations">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_to_presentations">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_end_year_presentations">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QTreeWidget" name="treeWidget_pres">
          <column>
           <property name="text">
-           <string notr="true">&lt;No data currently in table&gt;</string>
+           <string notr="true">&lt;Use the 'Load Data' button below to add a presentation CSV to the summary&gt;</string>
           </property>
          </column>
         </widget>
@@ -87,10 +169,51 @@
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_start_year_grants">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_to_grants">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_end_year_grants">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QTreeWidget" name="treeWidget_grant">
          <column>
           <property name="text">
-           <string notr="true">&lt;No data currently in table&gt;</string>
+           <string notr="true">&lt;Use the 'Load Data' button below to add a grant/trail CSV to the summary&gt;</string>
           </property>
          </column>
         </widget>
@@ -110,15 +233,59 @@
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_start_year_publications">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_to_publications">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_end_year_publications">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QTreeWidget" name="treeWidget_pub">
          <column>
           <property name="text">
-           <string notr="true">&lt;No data currently in table&gt;</string>
+           <string notr="true">&lt;Use the 'Load Data' button below to add a publication CSV to the summary&gt;</string>
           </property>
          </column>
         </widget>
        </item>
       </layout>
+      <zorder>publication_header</zorder>
+      <zorder>treeWidget_pub</zorder>
+      <zorder></zorder>
      </widget>
     </widget>
    </item>

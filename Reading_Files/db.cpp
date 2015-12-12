@@ -52,7 +52,7 @@ DB::DB()//constructor for the database - creates 4 data type tables
 
     //-------------- Create Publications Table --------------//
 
-    sql="CREATE TABLE publications(MemberName varchar(40),PrimaryDomain varchar(30),PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
+    sql="CREATE TABLE publications(MemberName varchar(40), PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
     db.exec(sql);
 
     //-------------- Create Presentations Table --------------//
@@ -65,29 +65,78 @@ DB::DB()//constructor for the database - creates 4 data type tables
     //db.close();
 }
 
+//-------------- Drop Tables --------------//
 
-//------------------------ OTHER FUNCTIONS ------------------------//
-/**
- * @brief DB::dbexists
- * @return true if database.db exists in current dir
- * else @return false
- */
-bool DB::dbexists(){
+void DB::dropTableTeaching()
+{
+    QString sql;
+    // Drop Teaching Table
+    sql="DROP TABLE teaching;";
+    db.exec(sql);
+}
 
-    //R eplace all '\' with '/'
+void DB::dropTableGrants()
+{
+    QString sql;
+    // Drop Grants and Clinical Funding Table
+    sql="DROP TABLE grantsClinicalFunding;";
+    db.exec(sql);
+}
 
-    std::string s = getcwd(NULL, 0);;
-    std::replace( s.begin(), s.end(), '\\', '/'); // replace all 'x' to 'y'
-
-    //Check if DB exists
-    if (ifstream(s+"/database.db")){//if database exists
-        return true;
-    }
-    else{//if database does NOT exist
-        return false;
-    }
+void DB::dropTablePublications()
+{
+    QString sql;
+    // Drop Publications Table
+    sql="DROP TABLE publications;";
+    db.exec(sql);
 
 }
+
+void DB::dropTablePresentations()
+{
+    QString sql;
+    // Drop Presentations Table
+    sql="DROP TABLE presentations;";
+    db.exec(sql);
+}
+
+//-------------- Create Tables --------------//
+
+void DB::makeTableTeaching()
+{
+    QString sql;
+    sql="CREATE TABLE teaching(StartDate int,MemberName varchar(40),Program varchar(40), TotalHours DOUBLE(4,2),NumStudents int);";
+    db.exec(sql);
+
+}
+
+//-------------- Create Grants and Clinical Funding Table --------------//
+void DB::makeTableGrants()
+{
+    QString sql;
+    sql="CREATE TABLE grantsClinicalFunding (StartDate int,MemberName varchar(40),FundingType varchar (16),PeerReviewed varchar(5),IndustryGrant varchar(5), Status varchar(12),Role varchar(30),TotalAmount money, Title varchar(40));";
+    db.exec(sql);
+}
+
+//-------------- Create Publications Table --------------//
+void DB::makeTablePublications()
+{
+    QString sql;
+    sql="CREATE TABLE publications(MemberName varchar(40), PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
+    db.exec(sql);
+}
+
+
+ //-------------- Create Presentations Table --------------//
+void DB::makeTablePresentations()
+{
+    QString sql;
+    sql="CREATE TABLE presentations(Date int, MemberName varchar(40),Type varchar(30), Role varchar(20));";
+    db.exec(sql);
+}
+
+//------------------------ OTHER FUNCTIONS ------------------------//
+
 
 //------------------------ INPUT INTO DATABASE ------------------------//
 /**
@@ -160,19 +209,17 @@ void DB::addGrantEntry(grants_entry a){
 void DB::addPublicationEntry(publication_entry a){
 
     string sql;
-    string MemberName,PrimaryDomain,PublicationStatus,Type,StatusDate,Role,MediumName,Title;
+    string MemberName,PublicationStatus,Type,StatusDate,Role,MediumName,Title;
     QString qsql;
 
-    MemberName= a.get_authors();
-    PrimaryDomain=a.get_DOI();//a.get_what??? ... depends on what field Dan populates
-    PublicationStatus=a.get_publication_status();
+    MemberName = a.get_authors();
     Type=a.get_type();
-    StatusDate=a.get_status_year(); //or get_date()?
+    StatusDate=a.get_status_year();
     Role=a.get_role();
     MediumName= a.get_journal();
     Title=a.get_title();
 
-    sql = std::string("INSERT INTO publications (MemberName, PrimaryDomain, PublicationStatus, Type, StatusDate, Role, MediumName, Title) VALUES(")+"'"+MemberName+"','"+PrimaryDomain+"','"+PublicationStatus+"',"+Type+","+StatusDate+",'"+Role+"','"+MediumName+"',"+Type+","+Title+");";
+    sql = std::string("INSERT INTO publications (MemberName, PublicationStatus, Type, StatusDate, Role, MediumName, Title) VALUES(")+"'"+MemberName+"','"+PublicationStatus+"',"+Type+","+StatusDate+",'"+Role+"','"+MediumName+"',"+Type+","+Title+");";
 
     //convert sql statement to Qstring
     qsql = QString::fromStdString(sql);//convert to qstring
@@ -273,6 +320,7 @@ QVector<teaching_entry> DB::getTeachByDate(int date1, int date2){
     qry.exec();
 
     while(qry.next()){
+
 
         teaching_entry TE;//create teaching_entry to append to vector
 
@@ -390,7 +438,7 @@ QVector<publication_entry> DB::getPubFull(){
 
     qry.exec();
 
-    //order of returned data: MemberName, PrimaryDomain, PublicationStatus, Type, StatusDate, Role, MediumName, Title
+    //order of returned data: MemberName, PublicationStatus, Type, StatusDate, Role, MediumName, Title
 
     while(qry.next()){
 
@@ -406,6 +454,8 @@ QVector<publication_entry> DB::getPubFull(){
         //PE.set_status_day(convert.str()); //proper date feild?
         PE.set_authors(qry.value(0).toString().toStdString());
         //PE.set_?(qry.value(1).toString().toStdString()); which feild is primary domain
+//      PE.set_date(convert.str());
+//      PE.set_member(qry.value(0).toString().toStdString());
         PE.set_publication_status(qry.value(2).toString().toStdString());
         PE.set_type(qry.value(3).toString().toStdString());
         PE.set_role(qry.value(5).toString().toStdString());
@@ -450,6 +500,8 @@ QVector<publication_entry> DB::getPubByDate(int date1, int date2){
        // PE.set_status_year(convert.str()); //proper date feild?
         PE.set_authors(qry.value(0).toString().toStdString());
         //PE.set_?(qry.value(1).toString().toStdString()); which feild is primary domain
+        //PE.set_date(convert.str());
+        //PE.set_member(qry.value(0).toString().toStdString());
         PE.set_publication_status(qry.value(2).toString().toStdString());
         PE.set_type(qry.value(3).toString().toStdString());
         PE.set_role(qry.value(5).toString().toStdString());

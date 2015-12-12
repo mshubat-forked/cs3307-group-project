@@ -22,6 +22,7 @@
 #include <fstream>
 #include <direct.h>
 #include <algorithm>
+#include <dirent.h>
 
 class DB
 {
@@ -32,37 +33,47 @@ class DB
 public:
     DB();
 
-       //------------------------ OTHER FUNCTIONS ------------------------//
+    //-------------- Drop Tables --------------//
 
-       static bool dbexists ();//static - can be called w/o an object
+    void dropTableTeaching();
+    void dropTableGrants();
+    void dropTablePublications();
+    void dropTablePresentations();
 
-       //------------------------ INPUT INTO DATABASE ------------------------//
+    //-------------- Create Tables --------------//
 
-       void addTeachingEntry(teaching_entry a);
+    void makeTableTeaching();
+    void makeTableGrants();
+    void makeTablePublications();
+    void makeTablePresentations();
 
-       void addGrantEntry(grants_entry a);
+    //------------------------ INPUT INTO DATABASE ------------------------//
 
-       void addPublicationEntry(publication_entry a);
+    void addTeachingEntry(teaching_entry a);
 
-       void addPresentationEntry(presentation_entry a);
+    void addGrantEntry(grants_entry a);
 
-       //------------------------ OUTPUT FROM DATABASE ------------------------//
+    void addPublicationEntry(publication_entry a);
 
-       QVector<teaching_entry> getTeachFull();
+    void addPresentationEntry(presentation_entry a);
 
-       QVector<teaching_entry> getTeachByDate(int date1, int date2);
+    //------------------------ OUTPUT FROM DATABASE ------------------------//
 
-       QVector<grants_entry> getGrantFull();
+    QVector<teaching_entry> getTeachFull();
 
-       QVector<grants_entry> getGrantByDate(int date1, int date2);
+    QVector<teaching_entry> getTeachByDate(int date1, int date2);
 
-       QVector<publication_entry> getPubFull();
+    QVector<grants_entry> getGrantFull();
 
-       QVector<publication_entry> getPubByDate(int date1, int date2);
+    QVector<grants_entry> getGrantByDate(int date1, int date2);
 
-       QVector<presentation_entry> getPresFull();
+    QVector<publication_entry> getPubFull();
 
-       QVector<presentation_entry> getPresByDate(int date1, int date2);
+    QVector<publication_entry> getPubByDate(int date1, int date2);
+
+    QVector<presentation_entry> getPresFull();
+
+    QVector<presentation_entry> getPresByDate(int date1, int date2);
 
 };
 

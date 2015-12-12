@@ -17,8 +17,7 @@
 #include <fstream>
 #include <QProgressDialog>
 
-// + Could be used for storing a drag-and-dropped file name
-static QString csv_file_name;
+static DB database;
 
 using namespace std;
 
@@ -42,26 +41,78 @@ Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
 {
     ui->setupUi(this);
 
-    // + Allows drag and drop functionality, unhide comment if want to use in future
-    // setAcceptDrops(true);
-
     // + Validator to ensure only year values can be entered into the date filter
     QIntValidator *v = new QIntValidator(0, 9999);
     ui->fromDate->setValidator( v );
     ui->toDate->setValidator( v );
 
     // + Make a connection to the database
-
     if(new_db == false){
-        DB database;
-            // + Get the teaching information from the database
+
+        // + Filter data only for the teaching tab
+        if(current_tab_index == 0)
+        {
+
             vector_teaching_entries = database.getTeachFull();
 
             // + Set the data aside for the graphs aswell
-            data_for_graphs = database.getTeachFull();
+            data_for_teaching_graphs = database.getTeachFull();
 
-            // + Build the summary window
             years = build_teaching_tree(vector_teaching_entries);
+
+            ui->label_start_year_teaching->setText(years.first());
+            ui->label_to_teaching->setText("to");
+            ui->label_end_year_teaching->setText(years.last());
+
+        }
+
+        // + Filter data only for the Presentations tab
+        else if(current_tab_index == 1)
+        {
+            vector_presentations_entries = database.getPresFull();
+
+            // + Set the data aside for the graphs aswell
+            data_for_presentations_graphs = database.getPresFull();
+
+            years = build_presentations_tree(vector_presentations_entries);
+
+            ui->label_start_year_presentations->setText(years.first());
+            ui->label_to_presentations->setText("to");
+            ui->label_end_year_presentations->setText(years.last());
+
+        }
+
+        // + Filter data only for the Grants tab
+        else if(current_tab_index == 2)
+        {
+            vector_grantfunding_entries = database.getGrantFull();
+
+            // + Set the data aside for the graphs aswell
+            data_for_grantfunding_graphs = database.getGrantFull();
+
+            years = build_grants_tree(vector_grantfunding_entries);
+
+            ui->label_start_year_grants->setText(years.first());
+            ui->label_to_grants->setText("to");
+            ui->label_end_year_grants->setText(years.last());
+
+        }
+
+        // + Filter data only for the Publications tab
+        else if(current_tab_index == 3)
+        {
+            vector_publications_entries = database.getPubFull();
+
+            // + Set the data aside for the graphs aswell
+            data_for_publications_graphs = database.getPubFull();
+
+            years = build_publications_tree(vector_publications_entries);
+
+            ui->label_start_year_publications->setText(years.first());
+            ui->label_to_publications->setText("to");
+            ui->label_end_year_publications->setText(years.last());
+
+        }
     }
 
     // + If a new session was chosen clear the table and start fresh
@@ -71,6 +122,7 @@ Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
     }
 
 }
+
 
 /*
  * Function: make_root
@@ -124,7 +176,7 @@ QTreeWidgetItem* Summary_Window::make_root(QString category, QString num_hours, 
  * + A newly made child QTreeWidgetItem
  */
 QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString date, QString faculty_name,
-                                          QString num_hours, QString num_students)
+                                             QString num_hours, QString num_students)
 {
     // + Create a new tree widget to add to the teaching_tree table on the main window
     QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem();
@@ -148,50 +200,6 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString da
 
     return new_tree_widget;
 }
-
-
-/*
- * + Allow items to be dragged on the Summary_Window
- */
-void Summary_Window::dragEnterEvent(QDragEnterEvent *e)
-{
-    if (e->mimeData()->hasUrls())
-    {
-        e->acceptProposedAction();
-    }
-
-}
-
-/*
- * + Allow items to be dropped on the Summary_Window
- */
-void Summary_Window::dropEvent(QDropEvent *e)
-{
-    foreach(const QUrl &url, e->mimeData()->urls())
-    {
-        const QString &file_name = url.toLocalFile();
-
-        std::string s_file_name = file_name.toUtf8().constData();
-        std::string accepted_file_type = ".csv";
-
-        std::size_t found = s_file_name.find(accepted_file_type);
-
-        // + Check if the dropped file by the user is a .csv file
-        // + Only accept .csv files for input
-        if(found != -1)
-        {
-            qDebug() << "Acceptable file: " << file_name;
-            csv_file_name = file_name;
-        }
-
-        else
-        {
-            qDebug() << "Unacceptable file: " << file_name;
-        }
-    }
-}
-
-
 
 
 /*
@@ -231,7 +239,7 @@ void Summary_Window::make_tree_header()
  * - other: a pointer to a root treeWidget to put other data under
  */
 void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *ume,
-                                         QTreeWidgetItem *cme, QTreeWidgetItem *other)
+                                        QTreeWidgetItem *cme, QTreeWidgetItem *other)
 {
 
     // + Make each of the categories top level items in the tree widget
@@ -253,7 +261,7 @@ void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *u
  */
 void Summary_Window::on_button_graph_clicked()
 {
-    setup_graph = new GraphSetup(faculty, data_for_graphs, years, current_tab_index, this);
+    setup_graph = new GraphSetup(faculty, data_for_teaching_graphs, years, current_tab_index, this);
     setup_graph->show();
 }
 
@@ -278,21 +286,31 @@ void Summary_Window::on_tabWidget_tabBarClicked(int index)
 void Summary_Window::on_button_load_file_clicked()
 {
     // + Make a connection to the database
-    DB database;
-
     // + Load a Teaching table
     if(current_tab_index == 0)
     {
 
+        if(dbexists())
+        {
+            database.dropTableTeaching();
+            database.makeTableTeaching();
+        }
+
         readTeach(this, database);
+
         // + Get the teaching information from the database
         vector_teaching_entries = database.getTeachFull();
 
         // + Set the data aside for the graphs aswell
-        data_for_graphs = database.getTeachFull();
+        data_for_teaching_graphs = database.getTeachFull();
 
         // + Build the summary window
         years = build_teaching_tree(vector_teaching_entries);
+
+
+        ui->label_start_year_teaching->setText(years.first());
+        ui->label_to_teaching->setText("to");
+        ui->label_end_year_teaching->setText(years.last());
 
     }
 
@@ -300,12 +318,54 @@ void Summary_Window::on_button_load_file_clicked()
     else if(current_tab_index == 1)
     {
 
+        if(dbexists())
+        {
+            database.dropTablePresentations();
+            database.makeTablePresentations();
+        }
+
+        readPresentations(this, database);
+
+        // + Get the Presentation information from the database
+        vector_presentations_entries = database.getPresFull();
+
+        // + Set the data aside for the graphs aswell
+        data_for_presentations_graphs = database.getPresFull();
+
+        // + Build the summary window
+        years = build_presentations_tree(vector_presentations_entries);
+
+
+        ui->label_start_year_presentations->setText(years.first());
+        ui->label_to_presentations->setText("to");
+        ui->label_end_year_presentations->setText(years.last());
+
     }
 
 
     // + Load a Grants table
     else if(current_tab_index == 2)
     {
+        if(dbexists())
+        {
+            database.dropTableGrants();
+            database.makeTableGrants();
+        }
+
+        readGrants(this, database);
+
+        // + Get the Presentation information from the database
+        vector_grantfunding_entries = database.getGrantFull();
+
+        // + Set the data aside for the graphs aswell
+        data_for_grantfunding_graphs = database.getGrantFull();
+
+        // + Build the summary window
+        years = build_grants_tree(vector_grantfunding_entries);
+
+        ui->label_start_year_grants->setText(years.first());
+        ui->label_to_grants->setText("to");
+        ui->label_end_year_grants->setText(years.last());
 
     }
 
@@ -313,6 +373,26 @@ void Summary_Window::on_button_load_file_clicked()
     // + Load a Publications
     else if(current_tab_index == 3)
     {
+        if(dbexists())
+        {
+            database.dropTablePublications();
+            database.makeTablePublications();
+        }
+
+        readPublications(this, database);
+
+        // + Get the Presentation information from the database
+        vector_publications_entries = database.getPubFull();
+
+        // + Set the data aside for the graphs aswell
+        data_for_publications_graphs = database.getPubFull();
+
+        // + Build the summary window
+        years = build_publications_tree(vector_publications_entries);
+
+        ui->label_start_year_publications->setText(years.first());
+        ui->label_to_publications->setText("to");
+        ui->label_end_year_publications->setText(years.last());
 
     }
 
@@ -343,21 +423,113 @@ void Summary_Window::on_dateFilterButton_clicked()
 
     else
     {
-        //assigns the entered values to the the fromYear and toYear variables to be used for filtering
-        fromYear=tempFrom;
-        toYear=tempTo;
-        //now need to filter
-
-        DB database;
-
         // + Get the teaching information from the database
-        QVector<teaching_entry> vector_teaching_entries = database.getTeachByDate(tempFrom,tempTo);
 
-        // + Set the data aside for the graphs aswell
-        data_for_graphs = database.getTeachByDate(tempFrom,tempTo);
+        // + Filter data only for the teaching tab
+        if(current_tab_index == 0)
+        {
+            vector_teaching_entries = database.getTeachByDate(tempFrom,tempTo);
 
-        years = build_teaching_tree(vector_teaching_entries);
+            // + Set the data aside for the graphs aswell
+            data_for_teaching_graphs = database.getTeachByDate(tempFrom,tempTo);
 
+            years = build_teaching_tree(vector_teaching_entries);
+
+            // + Need if statement to handle empty year list
+            if(years.size() > 0)
+            {
+                ui->label_start_year_teaching->setText(years.first());
+                ui->label_to_teaching->setText("to");
+                ui->label_end_year_teaching->setText(years.last());
+            }
+
+            // + Show data range with no data values
+            else
+            {
+                ui->label_start_year_teaching->setText(QString::number(tempFrom));
+                ui->label_to_teaching->setText("to");
+                ui->label_end_year_teaching->setText(QString::number(tempTo));
+            }
+
+
+        }
+
+        // + Filter data only for the Presentations tab
+        else if(current_tab_index == 1)
+        {
+            vector_presentations_entries = database.getPresByDate(tempFrom,tempTo);
+
+            // + Set the data aside for the graphs aswell
+            data_for_presentations_graphs = database.getPresByDate(tempFrom,tempTo);
+
+            years = build_presentations_tree(vector_presentations_entries);
+
+            // + Need if statement to handle empty year list
+            if(years.size() > 0)
+            {
+                ui->label_start_year_presentations->setText(years.first());
+                ui->label_to_presentations->setText("to");
+                ui->label_end_year_presentations->setText(years.last());
+            }
+
+            else
+            {
+                ui->label_start_year_presentations->setText(QString::number(tempFrom));
+                ui->label_to_presentations->setText("to");
+                ui->label_end_year_presentations->setText(QString::number(tempTo));
+            }
+
+        }
+
+        // + Filter data only for the Grants tab
+        else if(current_tab_index == 2)
+        {
+            vector_grantfunding_entries = database.getGrantByDate(tempFrom,tempTo);
+
+            // + Set the data aside for the graphs aswell
+            data_for_grantfunding_graphs = database.getGrantByDate(tempFrom,tempTo);
+
+            years = build_grants_tree(vector_grantfunding_entries);
+
+            if(years.size() > 0)
+            {
+                ui->label_start_year_grants->setText(years.first());
+                ui->label_to_grants->setText("to");
+                ui->label_end_year_grants->setText(years.last());
+            }
+            else
+            {
+                ui->label_start_year_grants->setText(QString::number(tempFrom));
+                ui->label_to_grants->setText("to");
+                ui->label_end_year_grants->setText(QString::number(tempTo));
+            }
+
+        }
+
+        // + Filter data only for the Publications tab
+        else if(current_tab_index == 3)
+        {
+            vector_publications_entries = database.getPubByDate(tempFrom,tempTo);
+
+            // + Set the data aside for the graphs aswell
+            data_for_publications_graphs = database.getPubByDate(tempFrom,tempTo);
+
+            years = build_publications_tree(vector_publications_entries);
+
+            if(years.size() > 0)
+            {
+                ui->label_start_year_publications->setText(years.first());
+                ui->label_to_publications->setText("to");
+                ui->label_end_year_publications->setText(years.last());
+            }
+            else
+            {
+                ui->label_start_year_publications->setText(QString::number(tempFrom));
+                ui->label_to_publications->setText("to");
+                ui->label_end_year_publications->setText(QString::number(tempTo));
+            }
+
+        }
     }
 }
 
@@ -445,26 +617,26 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
         QTreeWidgetItem *program;
         if(teaching_program == "Postgraduate Medical Education")
         {
-           program = pme;
-           pme_total_hours += current_teaching_entry.get_total_hours();
-           pme_total_trainees += current_teaching_entry.get_trainees();
-           temp_years.append(teaching_date);
+            program = pme;
+            pme_total_hours += current_teaching_entry.get_total_hours();
+            pme_total_trainees += current_teaching_entry.get_trainees();
+            temp_years.append(teaching_date);
         }
 
         else if(teaching_program == "Undergraduate Medical Education")
         {
-           program = ume;
-           ume_total_hours += current_teaching_entry.get_total_hours();
-           ume_total_trainees += current_teaching_entry.get_trainees();
-           temp_years.append(teaching_date);
+            program = ume;
+            ume_total_hours += current_teaching_entry.get_total_hours();
+            ume_total_trainees += current_teaching_entry.get_trainees();
+            temp_years.append(teaching_date);
         }
 
         else if(teaching_program == "Continuing Medical Education")
         {
-           program = cme;
-           cme_total_hours += current_teaching_entry.get_total_hours();
-           cme_total_trainees += current_teaching_entry.get_trainees();
-           temp_years.append(teaching_date);
+            program = cme;
+            cme_total_hours += current_teaching_entry.get_total_hours();
+            cme_total_trainees += current_teaching_entry.get_trainees();
+            temp_years.append(teaching_date);
         }
 
         else
@@ -580,6 +752,91 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
     qSort(temp_years);
 
     return temp_years;
+}
+
+/*
+ * Function: build_presentations_tree
+ * ----------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Fills out the summary tree with teaching entry information
+ *
+ * PARAMETERS:
+ * - vector_teaching_entries: teaching entry information to parse through and display
+ *
+ * RETURNS:
+ * + A QStringList of years found when reading through the data
+ */
+QStringList Summary_Window:: build_presentations_tree(QVector<presentation_entry> vector_presentations_entries)
+{
+
+}
+
+/*
+ * Function: build_grants_tree
+ * ----------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Fills out the summary tree with grant entry information
+ *
+ * PARAMETERS:
+ * - vector_grants_entries: teaching entry information to parse through and display
+ *
+ * RETURNS:
+ * + A QStringList of years found when reading through the data
+ */
+QStringList Summary_Window:: build_grants_tree(QVector<grants_entry> vector_grantfunding_entries)
+{
+
+}
+
+/*
+ * Function: build_publications_tree
+ * ----------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Fills out the summary tree with publication entry information
+ *
+ * PARAMETERS:
+ * - vector_publications_entries: teaching entry information to parse through and display
+ *
+ * RETURNS:
+ * + A QStringList of years found when reading through the data
+ */
+QStringList Summary_Window:: build_publications_tree(QVector<publication_entry> vector_publications_entries)
+{
+
+
+
+}
+/**
+ * @brief DB::dbexists
+ * @return true if database.db exists in current dir
+ * else @return false
+ */
+
+/*
+ * Function: dbexists
+ * ----------------------------------
+ * WHAT THE FUNCTION DOES:
+ * + Checks if the database exists
+ *
+ * RETURNS:
+ * + True if the database exists, false otherwise
+ */
+bool Summary_Window::dbexists()
+{
+
+    //R eplace all '\' with '/'
+
+    std::string s = getcwd(NULL, 0);
+    std::replace( s.begin(), s.end(), '\\', '/'); // replace all 'x' to 'y'
+
+    //Check if DB exists
+    if (ifstream(s+"/database.db")){//if database exists
+        return true;
+    }
+    else{//if database does NOT exist
+
+        return false;
+    }
 }
 
 /*

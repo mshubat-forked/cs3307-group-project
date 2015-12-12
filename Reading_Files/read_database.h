@@ -31,5 +31,9 @@ string dateTrim(string t);
 
 // + Reads a teaching database into the program
 void readTeach(QWidget *parent, DB db);
+void readPresentations(QWidget *parent, DB db);
+void readGrants(QWidget *parent, DB db);
+void readPublications(QWidget *parent, DB db);
+
 
 #endif // READ_DATABAS_H

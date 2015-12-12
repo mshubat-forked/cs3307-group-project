@@ -231,6 +231,13 @@ void readTeach(QWidget *parent ,DB database){
 
 }
 
+void readPresentations(QWidget *parent, DB db)
+{}
+void readGrants(QWidget *parent, DB db)
+{}
+void readPublications(QWidget *parent, DB db)
+{}
+
 /*
  * Function: dateTrim
  * ---------------------------------------
