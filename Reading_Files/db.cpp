@@ -52,12 +52,12 @@ DB::DB()//constructor for the database - creates 4 data type tables
 
     //-------------- Create Publications Table --------------//
 
-    sql="CREATE TABLE publications(MemberName varchar(40), PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
+    sql="CREATE TABLE publications(MemberName varchar(40), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
     db.exec(sql);
 
     //-------------- Create Presentations Table --------------//
 
-    sql="CREATE TABLE presentations(Date int, MemberName varchar(40),Type varchar(30), Role varchar(20));";
+    sql="CREATE TABLE presentations(Date int, MemberName varchar(40),Type varchar(30));";
     db.exec(sql);
 
 
@@ -122,7 +122,7 @@ void DB::makeTableGrants()
 void DB::makeTablePublications()
 {
     QString sql;
-    sql="CREATE TABLE publications(MemberName varchar(40), PublicationStatus varchar(10), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
+    sql="CREATE TABLE publications(MemberName varchar(40), Type varchar(30), StatusDate int, Role varchar(30), MediumName varchar(50), Title varchar(200));";
     db.exec(sql);
 }
 
@@ -131,7 +131,7 @@ void DB::makeTablePublications()
 void DB::makeTablePresentations()
 {
     QString sql;
-    sql="CREATE TABLE presentations(Date int, MemberName varchar(40),Type varchar(30), Role varchar(20));";
+    sql="CREATE TABLE presentations(Date int, MemberName varchar(40),Type varchar(30));";
     db.exec(sql);
 }
 
@@ -209,17 +209,17 @@ void DB::addGrantEntry(grants_entry a){
 void DB::addPublicationEntry(publication_entry a){
 
     string sql;
-    string MemberName,PublicationStatus,Type,StatusDate,Role,MediumName,Title;
+    string MemberName,Type,StatusDate,Role,MediumName,Title;
     QString qsql;
 
-    MemberName = a.get_authors();
+    MemberName = a.get_member();
     Type=a.get_type();
-    StatusDate=a.get_status_year();
+    StatusDate=a.get_date();
     Role=a.get_role();
     MediumName= a.get_journal();
     Title=a.get_title();
 
-    sql = std::string("INSERT INTO publications (MemberName, PublicationStatus, Type, StatusDate, Role, MediumName, Title) VALUES(")+"'"+MemberName+"','"+PublicationStatus+"',"+Type+","+StatusDate+",'"+Role+"','"+MediumName+"',"+Type+","+Title+");";
+    sql = std::string("INSERT INTO publications (MemberName, Type, StatusDate, Role, MediumName, Title) VALUES(")+"'"+MemberName+"','"+Type+"','"+StatusDate+"',"+Role+ ","+MediumName +"','"+Title+");";
 
     //convert sql statement to Qstring
     qsql = QString::fromStdString(sql);//convert to qstring
@@ -236,16 +236,14 @@ void DB::addPublicationEntry(publication_entry a){
 void DB::addPresentationEntry(presentation_entry a){
 
     string sql;//used to hold sql string
-    string Date,MemberName,Type,Role;
+    string Date,MemberName,Type;
     QString qsql;//used to hold sql QString
-
 
     Date=a.get_date();
     MemberName=a.get_member();
     Type=a.get_type();
-    Role=a.get_role();
 
-    sql = std::string("INSERT INTO presentations (Date, MemberName, Type, Role) VALUES(")+"'"+Date+"','"+MemberName+"','"+Type+"');";
+    sql = std::string("INSERT INTO presentations (Date, MemberName, Type) VALUES(")+"'"+Date+"','"+MemberName+"','"+Type+"');";
 
     //convert sql statement to Qstring
     qsql = QString::fromStdString(sql);//convert to qstring
@@ -446,21 +444,20 @@ QVector<publication_entry> DB::getPubFull(){
 
         convert.str("");
 
-        convert <<qry.value(4).toInt();
+        convert <<qry.value(3).toInt();
 
         date=convert.str();
 
 
         //PE.set_status_day(convert.str()); //proper date feild?
-        PE.set_authors(qry.value(0).toString().toStdString());
         //PE.set_?(qry.value(1).toString().toStdString()); which feild is primary domain
-//      PE.set_date(convert.str());
-//      PE.set_member(qry.value(0).toString().toStdString());
-        PE.set_publication_status(qry.value(2).toString().toStdString());
-        PE.set_type(qry.value(3).toString().toStdString());
-        PE.set_role(qry.value(5).toString().toStdString());
-        PE.set_journal(qry.value(6).toString().toStdString());
-        PE.set_title(qry.value(7).toString().toStdString());
+        PE.set_member(qry.value(0).toString().toStdString());
+        PE.set_publication_status(qry.value(1).toString().toStdString());
+        PE.set_type(qry.value(2).toString().toStdString());
+        PE.set_date(date);
+        PE.set_role(qry.value(4).toString().toStdString());
+        PE.set_journal(qry.value(5).toString().toStdString());
+        PE.set_title(qry.value(6).toString().toStdString());
 
         tVector.append(PE);
     }//end of while
@@ -498,10 +495,10 @@ QVector<publication_entry> DB::getPubByDate(int date1, int date2){
 
 
        // PE.set_status_year(convert.str()); //proper date feild?
-        PE.set_authors(qry.value(0).toString().toStdString());
+        //PE.set_authors(qry.value(0).toString().toStdString());
         //PE.set_?(qry.value(1).toString().toStdString()); which feild is primary domain
-        //PE.set_date(convert.str());
-        //PE.set_member(qry.value(0).toString().toStdString());
+        PE.set_date(convert.str());
+        PE.set_member(qry.value(0).toString().toStdString());
         PE.set_publication_status(qry.value(2).toString().toStdString());
         PE.set_type(qry.value(3).toString().toStdString());
         PE.set_role(qry.value(5).toString().toStdString());

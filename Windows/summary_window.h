@@ -39,16 +39,34 @@ public:
 private slots:
 
     QTreeWidgetItem * make_root(QString category, QString num_hours, QString num_students);
+    QTreeWidgetItem * make_root_pres(QString category);
+    QTreeWidgetItem * make_root_grants(QString category, QString total, QString total_dollars);
+    QTreeWidgetItem * make_root_pubs(QString category, QString total);
 
     QTreeWidgetItem * make_child(QTreeWidgetItem *parent, QString date, QString faculty_name,
                                                   QString num_hours, QString num_students);
+
+    QTreeWidgetItem * make_child_pres(QTreeWidgetItem *parent, QString faculty_name, QString total);
+
+    QTreeWidgetItem * make_child_grants(QTreeWidgetItem *parent, QString type, QString faculty_name, QString num_total, QString num_dollars);
+
+    QTreeWidgetItem * make_child_pubs(QTreeWidgetItem *parent, QString faculty_name, QString num_total);
 
     void on_dateFilterButton_clicked();
 
     void make_tree_header();
 
+
     void top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *ume,
                             QTreeWidgetItem *cme, QTreeWidgetItem *other);
+
+    void top_level_pres(QTreeWidgetItem *invited, QTreeWidgetItem *abstracts,
+                                 QTreeWidgetItem *presentations, QTreeWidgetItem *other);
+
+    void top_level_grants(QTreeWidgetItem *grants, QTreeWidgetItem *funding);
+
+    void top_level_pubs(QTreeWidgetItem *publications, QTreeWidgetItem *journals,
+                                 QTreeWidgetItem *books, QTreeWidgetItem *chapters, QTreeWidgetItem *letters);
 
      QStringList build_teaching_tree(QVector<teaching_entry> vector_teaching_entries);
 
@@ -88,6 +106,43 @@ private:
    int cme_total_trainees = 0;
    int other_total_trainees = 0;
 
+   // + The totals for the presentations window
+   int abstract_total = 0;
+   int invited_total = 0;
+   int presentation_total = 0;
+   int other_pres_total = 0;
+
+   // + The totals for grants
+   double grant_total_dollars = 0.0;
+   double funding_total_dollars = 0.0;
+   int grant_total = 0;
+   int funding_total = 0;
+   
+   int grant_peer_total = 0;
+   int grant_sponsored_total = 0;
+   double grant_peer_dollar_total = 0.0;
+   double grant_sponsored_dollar_total = 0.0;
+   
+   int funding_peer_total = 0;
+   int funding_sponsored_total = 0;
+   double funding_peer_dollar_total = 0.0;
+   double funding_sponsored_dollar_total = 0.0;
+      
+   int grant_industry_total;
+   double grant_industry_dollar_total;
+   
+   int funding_industry_total;
+   double funding_industry_dollar_total;
+   
+   // + The publications total
+   int published_abstracts_total = 0;
+   int journals_total = 0;
+   int book_total = 0;
+   int chapter_total = 0;
+   int letters_total = 0;
+   int publications_total = 0;
+   
+   
    // + Keeps track of the total hours for a year
    double year_total_hours = 0.0;
 
@@ -100,6 +155,9 @@ private:
    // + Keeps track of the total trainees for a faculty member
    int member_total_trainees = 0;
 
+   int counter_for_current_name_pres = 0;
+   int counter_for_current_name_pubs = 0;
+
    // + Defines a the values to the graph
    QVector<double> graph_values;
 
@@ -108,6 +166,9 @@ private:
 
    // + Stores the faculty names
    QStringList faculty;
+   QStringList faculty_pres;
+   QStringList faculty_grants;
+   QStringList faculty_pubs;
 
    // + The current tab index
    int current_tab_index = 0;

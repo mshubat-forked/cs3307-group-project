@@ -46,6 +46,10 @@ Summary_Window::Summary_Window(QWidget *parent, bool new_db) :
     ui->fromDate->setValidator( v );
     ui->toDate->setValidator( v );
 
+    
+    // + Define the headers for a teaching tree widget
+    make_tree_header();
+
     // + Make a connection to the database
     if(new_db == false){
 
@@ -156,6 +160,43 @@ QTreeWidgetItem* Summary_Window::make_root(QString category, QString num_hours, 
     return new_tree_widget;
 }
 
+QTreeWidgetItem* Summary_Window::make_root_pres(QString category)
+{
+
+    // + Create a new tree widget to add to the treeWidget table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->treeWidget_pres);
+
+    new_tree_widget->setText(0, category);
+
+    return new_tree_widget;
+}
+
+QTreeWidgetItem* Summary_Window::make_root_grants(QString category, QString total, QString total_dollars)
+{
+
+    // + Create a new tree widget to add to the treeWidget table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->treeWidget_grant);
+
+    new_tree_widget->setText(0, category);
+    new_tree_widget->setText(3, total);
+    new_tree_widget->setText(4, total_dollars);
+
+    return new_tree_widget;
+}
+
+
+QTreeWidgetItem* Summary_Window::make_root_pubs(QString category, QString total)
+{
+
+    // + Create a new tree widget to add to the treeWidget table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem(ui->treeWidget_pub);
+
+    new_tree_widget->setText(0, category);
+    new_tree_widget->setText(4, total);
+
+    return new_tree_widget;
+}
+
 /*
  * Function: make_child
  * -----------------------------------------
@@ -202,6 +243,63 @@ QTreeWidgetItem * Summary_Window::make_child(QTreeWidgetItem *parent, QString da
 }
 
 
+QTreeWidgetItem * Summary_Window::make_child_grants(QTreeWidgetItem *parent, QString type,
+                                                    QString faculty_name, QString num_total, QString num_dollars)
+{
+    // + Create a new tree widget to add to the teaching_tree table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem();
+
+    // + If the date is not NULL then the sub item just after the main root item
+    if(type != NULL)
+    {
+        new_tree_widget->setText(1, type);
+        new_tree_widget->setText(3, num_total);
+        new_tree_widget->setText(4, num_dollars);
+    }
+
+    // + The sub item store the faculty name and should be set after date sub item
+    else
+    {
+        new_tree_widget->setText(2, faculty_name);
+        new_tree_widget->setText(3, num_total);
+        new_tree_widget->setText(4, num_dollars);
+    }
+    parent->addChild(new_tree_widget);
+
+    return new_tree_widget;
+}
+
+
+QTreeWidgetItem * Summary_Window::make_child_pres(QTreeWidgetItem *parent, QString faculty_name, QString total)
+{
+    // + Create a new tree widget to add to the teaching_tree table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem();
+
+    new_tree_widget->setText(1, faculty_name);
+    new_tree_widget->setText(2, total);
+
+
+    parent->addChild(new_tree_widget);
+
+    return new_tree_widget;
+}
+
+
+QTreeWidgetItem * Summary_Window::make_child_pubs(QTreeWidgetItem *parent, QString faculty_name, QString total)
+{
+    // + Create a new tree widget to add to the teaching_tree table on the main window
+    QTreeWidgetItem *new_tree_widget = new QTreeWidgetItem();
+
+    new_tree_widget->setText(1, faculty_name);
+    new_tree_widget->setText(2, total);
+
+
+    parent->addChild(new_tree_widget);
+
+    return new_tree_widget;
+}
+
+
 /*
  * Function: make_tree_header
  * -------------------------------
@@ -219,10 +317,51 @@ void Summary_Window::make_tree_header()
     ui->treeWidget_teach->headerItem()->setText(4,"Students:");
 
     // + Spaces the headers evenly along the top of the tree widget
-    for(int n=0; n<4; n++)
+    for(int n=0; n<5; n++)
     {
         ui->treeWidget_teach->resizeColumnToContents(n);
     }
+
+    // + Set the header for the presentation tree window
+    ui->treeWidget_pres->setColumnCount(3);
+    ui->treeWidget_pres->headerItem()->setText(0,"Category:");
+    ui->treeWidget_pres->headerItem()->setText(1,"Faculty Member:");
+    ui->treeWidget_pres->headerItem()->setText(2, "Total Number:");
+
+    // + Spaces the headers evenly along the top of the tree widget
+    for(int n=0; n<3; n++)
+    {
+        ui->treeWidget_pres->resizeColumnToContents(n);
+    }
+
+    // + Set the header for the grants/funding header
+    ui->treeWidget_grant->setColumnCount(5);
+    ui->treeWidget_grant->headerItem()->setText(0,"Category:");
+    ui->treeWidget_grant->headerItem()->setText(1,"Type:");
+    ui->treeWidget_grant->headerItem()->setText(2,"Faculty Member:");
+    ui->treeWidget_grant->headerItem()->setText(3,"Total Number:");
+    ui->treeWidget_grant->headerItem()->setText(4,"Total Dollars:");
+
+    // + Spaces the headers evenly along the top of the tree widget
+    for(int n=0; n<5; n++)
+    {
+        ui->treeWidget_grant->resizeColumnToContents(n);
+    }
+
+
+    // + Set the header for the publications header
+    ui->treeWidget_pub->setColumnCount(3);
+    ui->treeWidget_pub->headerItem()->setText(0,"Category:");
+    ui->treeWidget_pub->headerItem()->setText(1,"Faculty Member:");
+    ui->treeWidget_pub->headerItem()->setText(2,"Total:");
+
+    // + Spaces the headers evenly along the top of the tree widget
+    for(int n=0; n<3; n++)
+    {
+        ui->treeWidget_pub->resizeColumnToContents(n);
+    }
+
+    ui->treeWidget_pub->setColumnWidth(0, 200);
 }
 
 /*
@@ -250,7 +389,41 @@ void Summary_Window::top_level_teaching(QTreeWidgetItem *pme, QTreeWidgetItem *u
 
 }
 
+void Summary_Window::top_level_pres(QTreeWidgetItem *invited, QTreeWidgetItem *abstracts,
+                                    QTreeWidgetItem *presentations, QTreeWidgetItem *other)
+{
 
+    // + Make each of the categories top level items in the tree widget
+    ui->treeWidget_pres->addTopLevelItem(invited);
+    ui->treeWidget_pres->addTopLevelItem(abstracts);
+    ui->treeWidget_pres->addTopLevelItem(presentations);
+    ui->treeWidget_pres->addTopLevelItem(other);
+
+}
+
+
+void Summary_Window::top_level_grants(QTreeWidgetItem *grants, QTreeWidgetItem *funding)
+{
+
+    // + Make each of the categories top level items in the tree widget
+    ui->treeWidget_grant->addTopLevelItem(grants);
+    ui->treeWidget_grant->addTopLevelItem(funding);
+
+}
+
+
+void Summary_Window::top_level_pubs(QTreeWidgetItem *publications, QTreeWidgetItem *journals,
+                                    QTreeWidgetItem *books, QTreeWidgetItem *chapters, QTreeWidgetItem *letters)
+{
+
+    // + Make each of the categories top level items in the tree widget
+    ui->treeWidget_pub->addTopLevelItem(publications);
+    ui->treeWidget_pub->addTopLevelItem(journals);
+    ui->treeWidget_pub->addTopLevelItem(books);
+    ui->treeWidget_pub->addTopLevelItem(chapters);
+    ui->treeWidget_pub->addTopLevelItem(letters);
+
+}
 
 /*
  * Function: on_button_graph_clicked
@@ -307,11 +480,12 @@ void Summary_Window::on_button_load_file_clicked()
         // + Build the summary window
         years = build_teaching_tree(vector_teaching_entries);
 
-
-        ui->label_start_year_teaching->setText(years.first());
-        ui->label_to_teaching->setText("to");
-        ui->label_end_year_teaching->setText(years.last());
-
+        if(!years.isEmpty())
+        {
+            ui->label_start_year_teaching->setText(years.first());
+            ui->label_to_teaching->setText("to");
+            ui->label_end_year_teaching->setText(years.last());
+        }
     }
 
     // + Load a Presentations table
@@ -335,10 +509,12 @@ void Summary_Window::on_button_load_file_clicked()
         // + Build the summary window
         years = build_presentations_tree(vector_presentations_entries);
 
-
-        ui->label_start_year_presentations->setText(years.first());
-        ui->label_to_presentations->setText("to");
-        ui->label_end_year_presentations->setText(years.last());
+        if(!years.isEmpty())
+        {
+            ui->label_start_year_presentations->setText(years.first());
+            ui->label_to_presentations->setText("to");
+            ui->label_end_year_presentations->setText(years.last());
+        }
 
     }
 
@@ -363,10 +539,12 @@ void Summary_Window::on_button_load_file_clicked()
         // + Build the summary window
         years = build_grants_tree(vector_grantfunding_entries);
 
-        ui->label_start_year_grants->setText(years.first());
-        ui->label_to_grants->setText("to");
-        ui->label_end_year_grants->setText(years.last());
-
+        if(!years.isEmpty())
+        {
+            ui->label_start_year_grants->setText(years.first());
+            ui->label_to_grants->setText("to");
+            ui->label_end_year_grants->setText(years.last());
+        }
     }
 
 
@@ -390,9 +568,12 @@ void Summary_Window::on_button_load_file_clicked()
         // + Build the summary window
         years = build_publications_tree(vector_publications_entries);
 
-        ui->label_start_year_publications->setText(years.first());
-        ui->label_to_publications->setText("to");
-        ui->label_end_year_publications->setText(years.last());
+        if(!years.isEmpty())
+        {
+            ui->label_start_year_publications->setText(years.first());
+            ui->label_to_publications->setText("to");
+            ui->label_end_year_publications->setText(years.last());
+        }
 
     }
 
@@ -565,8 +746,7 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
 
     QStringList temp_years;
 
-    // + Define the headers for a teaching tree widget
-    make_tree_header();
+
 
     // + Setup the root categories on the tree
     QTreeWidgetItem *pme = make_root("PME", "", "");
@@ -758,7 +938,7 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
  * Function: build_presentations_tree
  * ----------------------------------
  * WHAT THE FUNCTION DOES:
- * + Fills out the summary tree with teaching entry information
+ * + Fills out the summary tree with presentation entry information
  *
  * PARAMETERS:
  * - vector_teaching_entries: teaching entry information to parse through and display
@@ -768,6 +948,136 @@ QStringList Summary_Window::build_teaching_tree(QVector<teaching_entry> vector_t
  */
 QStringList Summary_Window:: build_presentations_tree(QVector<presentation_entry> vector_presentations_entries)
 {
+
+
+    ui->treeWidget_pres->clear();
+
+    // + Keeps track of total hours for each main heading
+    abstract_total = 0;
+    invited_total = 0;
+    presentation_total = 0;
+    other_pres_total = 0;
+
+    QStringList temp_years;
+
+    // + Setup the root categories on the tree
+    QTreeWidgetItem *abstract = make_root_pres("Abstract Presented");
+    QTreeWidgetItem *invited = make_root_pres("Invited Lectures");
+    QTreeWidgetItem *presentations = make_root_pres("Various Presentations");
+    QTreeWidgetItem *other = make_root_pres("Other");
+
+    // + Used for keeping track of values through looping
+    QString current_date = "99999";
+    QString current_member = "-1";
+
+    // + Pointers to the current row of the tree
+    QTreeWidgetItem *p_member_row;
+
+    int iteration = 0;
+
+    int max_length = 0;
+
+    // + Set the top level of items in the tree
+    top_level_pres(abstract, invited, presentations, other);
+
+    // + Loop for the values in the passed database
+    while(!vector_presentations_entries.isEmpty())
+    {
+
+        // + Get a presentation entry items from the database
+        presentation_entry current_presentation_entry = vector_presentations_entries.takeFirst();
+
+        // + Extract information from the aformentioned current_presentation_entry
+        QString presentation_program = QString::fromStdString(current_presentation_entry.get_type());
+
+        if(presentation_program.length() > max_length)
+        {
+            max_length = presentation_program.length();
+        }
+        
+        QString presentation_member = QString::fromStdString(current_presentation_entry.get_member());
+        
+        QString presenation_year = QString::fromStdString(current_presentation_entry.get_date());
+
+        QString current_member = "-1";
+
+        // + If a blank value is found, skip the whole entry
+        if(presentation_program == "" || presenation_year == "0")
+            continue;
+        if(presentation_member == "")
+            continue;
+
+        // + Determing which root the current teaching entry should be put under
+        QTreeWidgetItem *current_type;
+        if(presentation_program == "Abstract Presented")
+        {
+            current_type = abstract;
+        }
+
+        else if(presentation_program == "Invited Lectures")
+        {
+            current_type = invited;
+        }
+
+        else if(presentation_program.contains("Presentation"))
+        {
+            current_type = presentations;
+        }
+
+        else
+        {
+            current_type = other;
+        }
+
+        temp_years.append(presenation_year);
+
+
+        if(current_member != presentation_member)
+        {
+            current_member = presentation_member;
+
+            // + Add a new name to the faculty vector for other functions
+            faculty_pres.append(current_member);
+
+            if(iteration == 0)
+            {
+                p_member_row = make_child_pres(current_type, current_member, "");
+                counter_for_current_name_pres++;
+            }
+
+            else
+            {
+
+                p_member_row->setText(2,QString::number(counter_for_current_name_pres));
+
+                p_member_row = make_child_pres(current_type, current_member, QString::number(counter_for_current_name_pres));
+                counter_for_current_name_pres++;
+
+            }
+
+        }
+
+        else
+        {
+            counter_for_current_name_pres++;
+        }
+
+        iteration++;
+
+    }
+
+    ui->treeWidget_pres->setColumnWidth(0,(max_length)*10);
+
+    faculty_pres = faculty_pres.toSet().toList();
+
+    // + Get rid of an duplicate information from the years list
+    temp_years = temp_years.toSet().toList();
+
+    // + Sort the list in ascending order
+    qSort(temp_years);
+
+    return temp_years;
+
 
 }
 
@@ -785,6 +1095,200 @@ QStringList Summary_Window:: build_presentations_tree(QVector<presentation_entry
  */
 QStringList Summary_Window:: build_grants_tree(QVector<grants_entry> vector_grantfunding_entries)
 {
+    /*
+    ui->treeWidget_teach->clear();
+
+    grant_total_dollars = 0.0;
+    funding_total_dollars = 0.0;
+
+    grant_peer_total = 0;
+    grant_sponsored_total = 0;
+    grant_peer_dollar_total = 0.0;
+    grant_sponsored_dollar_total = 0.0;
+
+    grant_total = 0;
+    funding_total = 0;
+
+    QStringList temp_years;
+
+    // + Setup the root categories on the tree
+    QTreeWidgetItem *grants = make_root_grants("Grants", "", "");
+    QTreeWidgetItem *funding = make_root_grants("Clinical Funding", "","");
+
+    // + Used for keeping track of values through looping
+    QString current_member = "-1";
+    QString current_main_type = "Dogs";
+
+    int iteration = 0;
+
+    // + Pointers to the current row of the tree
+    QTreeWidgetItem *p_member_row;
+
+    // + Set the top level of items in the tree
+    top_level_grants(grants,funding);
+
+    QTreeWidgetItem p_gpr = make_child_grants(grants,"Peer Reviewed","","","");
+    QTreeWidgetItem p_gis = make_child_grants(grants,"Industry Sponsored","","","");
+    QTreeWidgetItem p_fpr = make_child_grants(grants,"Peer Reviewed","","","");
+    QTreeWidgetItem p_fis = make_child_grants(grants,"Industry Sponsored","","","");
+
+    // + Loop for the values in the passed database
+    while(!vector_grantfunding_entries.isEmpty())
+    {
+
+        // + Get a teaching entry items from the database
+        grants_entry current_grant_entry = vector_grantfunding_entries.takeFirst();
+
+        // + Extract information from the aformentioned teaching_entry
+        QString grant_type = QString::fromStdString(current_grant_entry.get_ftype());
+        QString grant_date = QString::fromStdString(current_grant_entry.get_date());
+        QString grant_member = QString::fromStdString(current_grant_entry.get_member());
+        bool peer_reviewed = current_grant_entry.get_preview();
+        int amount = current_grant_entry.get_total_amount();
+        QString member_amount = QString::number(amount);
+
+        // + If a blank value is found, skip the whole entry
+        if(grant_date == "" || grant_date == "0")
+            continue;
+        if(grant_member == "")
+            continue;
+        if(grant_dollars == "")
+            continue;
+
+        // + Determing which root the current teaching entry should be put under
+        QTreeWidgetItem *main_type;
+        if(grant_type == "Grants" )
+        {
+            main_type = grants;
+
+            grant_total++;
+            grant_total_dollars += amount;
+
+            if(peer_reviewed == true)
+            {
+                grant_peer_total++;
+                grant_peer_dollar_total += amount;
+            }
+
+            else
+            {
+                grant_industry_total++;
+                grant_industry_dollar_total += amount;
+            }
+
+            temp_years.append(teaching_date);
+        }
+
+        else if(grant_type == "Clinical Trials")
+        {
+            main_type = funding;
+
+            funding_total++;
+            funding_total_dollars += amount;
+
+            if(peer_reviewed == true)
+            {
+                funding_peer_total++;
+                funding_peer_dollar_total += amount;
+            }
+
+            else
+            {
+                funding_industry_total++;
+                funding_industry_dollar_total += amount;
+            }
+
+            temp_years.append(teaching_date);
+
+        }
+
+
+        // + Add a name row to the year row made above
+        // + The code here is similar to what the year row code does above
+        if(current_member != grant_member)
+        {
+            current_member = grant_member;
+
+            // + Add a new name to the faculty vector for other functions
+            faculty_grants.append(current_member);
+
+            if(iteration == 0)
+            {
+                if(grant_type == "Grants" && peer_reviewed == true)
+                {
+                    p_member_row = make_child(p_gpr, NULL, current_member, QString::number(grants_member_total), member_amount);
+                }
+                
+                
+                else if (grant_type == "Grants" && peer_reviewed == false)
+                {
+                     p_member_row = make_child(p_gis, NULL, current_member, QString::number(grants_member_total, member_amount);
+                }
+
+                else if (grant_type == "Clinical Trials" && peer_reviewed == true)
+                {
+                     p_member_row = make_child(p_fpr, NULL, current_member, QString::number(grants_member_total, member_amount);
+                }
+
+
+                else if (grant_type == "Clinical Trials" && peer_reviewed == false)
+                {
+                     p_member_row = make_child(p_fis, NULL, current_member, QString::number(grants_member_total, member_amount);
+                }
+                
+
+                member_total_hours += current_teaching_entry.get_total_hours();
+                member_total_trainees += current_teaching_entry.get_trainees();
+
+            }
+
+            else
+            {
+
+                p_member_row->setText(3,QString::number(member_total_hours,'f',0));
+                p_member_row->setText(4,QString::number(member_total_trainees,'f',0));
+                grants_member_total = 0;
+
+
+                p_member_row = make_child(p_year_row, NULL, current_member, teaching_hours, teaching_trainees);
+                member_total_hours = current_teaching_entry.get_total_hours();
+                member_total_trainees = current_teaching_entry.get_trainees();
+
+            }
+
+        }
+
+        else
+        {
+            member_total_hours += current_teaching_entry.get_total_hours();
+            member_total_trainees += current_teaching_entry.get_trainees();
+        }
+
+        iteration++;
+
+    }
+
+    // + Set totals for program categories
+    pme->setText(3,QString::number(pme_total_hours,'f',0));
+    pme->setText(4,QString::number(pme_total_trainees,'f',0));
+
+    ume->setText(3,QString::number(ume_total_hours,'f',0));
+    ume->setText(4,QString::number(ume_total_trainees,'f',0));
+
+    cme->setText(3,QString::number(cme_total_hours,'f',0));
+    cme->setText(4,QString::number(cme_total_trainees,'f',0));
+
+
+    faculty = faculty.toSet().toList();
+
+    // + Get rid of an duplicate information from the years list
+    temp_years = temp_years.toSet().toList();
+
+    // + Sort the list in ascending order
+    qSort(temp_years);
+
+    return temp_years;
+*/
 
 }
 
@@ -803,7 +1307,154 @@ QStringList Summary_Window:: build_grants_tree(QVector<grants_entry> vector_gran
 QStringList Summary_Window:: build_publications_tree(QVector<publication_entry> vector_publications_entries)
 {
 
+    ui->treeWidget_pub->clear();
 
+    // + Keeps track of total hours for each main heading
+    published_abstracts_total = 0;
+    journals_total = 0;
+    book_total = 0;
+    chapter_total = 0;
+    letters_total = 0;
+
+    QStringList temp_years;
+
+    // + Setup the root categories on the tree
+    QTreeWidgetItem *published_abstacts = make_root_pubs("Abstract Presented","");
+    QTreeWidgetItem *journals = make_root_pubs("Journal Articles","");
+    QTreeWidgetItem *books = make_root_pubs("Books","");
+    QTreeWidgetItem *chapters = make_root_pubs("Book Chapters","");
+    QTreeWidgetItem *letters = make_root_pubs("Letters to Editor","");
+
+    // + Used for keeping track of values through looping
+    QString current_member = "-1";
+
+    // + Pointers to the current row of the tree
+    QTreeWidgetItem *p_member_row;
+
+    int iteration = 0;
+
+    int max_length = 0;
+
+    // + Set the top level of items in the tree
+    top_level_pubs(published_abstacts,journals,books,chapters,letters);
+
+    // + Loop for the values in the passed database
+    while(!vector_publications_entries.isEmpty())
+    {
+
+        // + Get a presentation entry items from the database
+        publication_entry current_publication_entry = vector_publications_entries.takeFirst();
+
+        // + Extract information from the aformentioned current_presentation_entry
+        QString publications_type = QString::fromStdString(current_publication_entry.get_type());
+
+        QString publications_member = QString::fromStdString(current_publication_entry.get_member());
+
+        if(publications_type.length() > max_length)
+        {
+            max_length = publications_type.length();
+        }
+
+        QString publications_year = QString::fromStdString(current_publication_entry.get_date());
+
+        QString current_member = "-1";
+
+        // + If a blank value is found, skip the whole entry
+        if(publications_type == "" || publications_year == "0")
+            continue;
+        if(publications_member == "")
+            continue;
+
+
+
+        // + Determing which root the current teaching entry should be put under
+        QTreeWidgetItem *current_type;
+        if(publications_type == "Book Chapters")
+        {
+            current_type = chapters;
+            chapter_total++;
+        }
+
+        else if(publications_type == "Books")
+        {
+            current_type = books;
+            book_total++;
+        }
+
+        else if(publications_type.contains("Journal Article"))
+        {
+            current_type = journals;
+            journals_total++;
+        }
+
+        else if(publications_type.contains("Letters to Editor"))
+        {
+            current_type = letters;
+            letters_total++;
+        }
+
+
+        else if(publications_type.contains("Published Abstract"))
+        {
+            current_type = published_abstacts;
+            published_abstracts_total++;
+        }
+
+
+        temp_years.append(publications_year);
+
+
+        if(current_member != publications_member)
+        {
+            current_member = publications_member;
+
+            // + Add a new name to the faculty vector for other functions
+            faculty_pubs.append(current_member);
+
+            if(iteration == 0)
+            {
+                p_member_row = make_child_pubs(current_type, current_member, "0");
+                counter_for_current_name_pubs++;
+            }
+
+            else
+            {
+
+                p_member_row->setText(2,QString::number(counter_for_current_name_pubs));
+
+                p_member_row = make_child_pres(current_type, current_member, QString::number(counter_for_current_name_pubs));
+                counter_for_current_name_pubs++;
+
+            }
+
+        }
+
+        else
+        {
+            counter_for_current_name_pubs++;
+        }
+
+        iteration++;
+
+    }
+
+    chapters->setText(2,QString::number(chapter_total));
+    books->setText(2,QString::number(book_total));
+    journals->setText(2,QString::number(journals_total));
+    letters->setText(2,QString::number(letters_total));
+    published_abstacts->setText(2,QString::number( published_abstracts_total));
+
+    faculty_pubs = faculty_pubs.toSet().toList();
+
+
+
+    // + Get rid of an duplicate information from the years list
+    temp_years = temp_years.toSet().toList();
+
+    // + Sort the list in ascending order
+    qSort(temp_years);
+
+    return temp_years;
 
 }
 /**

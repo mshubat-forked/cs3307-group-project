@@ -8,7 +8,7 @@ QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-TARGET = Cherrio
+TARGET = Acuity Star Browser
 TEMPLATE = app
 
 CONFIG += c++11

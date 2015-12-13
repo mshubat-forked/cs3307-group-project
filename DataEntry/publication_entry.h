@@ -10,9 +10,10 @@
 
 #include <stdio.h>
 #include <string>
+#include "data_entry.h"
 using namespace std;
 
-class publication_entry
+class publication_entry: public data_entry
 {
 private:
     string publication_status;
